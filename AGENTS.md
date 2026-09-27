@@ -109,7 +109,17 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
 
 ---
 
-## 🎯 Gelecek Faz (Faz 15 - Canlı Dağıtım ve Yayın Öncesi)
+15. **Faz 15 (Web Tabanlı Şifre Sıfırlama Sayfası, GitHub Pages & Localhost Kökten Çözümü):**
+   - **Localhost 3000 Sorununun Kökten Çözülmesi:** Supabase Management API üzerinden projenin `site_url` ve `uri_allow_list` parametreleri güncellenerek `localhost:3000` tamamen kaldırıldı. Yeni yönlendirme adresi olarak resmi GitHub Pages HTTPS adresi (`https://abdulsamet-kasal.github.io/zenit/reset-password.html`) atandı.
+   - **Web Tabanlı Şifre Sıfırlama Portalı (`docs/reset-password.html` & `docs/index.html`):** Supabase Free tier kısıtlamasında varsayılan şablonların değiştirilememesi ve e-postada yalnızca link gönderilmesi engeli kökten çözüldü. GitHub Pages üzerinden barındırılan, Tailwind CSS ve `@supabase/supabase-js` ile güçlendirilmiş, ŞEFFAF kurumsal kimliğine uygun, mobil ve masaüstü uyumlu şifre yenileme web sayfası yayınlandı.
+   - **Derin Bağlantı (Deep Linking) Entegrasyonu:** `android/app/src/main/AndroidManifest.xml` içerisine `seffaf://` şeması intent-filter olarak eklendi. Web sayfasında şifresini yenileyen kullanıcı "Uygulamayı Aç" butonuna basarak doğrudan ŞEFFAF uygulamasına dönebilmektedir.
+   - **Mobil Giriş & Sıfırlama Akışının Senkronizasyonu:** `LoginScreen` ve `SupabaseAuthRepository` şifre sıfırlama taleplerini yeni HTTPS adresiyle gönderecek ve kullanıcıya gerçek e-posta bağlantısı akışına dair adım adım anlaşılır rehberlik sağlayacak şekilde güncellendi.
+   - **Sürüm Güncellemesi:** Uygulama sürümü `1.2.2+5` olarak güncellendi.
+   - **Test & Analiz:** `flutter analyze` 0 hata ile tamamlandı, 20 testin 20'si de başarıyla geçti.
+
+---
+
+## 🎯 Gelecek Faz (Faz 16 - Canlı Dağıtım ve Yayın Öncesi)
 - Canlı SMS sağlayıcısı (Netgsm / Twilio) ile harici SMS gönderimi.
 
 

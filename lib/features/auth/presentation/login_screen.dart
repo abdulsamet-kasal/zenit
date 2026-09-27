@@ -166,7 +166,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ],
                     if (step == 1) ...[
                       const Text(
-                        'Kayıtlı e-posta adresinizi girin. Size 6 haneli bir doğrulama kodu gönderilecektir.',
+                        'Kayıtlı e-posta adresinizi girin. Yeni şifrenizi belirleyebileceğiniz güvenli bir sıfırlama bağlantısı gönderilecektir.',
                         style: TextStyle(fontSize: 14),
                       ),
                       const SizedBox(height: 16),
@@ -178,39 +178,75 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           prefixIcon: Icon(Icons.email_outlined),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'İpucu: E-postadaki bağlantı yerine gelen 6 haneli kodu doğrudan bu ekranda kullanabilirsiniz.',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.textSecondaryDark
-                              : AppColors.textSecondaryLight,
+                      const SizedBox(height: 12),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          icon: const Icon(Icons.pin, size: 16),
+                          label: const Text(
+                            'Elimde 6 haneli kod var',
+                            style: TextStyle(fontSize: 12.5),
+                          ),
+                          onPressed: () {
+                            final email = emailCtrl.text.trim();
+                            if (email.isEmpty || !email.contains('@')) {
+                              setDialogState(() => dialogError =
+                                  'Lütfen önce e-posta adresinizi girin.');
+                              return;
+                            }
+                            setDialogState(() {
+                              dialogError = null;
+                              step = 3;
+                            });
+                          },
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      TextButton.icon(
-                        icon: const Icon(Icons.arrow_forward_rounded, size: 16),
-                        label: const Text(
-                          'Daha önce kod aldım, şifre belirleyeceğim',
-                          style: TextStyle(fontSize: 13),
+                    ] else if (step == 2) ...[
+                      // Bağlantı Gönderildi Başarı Durumu
+                      Center(
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: AppColors.accent.withValues(alpha: 0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.mark_email_read_outlined,
+                                color: AppColors.accent,
+                                size: 36,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              emailCtrl.text.trim(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'adresine şifre sıfırlama bağlantısı başarıyla gönderildi.\n\nLütfen e-postanızı açıp bağlantıya tıklayarak yeni şifrenizi belirleyin. Ardından uygulamadan yeni şifrenizle giriş yapabilirsiniz.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? AppColors.textSecondaryDark
+                                    : AppColors.textSecondaryLight,
+                                height: 1.4,
+                              ),
+                            ),
+                          ],
                         ),
-                        onPressed: () {
-                          final email = emailCtrl.text.trim();
-                          if (email.isEmpty || !email.contains('@')) {
-                            setDialogState(() => dialogError =
-                                'Lütfen önce yukarıya e-posta adresinizi girin.');
-                            return;
-                          }
-                          setDialogState(() {
-                            dialogError = null;
-                            step = 2;
-                          });
-                        },
                       ),
                     ] else ...[
+                      // Step 3: Kod ile Sıfırlama
                       Text(
-                        '${emailCtrl.text.trim()} adresine gönderilen 6 haneli kurtarma kodunu ve yeni şifrenizi girin:',
+                        '${emailCtrl.text.trim()} adresine gelen 6 haneli kodu ve yeni şifrenizi girin:',
                         style: const TextStyle(fontSize: 13),
                       ),
                       const SizedBox(height: 14),
@@ -256,147 +292,161 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
               actions: [
-                TextButton(
-                  onPressed: isSubmitting ? null : () => Navigator.of(ctx).pop(),
-                  child: const Text('İptal'),
-                ),
-                if (step == 1)
+                if (step == 2)
                   ElevatedButton(
-                    onPressed: isSubmitting
-                        ? null
-                        : () async {
-                            final email = emailCtrl.text.trim();
-                            if (email.isEmpty || !email.contains('@')) {
-                              setDialogState(() =>
-                                  dialogError = 'Geçerli bir e-posta adresi girin.');
-                              return;
-                            }
-                            setDialogState(() {
-                              isSubmitting = true;
-                              dialogError = null;
-                            });
-                            try {
-                              await ref
-                                  .read(authRepositoryProvider)
-                                  .resetPassword(email);
-                              setDialogState(() {
-                                isSubmitting = false;
-                                step = 2;
-                              });
-                            } catch (e) {
-                              setDialogState(() {
-                                isSubmitting = false;
-                                final errStr = e.toString();
-                                if (errStr.contains('429') ||
-                                    errStr.contains('rate limit') ||
-                                    errStr.contains('security purposes')) {
-                                  dialogError =
-                                      'Çok sık kod talebi yapıldı (Limit: 429). Güvenlik amacıyla lütfen 60 saniye bekleyin veya daha önce gelen e-postadaki kodu kullanın.';
-                                } else {
-                                  dialogError = 'Sıfırlama kodu gönderilemedi: $e';
-                                }
-                              });
-                            }
-                          },
-                    child: isSubmitting
-                        ? const SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text('Kod Gönder'),
+                    onPressed: () => Navigator.of(ctx).pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Tamam, Anladım'),
                   )
                 else ...[
                   TextButton(
                     onPressed: isSubmitting
                         ? null
-                        : () => setDialogState(() => step = 1),
-                    child: const Text('Geri'),
-                  ),
-                  ElevatedButton(
-                    onPressed: isSubmitting
-                        ? null
-                        : () async {
-                            final token = codeCtrl.text.trim();
-                            final newPass = newPasswordCtrl.text.trim();
-                            final confirmPass = confirmPasswordCtrl.text.trim();
-
-                            if (token.length != 6) {
-                              setDialogState(() => dialogError =
-                                  'Lütfen 6 haneli kodu eksiksiz girin.');
-                              return;
-                            }
-                            if (newPass.length < 6) {
-                              setDialogState(() => dialogError =
-                                  'Şifre en az 6 karakter olmalıdır.');
-                              return;
-                            }
-                            if (newPass != confirmPass) {
-                              setDialogState(() =>
-                                  dialogError = 'Girdiğiniz şifreler uyuşmuyor.');
-                              return;
-                            }
-
-                            setDialogState(() {
-                              isSubmitting = true;
-                              dialogError = null;
-                            });
-
-                            try {
-                              await ref
-                                  .read(authRepositoryProvider)
-                                  .verifyOtpAndResetPassword(
-                                    emailCtrl.text.trim(),
-                                    token,
-                                    newPass,
-                                  );
-                              if (ctx.mounted) {
-                                Navigator.of(ctx).pop();
-                              }
-                              if (mounted) {
-                                _passwordController.text = newPass;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Şifreniz başarıyla güncellendi! Yeni şifrenizle giriş yapabilirsiniz.',
-                                    ),
-                                    backgroundColor: AppColors.accent,
-                                  ),
-                                );
-                              }
-                            } catch (e) {
-                              setDialogState(() {
-                                isSubmitting = false;
-                                final errStr = e.toString();
-                                if (errStr.contains('429')) {
-                                  dialogError =
-                                      'Çok fazla deneme yapıldı. Lütfen biraz bekleyin.';
-                                } else if (errStr.contains('Token') ||
-                                    errStr.contains('invalid') ||
-                                    errStr.contains('expired')) {
-                                  dialogError =
-                                      'Girdiğiniz 6 haneli kod hatalı veya süresi dolmuş.';
-                                } else {
-                                  dialogError =
-                                      'Şifre sıfırlanamadı: $e';
-                                }
-                              });
+                        : () {
+                            if (step == 3) {
+                              setDialogState(() => step = 1);
+                            } else {
+                              Navigator.of(ctx).pop();
                             }
                           },
-                    child: isSubmitting
-                        ? const SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text('Şifreyi Güncelle'),
+                    child: Text(step == 3 ? 'Geri' : 'İptal'),
                   ),
+                  if (step == 1)
+                    ElevatedButton(
+                      onPressed: isSubmitting
+                          ? null
+                          : () async {
+                              final email = emailCtrl.text.trim();
+                              if (email.isEmpty || !email.contains('@')) {
+                                setDialogState(() => dialogError =
+                                    'Geçerli bir e-posta adresi girin.');
+                                return;
+                              }
+                              setDialogState(() {
+                                isSubmitting = true;
+                                dialogError = null;
+                              });
+                              try {
+                                await ref
+                                    .read(authRepositoryProvider)
+                                    .resetPassword(email);
+                                setDialogState(() {
+                                  isSubmitting = false;
+                                  step = 2; // Gönderildi onay ekranı
+                                });
+                              } catch (e) {
+                                setDialogState(() {
+                                  isSubmitting = false;
+                                  final errStr = e.toString();
+                                  if (errStr.contains('429') ||
+                                      errStr.contains('rate limit') ||
+                                      errStr.contains('security purposes')) {
+                                    dialogError =
+                                        'Çok sık talep yapıldı (Limit: 429). Güvenlik amacıyla lütfen 60 saniye bekleyin veya daha önce gönderilen e-postayı kontrol edin.';
+                                  } else {
+                                    dialogError =
+                                        'Sıfırlama bağlantısı gönderilemedi: $e';
+                                  }
+                                });
+                              }
+                            },
+                      child: isSubmitting
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text('Bağlantı Gönder'),
+                    )
+                  else if (step == 3)
+                    ElevatedButton(
+                      onPressed: isSubmitting
+                          ? null
+                          : () async {
+                              final token = codeCtrl.text.trim();
+                              final newPass = newPasswordCtrl.text.trim();
+                              final confirmPass =
+                                  confirmPasswordCtrl.text.trim();
+
+                              if (token.length != 6) {
+                                setDialogState(() => dialogError =
+                                    'Lütfen 6 haneli kodu eksiksiz girin.');
+                                return;
+                              }
+                              if (newPass.length < 6) {
+                                setDialogState(() => dialogError =
+                                    'Şifre en az 6 karakter olmalıdır.');
+                                return;
+                              }
+                              if (newPass != confirmPass) {
+                                setDialogState(() => dialogError =
+                                    'Girdiğiniz şifreler uyuşmuyor.');
+                                return;
+                              }
+
+                              setDialogState(() {
+                                isSubmitting = true;
+                                dialogError = null;
+                              });
+
+                              try {
+                                await ref
+                                    .read(authRepositoryProvider)
+                                    .verifyOtpAndResetPassword(
+                                      emailCtrl.text.trim(),
+                                      token,
+                                      newPass,
+                                    );
+                                if (ctx.mounted) {
+                                  Navigator.of(ctx).pop();
+                                }
+                                if (mounted) {
+                                  _passwordController.text = newPass;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Şifreniz başarıyla güncellendi! Yeni şifrenizle giriş yapabilirsiniz.',
+                                      ),
+                                      backgroundColor: AppColors.accent,
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                setDialogState(() {
+                                  isSubmitting = false;
+                                  final errStr = e.toString();
+                                  if (errStr.contains('429')) {
+                                    dialogError =
+                                        'Çok fazla deneme yapıldı. Lütfen biraz bekleyin.';
+                                  } else if (errStr.contains('Token') ||
+                                      errStr.contains('invalid') ||
+                                      errStr.contains('expired')) {
+                                    dialogError =
+                                        'Girdiğiniz 6 haneli kod hatalı veya süresi dolmuş.';
+                                  } else {
+                                    dialogError =
+                                        'Şifre sıfırlanamadı: $e';
+                                  }
+                                });
+                              }
+                            },
+                      child: isSubmitting
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text('Şifreyi Güncelle'),
+                    ),
                 ],
               ],
             );
