@@ -12,6 +12,7 @@ import '../../../core/utils/geo_utils.dart';
 import '../../../data/models/complaint.dart';
 import '../../../data/models/complaint_status.dart';
 import '../../../data/repositories/providers.dart';
+import '../../../shared/widgets/seffaf_image.dart';
 import '../../feed/application/feed_controller.dart';
 
 class ReportCreationScreen extends ConsumerStatefulWidget {
@@ -382,9 +383,14 @@ class _ReportCreationScreenState extends ConsumerState<ReportCreationScreen> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 6),
-          const Text(
+          Text(
             'Sorunun net görülebileceği 1 ila 3 fotoğraf seçin.',
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondaryLight),
+            style: TextStyle(
+              fontSize: 13,
+              color: isDark
+                  ? AppColors.textSecondaryDark
+                  : AppColors.textSecondaryLight,
+            ),
           ),
           const SizedBox(height: 14),
 
@@ -496,9 +502,14 @@ class _ReportCreationScreenState extends ConsumerState<ReportCreationScreen> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 6),
-          const Text(
+          Text(
             'Sorumlu belediye birimi ve SLA süresi kategoriye göre belirlenir.',
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondaryLight),
+            style: TextStyle(
+              fontSize: 13,
+              color: isDark
+                  ? AppColors.textSecondaryDark
+                  : AppColors.textSecondaryLight,
+            ),
           ),
           const SizedBox(height: 14),
 
@@ -587,9 +598,14 @@ class _ReportCreationScreenState extends ConsumerState<ReportCreationScreen> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 6),
-          const Text(
+          Text(
             'GPS konumunuzdan ilgili belediye ve mahalle otomatik olarak tespit edilir.',
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondaryLight),
+            style: TextStyle(
+              fontSize: 13,
+              color: isDark
+                  ? AppColors.textSecondaryDark
+                  : AppColors.textSecondaryLight,
+            ),
           ),
           const SizedBox(height: 20),
 
@@ -629,11 +645,14 @@ class _ReportCreationScreenState extends ConsumerState<ReportCreationScreen> {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      const Text(
+                      Text(
                         'Bu bildirim doğrudan belediyenin şeffaflık puanına etki edecektir.',
                         style: TextStyle(
-                            fontSize: 11.5,
-                            color: AppColors.textSecondaryLight),
+                          fontSize: 11.5,
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondaryLight,
+                        ),
                       ),
                     ],
                   ),
@@ -676,9 +695,11 @@ class _ReportCreationScreenState extends ConsumerState<ReportCreationScreen> {
                 const SizedBox(height: 12),
                 Text(
                   'Koordinat: ${_latitude.toStringAsFixed(5)}, ${_longitude.toStringAsFixed(5)}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textSecondaryLight,
+                    color: isDark
+                        ? AppColors.textSecondaryDark
+                        : AppColors.textSecondaryLight,
                   ),
                 ),
               ],
@@ -716,9 +737,14 @@ class _ReportCreationScreenState extends ConsumerState<ReportCreationScreen> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 6),
-          const Text(
+          Text(
             'Ekiplerin sorunu daha hızlı tespit edebilmesi için net bir açıklama girin.',
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondaryLight),
+            style: TextStyle(
+              fontSize: 13,
+              color: isDark
+                  ? AppColors.textSecondaryDark
+                  : AppColors.textSecondaryLight,
+            ),
           ),
           const SizedBox(height: 20),
 
@@ -765,9 +791,14 @@ class _ReportCreationScreenState extends ConsumerState<ReportCreationScreen> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 6),
-          const Text(
+          Text(
             'Bilgileri kontrol edip onayladıktan sonra bildiriminiz kamuya açık olarak yayınlanacaktır.',
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondaryLight),
+            style: TextStyle(
+              fontSize: 13,
+              color: isDark
+                  ? AppColors.textSecondaryDark
+                  : AppColors.textSecondaryLight,
+            ),
           ),
           const SizedBox(height: 16),
 
@@ -804,6 +835,29 @@ class _ReportCreationScreenState extends ConsumerState<ReportCreationScreen> {
                     ],
                   ),
                   const Divider(height: 20),
+
+                  if (_selectedImagePaths.isNotEmpty) ...[
+                    SizedBox(
+                      height: 84,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _selectedImagePaths.length,
+                        separatorBuilder: (_, _) => const SizedBox(width: 8),
+                        itemBuilder: (context, idx) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: SeffafImage(
+                              imagePath: _selectedImagePaths[idx],
+                              width: 84,
+                              height: 84,
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                  ],
 
                   if (_titleController.text.trim().isNotEmpty) ...[
                     Text(

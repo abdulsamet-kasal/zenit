@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../auth/presentation/login_screen.dart';
-import '../../main_navigation/main_nav_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -45,36 +43,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(AppConstants.keyOnboardingCompleted, true);
 
-    // Misafir kullanıcı kimliği oluştur (eğer henüz yoksa)
-    String? guestId = prefs.getString(AppConstants.keyGuestUserId);
-    if (guestId == null) {
-      guestId = const Uuid().v4();
-      final randomNum = (1000 + (guestId.hashCode.abs() % 9000));
-      final guestName = 'Misafir Vatandaş #$randomNum';
-      await prefs.setString(AppConstants.keyGuestUserId, guestId);
-      await prefs.setString(AppConstants.keyGuestUserName, guestName);
-    }
-
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const MainNavScreen()),
+      MaterialPageRoute(builder: (_) => const LoginScreen(isModal: false)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? AppColors.backgroundDark : Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           TextButton(
             onPressed: _completeOnboarding,
-            child: const Text(
+            child: Text(
               'Atla',
               style: TextStyle(
-                color: AppColors.textSecondaryLight,
+                color: isDark
+                    ? AppColors.textSecondaryDark
+                    : AppColors.textSecondaryLight,
                 fontWeight: FontWeight.w600,
                 fontSize: 15,
               ),
@@ -116,10 +108,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Text(
                           slide.title,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimaryLight,
+                            color: isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimaryLight,
                             letterSpacing: -0.5,
                           ),
                         ),
@@ -127,9 +121,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Text(
                           slide.description,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 15,
-                            color: AppColors.textSecondaryLight,
+                            color: isDark
+                                ? AppColors.textSecondaryDark
+                                : AppColors.textSecondaryLight,
                             height: 1.5,
                           ),
                         ),
@@ -183,19 +179,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ),
                     )
-                  else ...[
+                  else
                     ElevatedButton(
-                      onPressed: () async {
-                        final prefs = await SharedPreferences.getInstance();
-                        await prefs.setBool(AppConstants.keyOnboardingCompleted, true);
-                        if (!context.mounted) return;
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_) => const LoginScreen()),
-                        );
-                      },
+                      onPressed: _completeOnboarding,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       child: const Text(
                         'Giriş Yap / Kayıt Ol',
@@ -206,21 +195,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    OutlinedButton(
-                      onPressed: _completeOnboarding,
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: const Text(
-                        'Misafir Olarak Keşfet',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),

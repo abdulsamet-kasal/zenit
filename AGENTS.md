@@ -67,16 +67,29 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
 
 11. **Faz 11 (Kullanıcı Giriş & Kayıt Mimarisi, Supabase Auth ve E-Devlet Kaldırımı):**
    - **E-Devlet Kaldırımı:** E-Devlet bağımlılığı, referansları veya gereksinimleri tamamen ortadan kaldırıldı; platform tamamen bağımsız vatandaş odaklı kimlik modeline kavuşturuldu.
-   - **Giriş Yap Ekranı (`LoginScreen`):** E-posta ve şifre ile giriş, form validasyonu, şifre sıfırlama talebi, "Misafir Olarak Devam Et" seçeneği ve "Kayıt Ol" geçişi.
+   - **Giriş Yap Ekranı (`LoginScreen`):** E-posta ve şifre ile giriş, form validasyonu, şifre sıfırlama talebi ve "Kayıt Ol" geçişi.
    - **Kayıt Ol Ekranı (`RegisterScreen`):** Ad Soyad, E-posta, Telefon (opsiyonel), Şifre ve Şifre Tekrar alanları, hata yönetimi ve doğrudan oturum başlatma.
    - **Supabase Auth Entegrasyonu (`SupabaseAuthRepository`):** Canlı Supabase `client.auth` üzerinden oturum açma, kayıt oluşturma, şifre sıfırlama ve profil senkronizasyonu; ağ yokken yerel fallback desteği.
-   - **Profil Ekranı Güncellemesi:** Giriş yapmış vatandaşlar için e-posta, aktif rozet ve "Hesaptan Çıkış Yap" butonu; misafirler için "Giriş / Kayıt" davet kartı.
-   - **Onboarding Son Ekranı:** "Giriş Yap / Kayıt Ol" ve "Misafir Olarak Keşfet" ikili yönlendirmesi.
+   - **Profil Ekranı Güncellemesi:** Giriş yapmış vatandaşlar için e-posta, aktif rozet ve "Hesaptan Çıkış Yap" butonu.
    - **Widget Testleri:** `test/auth_screens_test.dart` ile form doğrulama ve render testleri (%100 başarı).
 
 ---
 
-## 🎯 Gelecek Faz (Faz 12 - Canlı Dağıtım ve Yayın Öncesi)
-- Supabase Storage Bucket'a fotoğraf yükleme (`complaint-photos` bucket).
+12. **Faz 12 (Zorunlu Kayıt & Giriş, Hesaptan Çıkış Akışı, Supabase Storage & SeffafImage, Dark Mode Kontrastı):**
+   - **Misafir Kullanıcı Tamamen Kaldırıldı:** Kayıt ve giriş işlemi zorunlu kılındı. `main.dart` açılışında oturum açılmamışsa doğrudan `LoginScreen(isModal: false)`'a yönlendirilir; `OnboardingScreen` ve `LoginScreen` içerisindeki tüm misafir mod seçenekleri arındırıldı.
+   - **Hesaptan Çıkış (Sign Out) Akışı:** `ProfileScreen` AppBar'ına ve ayarlar listesine belirgin "Hesaptan Çıkış Yap" eklendi; onay sonrası `authRepository.signOut()` çağrılarak oturum sıfırlanıp login ekranına temiz yönlendirme sağlandı.
+   - **Fotoğraf Yükleme & Görüntüleme Düzeltmesi (Supabase Storage):**
+     - Supabase canlı veritabanında `complaint-photos` storage bucket'ı oluşturuldu ve RLS politikaları uygulandı (`20260927000001_create_storage_and_auth_cleanup.sql`).
+     - `SupabaseComplaintRepository`: Şikayet oluştururken yerel fotoğraflar `client.storage.from('complaint-photos').uploadBinary(...)` ile Supabase Storage'a yüklenip public URL'leri veritabanına kaydedilir hale getirildi.
+     - `SeffafImage` (`lib/shared/widgets/seffaf_image.dart`): Hem internet URL'leri (`CachedNetworkImage`), hem yerel dosya yolları (`Image.file`), hem de yerel asset'leri (`Image.asset`) dark-mode uyumlu placeholder ve fallback ile sorunsuz render eden evrensel bileşen geliştirildi ve akış (`ComplaintCard`), detay (`ComplaintDetailScreen`), tam ekran görüntüleyici (`FullScreenImageViewer`), harita önizlemesi (`MapScreen`) ve şikayet sihirbazı Step 4 özetine entegre edildi.
+   - **Dark Mode Kontrast ve Tipografi İyileştirmeleri:**
+     - `AppTheme`: Hem `lightTheme` hem `darkTheme` için tam kapsamlı `textTheme` ve `chipTheme` tanımları eklendi.
+     - `FeedScreen`, `LeaderboardScreen`, `MapScreen`, `ReportCreationScreen`, `ComplaintDetailScreen`, `LoginScreen` ve `RegisterScreen` ekranlarındaki siyah kalan tüm metinler, filtre çipleri ve kenarlıklar dark mode uyumlu dinamik renklere dönüştürüldü.
+   - **Tam Test Kapsamı:** Tüm 20 birim, widget ve mimari testi %100 başarıyla geçti.
+
+---
+
+## 🎯 Gelecek Faz (Faz 13 - Canlı Dağıtım ve Yayın Öncesi)
 - Canlı SMS sağlayıcısı (Netgsm / Twilio) ile harici SMS gönderimi.
+
 

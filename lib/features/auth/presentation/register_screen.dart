@@ -92,6 +92,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kayıt Ol'),
@@ -114,11 +116,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Text(
+                Text(
                   'Şikayet oluşturmak, belediye aksaklıklarını bildirmek ve çözüm süreçlerini izlemek için kaydolun.',
                   style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.textSecondaryLight,
+                    color: isDark
+                        ? AppColors.textSecondaryDark
+                        : AppColors.textSecondaryLight,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -302,10 +306,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       'Zaten hesabınız var mı?',
                       style: TextStyle(
-                        color: AppColors.textSecondaryLight,
+                        color: isDark
+                            ? AppColors.textSecondaryDark
+                            : AppColors.textSecondaryLight,
                         fontSize: 14,
                       ),
                     ),
@@ -313,10 +319,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text(
+                      child: Text(
                         'Giriş Yap',
                         style: TextStyle(
-                          color: AppColors.primary,
+                          color: isDark ? AppColors.primaryLight : AppColors.primary,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),

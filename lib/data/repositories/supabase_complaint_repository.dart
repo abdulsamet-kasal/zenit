@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/config/supabase_config.dart';
 import '../models/comment.dart';
 import '../models/complaint.dart';
@@ -108,16 +110,69 @@ class SupabaseComplaintRepository implements ComplaintRepository {
     return _fallbackRepo.getComplaintById(id);
   }
 
+  Future<List<String>> _uploadPhotos(List<String> photoUrls) async {
+    final client = SupabaseConfig.client;
+    if (client == null) return photoUrls;
+
+    final result = <String>[];
+    for (final path in photoUrls) {
+      if (path.startsWith('http://') || path.startsWith('https://')) {
+        result.add(path);
+        continue;
+      }
+
+      try {
+        final cleanPath = path.replaceFirst('file://', '');
+        final file = File(cleanPath);
+        if (await file.exists()) {
+          final ext = cleanPath.split('.').last.toLowerCase();
+          final mimeType = ext == 'png'
+              ? 'image/png'
+              : ext == 'webp'
+                  ? 'image/webp'
+                  : 'image/jpeg';
+          final fileName =
+              'complaint_${DateTime.now().millisecondsSinceEpoch}_${cleanPath.hashCode.abs()}.$ext';
+          final bytes = await file.readAsBytes();
+
+          await client.storage.from('complaint-photos').uploadBinary(
+                fileName,
+                bytes,
+                fileOptions: FileOptions(
+                  contentType: mimeType,
+                  upsert: true,
+                ),
+              );
+
+          final publicUrl =
+              client.storage.from('complaint-photos').getPublicUrl(fileName);
+          debugPrint('📸 Fotoğraf Supabase Storage\'a başarıyla yüklendi: $publicUrl');
+          result.add(publicUrl);
+        } else {
+          result.add(path);
+        }
+      } catch (e) {
+        debugPrint('⚠️ Fotoğraf yüklenirken hata: $e. Yerel yol saklanıyor.');
+        result.add(path);
+      }
+    }
+    return result;
+  }
+
   @override
   Future<Complaint> createComplaint(Complaint complaint) async {
-    // Önce yerel önbelleğe ve SharedPreferences'a ekle (çevrimdışı güvenliği)
-    final localResult = await _fallbackRepo.createComplaint(complaint);
+    // 1. Yerel fotoğrafları Supabase Storage'a yükle
+    final uploadedPhotoUrls = await _uploadPhotos(complaint.photoUrls);
+    final complaintToSave = complaint.copyWith(photoUrls: uploadedPhotoUrls);
+
+    // 2. Yerel önbelleğe ve SharedPreferences'a ekle (çevrimdışı güvenliği)
+    final localResult = await _fallbackRepo.createComplaint(complaintToSave);
 
     final client = SupabaseConfig.client;
     if (client != null) {
       try {
-        await client.from('complaints').upsert(complaint.toSupabaseMap());
-        debugPrint('✅ Şikayet Supabase veritabanına aktarıldı: ${complaint.id}');
+        await client.from('complaints').upsert(complaintToSave.toSupabaseMap());
+        debugPrint('✅ Şikayet Supabase veritabanına aktarıldı: ${complaintToSave.id}');
       } catch (e) {
         debugPrint('⚠️ Supabase createComplaint hatası: $e. Yerel depolamada saklandı.');
       }

@@ -76,6 +76,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       }
     });
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -156,13 +158,23 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                       });
                       _loadLeaderboard();
                     },
-                    selectedColor: AppColors.primary,
+                    selectedColor: isDark ? AppColors.primaryLight : AppColors.primary,
                     checkmarkColor: Colors.white,
+                    backgroundColor: isDark ? AppColors.surfaceDark : Colors.white,
                     labelStyle: TextStyle(
-                      color:
-                          isSelected ? Colors.white : AppColors.textPrimaryLight,
+                      color: isSelected
+                          ? Colors.white
+                          : (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
                       fontWeight:
                           isSelected ? FontWeight.bold : FontWeight.w500,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(
+                        color: isSelected
+                            ? Colors.transparent
+                            : (isDark ? AppColors.borderDark : AppColors.borderLight),
+                      ),
                     ),
                   ),
                 );
@@ -176,10 +188,14 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : displayedList.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: Text(
                           'Aramanıza uygun belediye bulunamadı.',
-                          style: TextStyle(color: AppColors.textSecondaryLight),
+                          style: TextStyle(
+                            color: isDark
+                                ? AppColors.textSecondaryDark
+                                : AppColors.textSecondaryLight,
+                          ),
                         ),
                       )
                     : ListView.separated(
@@ -197,12 +213,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                             child: InkWell(
                               onTap: () {
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => MunicipalityProfileScreen(
-                                      municipality: muni,
+                                    MaterialPageRoute(
+                                      builder: (_) => MunicipalityProfileScreen(
+                                        municipality: muni,
+                                      ),
                                     ),
-                                  ),
-                                );
+                                  );
                               },
                               borderRadius: BorderRadius.circular(16),
                               child: Padding(
@@ -211,7 +227,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                 child: Row(
                                   children: [
                                     // Sıralama Rozeti
-                                    _buildRankBadge(rank),
+                                    _buildRankBadge(rank, isDark),
                                     const SizedBox(width: 14),
 
                                     // Belediye Bilgisi
@@ -230,10 +246,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                           const SizedBox(height: 3),
                                           Text(
                                             '${muni.province} / ${muni.district} • %${muni.resolutionRate.toStringAsFixed(0)} Çözüm',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 12,
-                                              color:
-                                                  AppColors.textSecondaryLight,
+                                              color: isDark
+                                                  ? AppColors.textSecondaryDark
+                                                  : AppColors.textSecondaryLight,
                                             ),
                                           ),
                                         ],
@@ -301,7 +318,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     );
   }
 
-  Widget _buildRankBadge(int rank) {
+  Widget _buildRankBadge(int rank, bool isDark) {
     if (rank == 1) {
       return const Text('🥇', style: TextStyle(fontSize: 24));
     } else if (rank == 2) {
@@ -314,16 +331,20 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       width: 28,
       height: 28,
       decoration: BoxDecoration(
-        color: AppColors.borderLight.withValues(alpha: 0.5),
+        color: isDark
+            ? AppColors.borderDark.withValues(alpha: 0.6)
+            : AppColors.borderLight.withValues(alpha: 0.5),
         shape: BoxShape.circle,
       ),
       child: Center(
         child: Text(
           '$rank',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
-            color: AppColors.textSecondaryLight,
+            color: isDark
+                ? AppColors.textSecondaryDark
+                : AppColors.textSecondaryLight,
           ),
         ),
       ),

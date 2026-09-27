@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:seffaf/shared/widgets/seffaf_image.dart';
 
 class FullScreenImageViewer extends StatefulWidget {
   final List<String> imageUrls;
@@ -54,15 +54,9 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
             child: InteractiveViewer(
               minScale: 0.8,
               maxScale: 4.0,
-              child: CachedNetworkImage(
-                imageUrl: widget.imageUrls[index],
+              child: SeffafImage(
+                imagePath: widget.imageUrls[index],
                 fit: BoxFit.contain,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
-                ),
-                errorWidget: (context, url, error) => const Center(
-                  child: Icon(Icons.broken_image, color: Colors.white54, size: 48),
-                ),
               ),
             ),
           );

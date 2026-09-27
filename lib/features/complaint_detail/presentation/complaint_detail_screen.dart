@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +10,7 @@ import '../../../data/models/complaint_status.dart';
 import '../../../data/repositories/providers.dart';
 import '../../../shared/widgets/category_badge.dart';
 import '../../../shared/widgets/full_screen_image_viewer.dart';
+import '../../../shared/widgets/seffaf_image.dart';
 import '../../../shared/widgets/status_badge.dart';
 import '../../feed/application/feed_controller.dart';
 
@@ -251,7 +251,7 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                                     _complaint.photoUrls, i),
                                 child: Hero(
                                   tag: 'photo_${_complaint.id}_$i',
-                                  child: CachedNetworkImage(
+                                  child: SeffafImage(
                                     imageUrl: _complaint.photoUrls[i],
                                     fit: BoxFit.cover,
                                     width: double.infinity,
@@ -373,12 +373,14 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       'Bildirilen Konum',
                                       style: TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.bold,
-                                        color: AppColors.textSecondaryLight,
+                                        color: isDark
+                                            ? AppColors.textSecondaryDark
+                                            : AppColors.textSecondaryLight,
                                       ),
                                     ),
                                     Text(
@@ -599,7 +601,7 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                     size: 18,
                     color: _complaint.isLikedByMe
                         ? AppColors.primary
-                        : AppColors.textSecondaryLight,
+                        : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight),
                   ),
                   const SizedBox(width: 6),
                   Text(
@@ -611,7 +613,7 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                           : FontWeight.w500,
                       color: _complaint.isLikedByMe
                           ? AppColors.primary
-                          : AppColors.textSecondaryLight,
+                          : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight),
                     ),
                   ),
                 ],
@@ -635,7 +637,7 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                     size: 18,
                     color: _complaint.isConfirmedByMe
                         ? AppColors.accent
-                        : AppColors.textSecondaryLight,
+                        : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight),
                   ),
                   const SizedBox(width: 6),
                   Text(
@@ -647,7 +649,7 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                           : FontWeight.w500,
                       color: _complaint.isConfirmedByMe
                           ? AppColors.accent
-                          : AppColors.textSecondaryLight,
+                          : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight),
                     ),
                   ),
                 ],
@@ -720,7 +722,7 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                           borderRadius: BorderRadius.circular(10),
                           child: AspectRatio(
                             aspectRatio: 1,
-                            child: CachedNetworkImage(
+                            child: SeffafImage(
                               imageUrl: beforeUrl,
                               fit: BoxFit.cover,
                             ),
@@ -758,7 +760,7 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                         borderRadius: BorderRadius.circular(10),
                         child: AspectRatio(
                           aspectRatio: 1,
-                          child: CachedNetworkImage(
+                          child: SeffafImage(
                             imageUrl: afterUrl,
                             fit: BoxFit.cover,
                           ),
@@ -808,9 +810,11 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
               if (_complaint.municipalityResponseDate != null)
                 Text(
                   DateFormatter.formatDate(_complaint.municipalityResponseDate!),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
-                    color: AppColors.textSecondaryLight,
+                    color: isDark
+                        ? AppColors.textSecondaryDark
+                        : AppColors.textSecondaryLight,
                   ),
                 ),
             ],
@@ -864,9 +868,14 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
             ],
           ),
           const SizedBox(height: 6),
-          const Text(
+          Text(
             'Bu çözüm sizi tatmin etti mi? Puanınız doğrudan belediye şeffaflık karnesine yansır.',
-            style: TextStyle(fontSize: 12, color: AppColors.textSecondaryLight),
+            style: TextStyle(
+              fontSize: 12,
+              color: isDark
+                  ? AppColors.textSecondaryDark
+                  : AppColors.textSecondaryLight,
+            ),
           ),
           const SizedBox(height: 10),
           Row(
@@ -903,7 +912,7 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
               ? AppColors.statusRejected.withValues(alpha: 0.3)
               : (isResolved
                   ? AppColors.statusResolved.withValues(alpha: 0.3)
-                  : AppColors.borderLight),
+                  : (isDark ? AppColors.borderDark : AppColors.borderLight)),
         ),
       ),
       child: Column(
@@ -951,13 +960,14 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                 date: DateFormatter.formatDate(_complaint.createdAt),
                 isDone: true,
                 isCurrent: _complaint.status == ComplaintStatus.pending,
+                isDark: isDark,
               ),
               Expanded(
                 child: Container(
                   height: 2,
                   color: _complaint.status != ComplaintStatus.pending
                       ? AppColors.primary
-                      : AppColors.borderLight,
+                      : (isDark ? AppColors.borderDark : AppColors.borderLight),
                 ),
               ),
               _buildTimelineStep(
@@ -968,13 +978,14 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                 isDone: _complaint.status == ComplaintStatus.inReview ||
                     _complaint.status == ComplaintStatus.resolved,
                 isCurrent: _complaint.status == ComplaintStatus.inReview,
+                isDark: isDark,
               ),
               Expanded(
                 child: Container(
                   height: 2,
                   color: _complaint.status == ComplaintStatus.resolved
                       ? AppColors.statusResolved
-                      : AppColors.borderLight,
+                      : (isDark ? AppColors.borderDark : AppColors.borderLight),
                 ),
               ),
               _buildTimelineStep(
@@ -984,6 +995,7 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                     : 'Hedef: $slaDays gün',
                 isDone: _complaint.status == ComplaintStatus.resolved,
                 isCurrent: _complaint.status == ComplaintStatus.resolved,
+                isDark: isDark,
               ),
             ],
           ),
@@ -997,8 +1009,9 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
     required String date,
     required bool isDone,
     required bool isCurrent,
+    required bool isDark,
   }) {
-    Color iconColor = AppColors.borderLight;
+    Color iconColor = isDark ? AppColors.borderDark : AppColors.borderLight;
     if (isDone) iconColor = AppColors.primary;
     if (title == 'Çözüldü' && isDone) iconColor = AppColors.statusResolved;
 
@@ -1018,7 +1031,9 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
           child: Icon(
             isDone ? Icons.check : Icons.circle,
             size: 14,
-            color: isDone ? Colors.white : AppColors.borderLight,
+            color: isDone
+                ? Colors.white
+                : (isDark ? AppColors.textSecondaryDark : AppColors.borderLight),
           ),
         ),
         const SizedBox(height: 4),
@@ -1031,9 +1046,11 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
         ),
         Text(
           date,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 9.5,
-            color: AppColors.textSecondaryLight,
+            color: isDark
+                ? AppColors.textSecondaryDark
+                : AppColors.textSecondaryLight,
           ),
         ),
       ],

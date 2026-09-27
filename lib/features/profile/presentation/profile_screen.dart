@@ -316,6 +316,45 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
+  Future<void> _confirmSignOut() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Çıkış Yap'),
+        content: const Text(
+            'Hesabınızdan çıkış yapmak istediğinize emin misiniz?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('İptal'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.danger,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Çıkış Yap'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await ref.read(authRepositoryProvider).signOut();
+      ref.invalidate(currentUserProvider);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Başarıyla çıkış yapıldı.')),
+        );
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginScreen(isModal: false)),
+          (route) => false,
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final userAsync = ref.watch(currentUserProvider);
@@ -326,6 +365,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profil & Ayarlar'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: AppColors.danger),
+            tooltip: 'Hesaptan Çıkış Yap',
+            onPressed: _confirmSignOut,
+          ),
+        ],
       ),
       body: Builder(
         builder: (context) {
@@ -545,56 +591,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       onTap: _showResetDataDialog,
                     ),
 
-                    if (!user.isGuest) ...[
-                      const Divider(height: 1),
-                      ListTile(
-                        leading: const Icon(Icons.logout,
-                            color: AppColors.danger),
-                        title: const Text(
-                          'Hesaptan Çıkış Yap',
-                          style: TextStyle(
-                            color: AppColors.danger,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    const Divider(height: 1),
+                    ListTile(
+                      leading: const Icon(Icons.logout,
+                          color: AppColors.danger),
+                      title: const Text(
+                        'Hesaptan Çıkış Yap',
+                        style: TextStyle(
+                          color: AppColors.danger,
+                          fontWeight: FontWeight.bold,
                         ),
-                        onTap: () async {
-                          final confirm = await showDialog<bool>(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              title: const Text('Çıkış Yap'),
-                              content: const Text(
-                                  'Hesabınızdan çıkış yapmak istediğinize emin misiniz?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(ctx).pop(false),
-                                  child: const Text('İptal'),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () =>
-                                      Navigator.of(ctx).pop(true),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.danger,
-                                    foregroundColor: Colors.white,
-                                  ),
-                                  child: const Text('Çıkış Yap'),
-                                ),
-                              ],
-                            ),
-                          );
-                          if (confirm == true) {
-                            await ref.read(authRepositoryProvider).signOut();
-                            ref.invalidate(currentUserProvider);
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Başarıyla çıkış yapıldı.')),
-                              );
-                            }
-                          }
-                        },
                       ),
-                    ],
+                      onTap: _confirmSignOut,
+                    ),
                   ],
                 ),
               ),
@@ -668,16 +677,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        !user.isGuest
-                            ? '🛡️ Kayıtlı Vatandaş (${user.email ?? user.phoneNumber ?? 'Aktif'})'
-                            : (user.isVerified
-                                ? '🛡️ Doğrulanmış Vatandaş (${user.phoneNumber ?? ''})'
-                                : 'Anonim Misafir ID: ${user.id.substring(0, 8)}...'),
+                        '🛡️ Kayıtlı Vatandaş (${user.email ?? user.phoneNumber ?? 'Aktif'})',
                         style: TextStyle(
                           fontSize: 11,
                           color: user.isVerified
                               ? AppColors.accent
-                              : AppColors.primary,
+                              : (isDark ? AppColors.primaryLight : AppColors.primary),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -687,45 +692,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
             ],
           ),
-          if (user.isGuest) ...[
-            const SizedBox(height: 14),
-            const Divider(height: 1),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                const Expanded(
-                  child: Text(
-                    'Şikayetlerinizi cihazlar arası senkronize etmek için hesabınıza giriş yapın.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.textSecondaryLight,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const LoginScreen(isModal: true),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.login, size: 16),
-                  label: const Text('Giriş / Kayıt'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(0, 36),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 8),
-                    textStyle: const TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-          ],
         ],
       ),
     );

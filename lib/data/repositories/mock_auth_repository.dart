@@ -31,13 +31,17 @@ class MockAuthRepository implements AuthRepository {
     }
 
     final createdIds = prefs.getStringList('seffaf_created_complaints') ?? [];
+    final isLoggedIn = prefs.getBool('seffaf_is_logged_in') ?? false;
+    final email = prefs.getString('seffaf_auth_email');
 
     final user = AnonymousUser(
       id: id,
-      displayName: name ?? 'Misafir Vatandaş',
+      displayName: name ?? (isLoggedIn ? 'Kayıtlı Vatandaş' : 'Misafir Vatandaş'),
       createdComplaintIds: createdIds,
       isVerified: isVerified,
       phoneNumber: phone,
+      email: email,
+      isGuest: !isLoggedIn,
       followedMunicipalityIds: followed,
     );
 

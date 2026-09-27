@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -12,6 +11,7 @@ import 'package:seffaf/data/models/complaint.dart';
 import 'package:seffaf/data/repositories/providers.dart';
 import 'package:seffaf/features/complaint_detail/presentation/complaint_detail_screen.dart';
 import 'package:seffaf/shared/widgets/category_badge.dart';
+import 'package:seffaf/shared/widgets/seffaf_image.dart';
 import 'package:seffaf/shared/widgets/status_badge.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
@@ -129,8 +129,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   if (complaint.photoUrls.isNotEmpty)
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(
-                        imageUrl: complaint.photoUrls.first,
+                      child: SeffafImage(
+                        imagePath: complaint.photoUrls.first,
                         width: 72,
                         height: 72,
                         fit: BoxFit.cover,
@@ -407,6 +407,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     Color? iconColor,
     required VoidCallback onTap,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: FilterChip(
@@ -422,10 +423,12 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         onSelected: (_) => onTap(),
         selectedColor: AppColors.primary,
         checkmarkColor: Colors.white,
-        backgroundColor: Colors.white,
+        backgroundColor: isDark ? AppColors.surfaceDark : Colors.white,
         elevation: 2,
         labelStyle: TextStyle(
-          color: isSelected ? Colors.white : AppColors.textPrimaryLight,
+          color: isSelected
+              ? Colors.white
+              : (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
           fontSize: 12,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
         ),

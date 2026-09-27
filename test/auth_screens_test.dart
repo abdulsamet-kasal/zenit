@@ -24,7 +24,7 @@ void main() {
 
       // Form elemanları
       expect(find.byType(TextFormField), findsNWidgets(2)); // E-posta ve şifre
-      expect(find.text('Misafir Vatandaş Olarak Devam Et'), findsOneWidget);
+      expect(find.text('Misafir Vatandaş Olarak Devam Et'), findsNothing);
       expect(find.text('Hemen Kayıt Ol'), findsOneWidget);
 
       // Boş giriş doğrulama testi

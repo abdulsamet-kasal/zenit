@@ -189,6 +189,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     Color? iconColor,
     required VoidCallback onTap,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: FilterChip(
@@ -202,15 +203,23 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
               )
             : null,
         onSelected: (_) => onTap(),
-        selectedColor: AppColors.primary,
+        selectedColor: isDark ? AppColors.primaryLight : AppColors.primary,
         checkmarkColor: Colors.white,
+        backgroundColor: isDark ? AppColors.surfaceDark : Colors.white,
         labelStyle: TextStyle(
-          color: isSelected ? Colors.white : AppColors.textPrimaryLight,
+          color: isSelected
+              ? Colors.white
+              : (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
           fontSize: 12.5,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+            color: isSelected
+                ? Colors.transparent
+                : (isDark ? AppColors.borderDark : AppColors.borderLight),
+          ),
         ),
       ),
     );

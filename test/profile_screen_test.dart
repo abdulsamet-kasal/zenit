@@ -21,6 +21,7 @@ void main() {
 
     expect(find.text('Profil & Ayarlar'), findsOneWidget);
     expect(find.text('Uygulama Ayarları'), findsOneWidget);
-    expect(find.text('Giriş / Kayıt'), findsOneWidget);
+    expect(find.text('Hesaptan Çıkış Yap'), findsOneWidget);
+    expect(find.byIcon(Icons.logout), findsWidgets);
   });
 }

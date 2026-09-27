@@ -133,6 +133,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Giriş Yap'),
@@ -178,12 +180,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'Şikayetlerinizi takip etmek ve belediyenizi puanlamak için giriş yapın.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.textSecondaryLight,
+                    color: isDark
+                        ? AppColors.textSecondaryDark
+                        : AppColors.textSecondaryLight,
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -313,59 +317,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                         ),
                 ),
-                const SizedBox(height: 20),
-
-                // Ayrım
-                const Row(
-                  children: [
-                    Expanded(child: Divider()),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        'veya',
-                        style: TextStyle(
-                          color: AppColors.textSecondaryLight,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                    Expanded(child: Divider()),
-                  ],
-                ),
-                const SizedBox(height: 20),
-
-                // Misafir Olarak Devam Et
-                OutlinedButton.icon(
-                  onPressed: () {
-                    if (widget.isModal) {
-                      Navigator.of(context).pop(false);
-                    } else {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) => const MainNavScreen(),
-                        ),
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.person_outline, size: 20),
-                  label: const Text('Misafir Vatandaş Olarak Devam Et'),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 28),
 
                 // Kayıt Ol Yönlendirmesi
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       'Hesabınız yok mu?',
                       style: TextStyle(
-                        color: AppColors.textSecondaryLight,
+                        color: isDark
+                            ? AppColors.textSecondaryDark
+                            : AppColors.textSecondaryLight,
                         fontSize: 14,
                       ),
                     ),
@@ -378,10 +341,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         'Hemen Kayıt Ol',
                         style: TextStyle(
-                          color: AppColors.primary,
+                          color: isDark ? AppColors.primaryLight : AppColors.primary,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),

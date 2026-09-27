@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'core/config/supabase_config.dart';
 import 'core/constants/app_constants.dart';
 import 'core/theme/app_theme.dart';
+import 'data/repositories/providers.dart';
+import 'features/auth/presentation/login_screen.dart';
 import 'features/main_navigation/main_nav_screen.dart';
 import 'features/onboarding/presentation/onboarding_screen.dart';
 
@@ -72,6 +74,7 @@ class SeffafApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final userAsync = ref.watch(currentUserProvider);
 
     return MaterialApp(
       title: 'Şeffaf',
@@ -79,9 +82,22 @@ class SeffafApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      home: onboardingCompleted
-          ? const MainNavScreen()
-          : const OnboardingScreen(),
+      home: !onboardingCompleted
+          ? const OnboardingScreen()
+          : userAsync.when(
+              data: (user) {
+                if (user.isGuest) {
+                  return const LoginScreen(isModal: false);
+                }
+                return const MainNavScreen();
+              },
+              loading: () => const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+              error: (_, _) => const LoginScreen(isModal: false),
+            ),
     );
   }
 }

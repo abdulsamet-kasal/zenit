@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:seffaf/core/constants/app_colors.dart';
 import 'package:seffaf/core/utils/date_formatter.dart';
 import 'package:seffaf/data/models/complaint.dart';
 import 'package:seffaf/shared/widgets/category_badge.dart';
+import 'package:seffaf/shared/widgets/seffaf_image.dart';
 import 'package:seffaf/shared/widgets/status_badge.dart';
 
 class ComplaintCard extends StatefulWidget {
@@ -101,23 +101,9 @@ class _ComplaintCardState extends State<ComplaintCard> {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    CachedNetworkImage(
+                    SeffafImage(
                       imageUrl: complaint.photoUrls.first,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        color: isDark ? Colors.grey[900] : Colors.grey[200],
-                        child: const Center(
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: isDark ? Colors.grey[900] : Colors.grey[200],
-                        child: Icon(
-                          Icons.broken_image_outlined,
-                          size: 40,
-                          color: AppColors.textSecondaryLight,
-                        ),
-                      ),
                     ),
                     // Çoklu Fotoğraf İndikatörü
                     if (complaint.photoUrls.length > 1)
@@ -229,7 +215,9 @@ class _ComplaintCardState extends State<ComplaintCard> {
                     Icon(
                       Icons.chevron_right,
                       size: 16,
-                      color: AppColors.textSecondaryLight,
+                      color: isDark
+                          ? AppColors.textSecondaryDark
+                          : AppColors.textSecondaryLight,
                     ),
                   ],
                 ),
