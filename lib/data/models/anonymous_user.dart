@@ -4,6 +4,8 @@ class AnonymousUser {
   final List<String> createdComplaintIds;
   final bool isVerified;
   final String? phoneNumber;
+  final String? email;
+  final bool isGuest;
   final List<String> followedMunicipalityIds;
 
   AnonymousUser({
@@ -12,6 +14,8 @@ class AnonymousUser {
     required this.createdComplaintIds,
     this.isVerified = false,
     this.phoneNumber,
+    this.email,
+    this.isGuest = true,
     this.followedMunicipalityIds = const [],
   });
 
@@ -25,6 +29,8 @@ class AnonymousUser {
           [],
       isVerified: json['isVerified'] as bool? ?? false,
       phoneNumber: json['phoneNumber'] as String?,
+      email: json['email'] as String?,
+      isGuest: json['isGuest'] as bool? ?? true,
       followedMunicipalityIds: (json['followedMunicipalityIds'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
@@ -39,6 +45,8 @@ class AnonymousUser {
       'createdComplaintIds': createdComplaintIds,
       'isVerified': isVerified,
       'phoneNumber': phoneNumber,
+      'email': email,
+      'isGuest': isGuest,
       'followedMunicipalityIds': followedMunicipalityIds,
     };
   }
@@ -49,6 +57,8 @@ class AnonymousUser {
     List<String>? createdComplaintIds,
     bool? isVerified,
     String? phoneNumber,
+    String? email,
+    bool? isGuest,
     List<String>? followedMunicipalityIds,
   }) {
     return AnonymousUser(
@@ -57,6 +67,8 @@ class AnonymousUser {
       createdComplaintIds: createdComplaintIds ?? this.createdComplaintIds,
       isVerified: isVerified ?? this.isVerified,
       phoneNumber: phoneNumber ?? this.phoneNumber,
+      email: email ?? this.email,
+      isGuest: isGuest ?? this.isGuest,
       followedMunicipalityIds:
           followedMunicipalityIds ?? this.followedMunicipalityIds,
     );

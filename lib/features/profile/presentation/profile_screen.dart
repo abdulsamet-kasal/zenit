@@ -6,6 +6,7 @@ import '../../../data/models/anonymous_user.dart';
 import '../../../data/models/complaint.dart';
 import '../../../data/models/municipality.dart';
 import '../../../data/repositories/providers.dart';
+import '../../auth/presentation/login_screen.dart';
 import '../../complaint_detail/presentation/complaint_detail_screen.dart';
 import '../../feed/presentation/widgets/complaint_card.dart';
 import '../../municipality/presentation/municipality_profile_screen.dart';
@@ -527,7 +528,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     const Divider(height: 1),
 
                     // Verileri Temizle
-                    ListTile(
+                      ListTile(
                       leading: const Icon(Icons.delete_outline,
                           color: AppColors.statusRejected),
                       title: const Text(
@@ -536,6 +537,57 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                       onTap: _showResetDataDialog,
                     ),
+
+                    if (!user.isGuest) ...[
+                      const Divider(height: 1),
+                      ListTile(
+                        leading: const Icon(Icons.logout,
+                            color: AppColors.danger),
+                        title: const Text(
+                          'Hesaptan Çıkış Yap',
+                          style: TextStyle(
+                            color: AppColors.danger,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onTap: () async {
+                          final confirm = await showDialog<bool>(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: const Text('Çıkış Yap'),
+                              content: const Text(
+                                  'Hesabınızdan çıkış yapmak istediğinize emin misiniz?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(ctx).pop(false),
+                                  child: const Text('İptal'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () =>
+                                      Navigator.of(ctx).pop(true),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.danger,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  child: const Text('Çıkış Yap'),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (confirm == true) {
+                            await ref.read(authRepositoryProvider).signOut();
+                            ref.invalidate(currentUserProvider);
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Başarıyla çıkış yapıldı.')),
+                              );
+                            }
+                          }
+                        },
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -559,68 +611,112 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               : (isDark ? AppColors.borderDark : AppColors.borderLight),
         ),
       ),
-      child: Row(
+      child: Column(
         children: [
-          CircleAvatar(
-            radius: 28,
-            backgroundColor: user.isVerified
-                ? AppColors.accent.withValues(alpha: 0.15)
-                : AppColors.primary.withValues(alpha: 0.1),
-            child: Icon(
-              user.isVerified ? Icons.verified : Icons.person,
-              size: 32,
-              color: user.isVerified ? AppColors.accent : AppColors.primary,
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 28,
+                backgroundColor: user.isVerified
+                    ? AppColors.accent.withValues(alpha: 0.15)
+                    : AppColors.primary.withValues(alpha: 0.1),
+                child: Icon(
+                  user.isVerified ? Icons.verified : Icons.person,
+                  size: 32,
+                  color: user.isVerified ? AppColors.accent : AppColors.primary,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            user.displayName,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        if (user.isVerified) ...[
+                          const SizedBox(width: 6),
+                          const Icon(Icons.check_circle,
+                              color: AppColors.accent, size: 18),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: user.isVerified
+                            ? AppColors.accent.withValues(alpha: 0.1)
+                            : AppColors.primary.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
                       child: Text(
-                        user.displayName,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
+                        !user.isGuest
+                            ? '🛡️ Kayıtlı Vatandaş (${user.email ?? user.phoneNumber ?? 'Aktif'})'
+                            : (user.isVerified
+                                ? '🛡️ Doğrulanmış Vatandaş (${user.phoneNumber ?? ''})'
+                                : 'Anonim Misafir ID: ${user.id.substring(0, 8)}...'),
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: user.isVerified
+                              ? AppColors.accent
+                              : AppColors.primary,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    if (user.isVerified) ...[
-                      const SizedBox(width: 6),
-                      const Icon(Icons.check_circle,
-                          color: AppColors.accent, size: 18),
-                    ],
                   ],
                 ),
-                const SizedBox(height: 4),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: user.isVerified
-                        ? AppColors.accent.withValues(alpha: 0.1)
-                        : AppColors.primary.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
+              ),
+            ],
+          ),
+          if (user.isGuest) ...[
+            const SizedBox(height: 14),
+            const Divider(height: 1),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                const Expanded(
                   child: Text(
-                    user.isVerified
-                        ? '🛡️ Doğrulanmış Vatandaş (${user.phoneNumber ?? ''})'
-                        : 'Anonim Kimlik ID: ${user.id.substring(0, 8)}...',
+                    'Şikayetlerinizi cihazlar arası senkronize etmek için hesabınıza giriş yapın.',
                     style: TextStyle(
-                      fontSize: 11,
-                      color: user.isVerified
-                          ? AppColors.accent
-                          : AppColors.primary,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: AppColors.textSecondaryLight,
                     ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const LoginScreen(isModal: true),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.login, size: 16),
+                  label: const Text('Giriş / Kayıt'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 8),
+                    textStyle: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
             ),
-          ),
+          ],
         ],
       ),
     );

@@ -65,7 +65,18 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
 
 ---
 
-## 🎯 Gelecek Faz (Faz 11 - Canlı Dağıtım ve Yayın Öncesi)
-- Supabase Auth SMS Provider (Twilio / Netgsm) ile canlı OTP SMS gönderimi.
+11. **Faz 11 (Kullanıcı Giriş & Kayıt Mimarisi, Supabase Auth ve E-Devlet Kaldırımı):**
+   - **E-Devlet Kaldırımı:** E-Devlet bağımlılığı, referansları veya gereksinimleri tamamen ortadan kaldırıldı; platform tamamen bağımsız vatandaş odaklı kimlik modeline kavuşturuldu.
+   - **Giriş Yap Ekranı (`LoginScreen`):** E-posta ve şifre ile giriş, form validasyonu, şifre sıfırlama talebi, "Misafir Olarak Devam Et" seçeneği ve "Kayıt Ol" geçişi.
+   - **Kayıt Ol Ekranı (`RegisterScreen`):** Ad Soyad, E-posta, Telefon (opsiyonel), Şifre ve Şifre Tekrar alanları, hata yönetimi ve doğrudan oturum başlatma.
+   - **Supabase Auth Entegrasyonu (`SupabaseAuthRepository`):** Canlı Supabase `client.auth` üzerinden oturum açma, kayıt oluşturma, şifre sıfırlama ve profil senkronizasyonu; ağ yokken yerel fallback desteği.
+   - **Profil Ekranı Güncellemesi:** Giriş yapmış vatandaşlar için e-posta, aktif rozet ve "Hesaptan Çıkış Yap" butonu; misafirler için "Giriş / Kayıt" davet kartı.
+   - **Onboarding Son Ekranı:** "Giriş Yap / Kayıt Ol" ve "Misafir Olarak Keşfet" ikili yönlendirmesi.
+   - **Widget Testleri:** `test/auth_screens_test.dart` ile form doğrulama ve render testleri (%100 başarı).
+
+---
+
+## 🎯 Gelecek Faz (Faz 12 - Canlı Dağıtım ve Yayın Öncesi)
 - Supabase Storage Bucket'a fotoğraf yükleme (`complaint-photos` bucket).
+- Canlı SMS sağlayıcısı (Netgsm / Twilio) ile harici SMS gönderimi.
 

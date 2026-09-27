@@ -15,6 +15,7 @@ class AppColors {
   static const Color statusInReview = Color(0xFF3B82F6); // Mavi / İnceleniyor
   static const Color statusResolved = Color(0xFF10B981); // Yeşil / Çözüldü
   static const Color statusRejected = Color(0xFFEF4444); // Kırmızı / Reddedildi
+  static const Color danger = Color(0xFFEF4444);
 
   // Light Mode Neutrals
   static const Color backgroundLight = Color(0xFFF8FAFC);

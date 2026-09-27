@@ -102,5 +102,63 @@ class MockAuthRepository implements AuthRepository {
       await prefs.setStringList('seffaf_created_complaints', createdIds);
     }
   }
+
+  @override
+  Future<AnonymousUser> signInWithEmail(String email, String password) async {
+    final prefs = await SharedPreferences.getInstance();
+    final name = email.split('@').first;
+    final user = AnonymousUser(
+      id: 'usr-${email.hashCode.abs()}',
+      displayName: name[0].toUpperCase() + name.substring(1),
+      email: email,
+      isGuest: false,
+      isVerified: true,
+      createdComplaintIds: prefs.getStringList('seffaf_created_complaints') ?? [],
+      followedMunicipalityIds: prefs.getStringList(AppConstants.keyFollowedMunicipalities) ?? [],
+    );
+    await saveUser(user);
+    await prefs.setString('seffaf_auth_email', email);
+    await prefs.setBool('seffaf_is_logged_in', true);
+    return user;
+  }
+
+  @override
+  Future<AnonymousUser> signUpWithEmail(
+    String email,
+    String password,
+    String fullName, {
+    String? phone,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final user = AnonymousUser(
+      id: 'usr-${email.hashCode.abs()}',
+      displayName: fullName,
+      email: email,
+      phoneNumber: phone,
+      isGuest: false,
+      isVerified: true,
+      createdComplaintIds: prefs.getStringList('seffaf_created_complaints') ?? [],
+      followedMunicipalityIds: prefs.getStringList(AppConstants.keyFollowedMunicipalities) ?? [],
+    );
+    await saveUser(user);
+    await prefs.setString('seffaf_auth_email', email);
+    await prefs.setBool('seffaf_is_logged_in', true);
+    return user;
+  }
+
+  @override
+  Future<void> signOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('seffaf_is_logged_in', false);
+    await prefs.remove('seffaf_auth_email');
+    // Misafir kullanıcıya geri dön
+    await clearUserData();
+  }
+
+  @override
+  Future<void> resetPassword(String email) async {
+    // Mock şifre sıfırlama
+    await Future.delayed(const Duration(milliseconds: 300));
+  }
 }
 

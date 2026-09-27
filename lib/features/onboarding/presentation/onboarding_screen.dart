@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../auth/presentation/login_screen.dart';
 import '../../main_navigation/main_nav_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -161,32 +162,65 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_currentIndex < _slides.length - 1) {
+                  if (_currentIndex < _slides.length - 1)
+                    ElevatedButton(
+                      onPressed: () {
                         _pageController.nextPage(
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                         );
-                      } else {
-                        _completeOnboarding();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    child: Text(
-                      _currentIndex == _slides.length - 1
-                          ? 'Başlayın'
-                          : 'Devam Et',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: const Text(
+                        'Devam Et',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  else ...[
+                    ElevatedButton(
+                      onPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool(AppConstants.keyOnboardingCompleted, true);
+                        if (!context.mounted) return;
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) => const LoginScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                      ),
+                      child: const Text(
+                        'Giriş Yap / Kayıt Ol',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 10),
+                    OutlinedButton(
+                      onPressed: _completeOnboarding,
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text(
+                        'Misafir Olarak Keşfet',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

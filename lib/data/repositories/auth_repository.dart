@@ -12,5 +12,18 @@ abstract class AuthRepository {
   Future<void> verifyUser(String phoneNumber);
 
   Future<void> addCreatedComplaintId(String complaintId);
+
+  Future<AnonymousUser> signInWithEmail(String email, String password);
+
+  Future<AnonymousUser> signUpWithEmail(
+    String email,
+    String password,
+    String fullName, {
+    String? phone,
+  });
+
+  Future<void> signOut();
+
+  Future<void> resetPassword(String email);
 }
 
