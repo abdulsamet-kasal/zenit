@@ -176,5 +176,15 @@ class MockAuthRepository implements AuthRepository {
     // Mock şifre sıfırlama
     await Future.delayed(const Duration(milliseconds: 300));
   }
+
+  @override
+  Future<void> verifyOtpAndResetPassword(
+    String email,
+    String token,
+    String newPassword,
+  ) async {
+    // Mock OTP ile şifre sıfırlama
+    await Future.delayed(const Duration(milliseconds: 300));
+  }
 }
 

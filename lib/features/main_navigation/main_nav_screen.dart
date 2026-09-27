@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/network/offline_sync_controller.dart';
@@ -17,6 +18,7 @@ class MainNavScreen extends ConsumerStatefulWidget {
 
 class _MainNavScreenState extends ConsumerState<MainNavScreen> {
   int _selectedIndex = 0;
+  DateTime? _lastBackPressTime;
 
   final List<Widget> _screens = const [
     FeedScreen(),
@@ -66,11 +68,47 @@ class _MainNavScreenState extends ConsumerState<MainNavScreen> {
       }
     });
 
-    return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _screens,
-      ),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (didPop) return;
+
+        // Sekmeler arası geçiş: Anasayfa (Akış - 0) haricindeki bir sekmedeyse Akış'a dön
+        if (_selectedIndex != 0) {
+          setState(() {
+            _selectedIndex = 0;
+          });
+          return;
+        }
+
+        // Anasayfadayken çift tıklama kontrolü (2 saniye aralık)
+        final now = DateTime.now();
+        if (_lastBackPressTime == null ||
+            now.difference(_lastBackPressTime!) > const Duration(seconds: 2)) {
+          _lastBackPressTime = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                'Çıkmak için tekrar geri tuşuna basın',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              duration: const Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          );
+        } else {
+          // 2 saniye içinde tekrar basıldıysa uygulamadan çık
+          SystemNavigator.pop();
+        }
+      },
+      child: Scaffold(
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _screens,
+        ),
 
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -125,8 +163,9 @@ class _MainNavScreenState extends ConsumerState<MainNavScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildNavItem({
     required int index,

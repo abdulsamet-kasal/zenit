@@ -33,6 +33,9 @@ class SeffafImage extends StatelessWidget {
 
     Widget imageWidget;
 
+    // Bellek tasarrufu için dinamik boyutlandırma (OOM önleme)
+    final cacheW = width != null ? (width! * 2).toInt().clamp(200, 1080) : 720;
+
     if (trimmed.isEmpty) {
       imageWidget = _buildFallback(isDark);
     } else if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
@@ -41,6 +44,9 @@ class SeffafImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
+        memCacheWidth: cacheW,
+        maxWidthDiskCache: 1080,
+        maxHeightDiskCache: 1080,
         placeholder: (context, url) =>
             placeholder ?? _buildPlaceholder(isDark),
         errorWidget: (context, url, error) =>
@@ -52,6 +58,7 @@ class SeffafImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
+        cacheWidth: cacheW,
         errorBuilder: (context, error, stackTrace) =>
             errorWidget ?? _buildFallback(isDark),
       );
@@ -65,6 +72,7 @@ class SeffafImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
+        cacheWidth: cacheW,
         errorBuilder: (context, error, stackTrace) =>
             errorWidget ?? _buildFallback(isDark),
       );

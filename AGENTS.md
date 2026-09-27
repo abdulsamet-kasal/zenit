@@ -89,7 +89,18 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
 
 ---
 
-## 🎯 Gelecek Faz (Faz 13 - Canlı Dağıtım ve Yayın Öncesi)
+13. **Faz 13 (Oturum Kalıcılığı, Supabase Auto-Confirm, Çift Geri Tuşu, Uygulama İçi OTP Şifre Sıfırlama & RAM Optimizasyonu):**
+   - **Otomatik E-posta Onay Trigger'ı (Supabase Auto-Confirm):** Supabase'de e-posta onay zorunluluğundan kaynaklanan ve şifre doğru olsa dahi "Invalid login credentials" hatasına yol açan engel kökten çözüldü (`20260928000000_auto_confirm_users.sql`). Canlı veritabanındaki tüm kullanıcılar onaylandı ve yeni kayıt olan her kullanıcı için anında onaylama trigger'ı kuruldu.
+   - **Oturum Kalıcılığı (Session Persistence):** `SupabaseAuthRepository` oturum açma ve kayıt işlemlerinde bilgileri güvenli SharedPreferences alanlarına (`seffaf_is_logged_in`, `seffaf_auth_email`, `seffaf_auth_user_id`) kaydeder. Uygulama soğuk açılışında (cold start) veya internet gecikmelerinde kullanıcı asla oturumdan düşürülmez.
+   - **Gelişmiş Geri Tuşu Yönetimi (Double Back to Exit & Anasayfaya Dönüş):** `MainNavScreen`'e modern `PopScope` entegre edildi. Kullanıcı Harita, Belediyeler veya Profil sekmesindeyken geri tuşuna basarsa anında Akış (Anasayfa) sekmesine döner; Anasayfadayken 2 saniye içinde iki kez geri tuşuna basarsa uygulama güvenle kapanır, ilk basışta bilgilendirici SnackBar uyarısı verilir.
+   - **Uygulama İçi 6 Haneli OTP ile Şifre Sıfırlama (`localhost:3000` Çözümü):** Supabase'in varsayılan e-posta linkindeki `localhost:3000` yönlendirme sorunu yerine kullanıcıya tarayıcı açtırmayan 2 adımlı uygulama içi diyalog geliştirildi. Kullanıcı e-postasına gelen 6 haneli doğrulama kodunu ve yeni şifresini doğrudan uygulama içinde girerek `verifyOTP(..., type: OtpType.recovery)` + `updateUser` ile şifresini sıfırlar.
+   - **Görsel & Bellek Optimizasyonları:** `SeffafImage` içine `memCacheWidth`, `maxWidthDiskCache`, `maxHeightDiskCache` ve `Image.file` için bellek sınırlamaları eklendi; RAM şişmesi ve düşük bellekli cihazlarda OOM riski önlendi.
+   - **Sürüm Güncellemesi:** Uygulama sürümü `1.2.0+3` olarak güncellendi.
+   - **Test & Analiz:** `flutter analyze` 0 hata ile tamamlandı, 20 testin 20'si de başarıyla geçti.
+
+---
+
+## 🎯 Gelecek Faz (Faz 14 - Canlı Dağıtım ve Yayın Öncesi)
 - Canlı SMS sağlayıcısı (Netgsm / Twilio) ile harici SMS gönderimi.
 
 
