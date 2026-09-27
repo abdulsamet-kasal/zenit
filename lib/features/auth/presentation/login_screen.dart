@@ -117,7 +117,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (dialogError != null)
+                    if (dialogError != null) ...[
                       Container(
                         padding: const EdgeInsets.all(10),
                         margin: const EdgeInsets.only(bottom: 12),
@@ -128,15 +128,42 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             color: AppColors.danger.withValues(alpha: 0.3),
                           ),
                         ),
-                        child: Text(
-                          dialogError!,
-                          style: const TextStyle(
-                            color: AppColors.danger,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              dialogError!,
+                              style: const TextStyle(
+                                color: AppColors.danger,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            if (step == 1 && dialogError!.contains('429')) ...[
+                              const SizedBox(height: 8),
+                              OutlinedButton.icon(
+                                icon: const Icon(Icons.pin, size: 16),
+                                label: const Text(
+                                  'Gelen Kodu Girerek Devam Et',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: AppColors.primary,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 4),
+                                ),
+                                onPressed: () {
+                                  setDialogState(() {
+                                    dialogError = null;
+                                    step = 2;
+                                  });
+                                },
+                              ),
+                            ],
+                          ],
                         ),
                       ),
+                    ],
                     if (step == 1) ...[
                       const Text(
                         'Kayıtlı e-posta adresinizi girin. Size 6 haneli bir doğrulama kodu gönderilecektir.',
@@ -160,6 +187,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ? AppColors.textSecondaryDark
                               : AppColors.textSecondaryLight,
                         ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextButton.icon(
+                        icon: const Icon(Icons.arrow_forward_rounded, size: 16),
+                        label: const Text(
+                          'Daha önce kod aldım, şifre belirleyeceğim',
+                          style: TextStyle(fontSize: 13),
+                        ),
+                        onPressed: () {
+                          final email = emailCtrl.text.trim();
+                          if (email.isEmpty || !email.contains('@')) {
+                            setDialogState(() => dialogError =
+                                'Lütfen önce yukarıya e-posta adresinizi girin.');
+                            return;
+                          }
+                          setDialogState(() {
+                            dialogError = null;
+                            step = 2;
+                          });
+                        },
                       ),
                     ] else ...[
                       Text(
@@ -239,7 +286,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             } catch (e) {
                               setDialogState(() {
                                 isSubmitting = false;
-                                dialogError = 'Sıfırlama kodu gönderilemedi: $e';
+                                final errStr = e.toString();
+                                if (errStr.contains('429') ||
+                                    errStr.contains('rate limit') ||
+                                    errStr.contains('security purposes')) {
+                                  dialogError =
+                                      'Çok sık kod talebi yapıldı (Limit: 429). Güvenlik amacıyla lütfen 60 saniye bekleyin veya daha önce gelen e-postadaki kodu kullanın.';
+                                } else {
+                                  dialogError = 'Sıfırlama kodu gönderilemedi: $e';
+                                }
                               });
                             }
                           },
@@ -315,8 +370,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             } catch (e) {
                               setDialogState(() {
                                 isSubmitting = false;
-                                dialogError =
-                                    'Şifre sıfırlanamadı: Kod hatalı veya süresi dolmuş olabilir.';
+                                final errStr = e.toString();
+                                if (errStr.contains('429')) {
+                                  dialogError =
+                                      'Çok fazla deneme yapıldı. Lütfen biraz bekleyin.';
+                                } else if (errStr.contains('Token') ||
+                                    errStr.contains('invalid') ||
+                                    errStr.contains('expired')) {
+                                  dialogError =
+                                      'Girdiğiniz 6 haneli kod hatalı veya süresi dolmuş.';
+                                } else {
+                                  dialogError =
+                                      'Şifre sıfırlanamadı: $e';
+                                }
                               });
                             }
                           },

@@ -33,8 +33,10 @@ class SeffafImage extends StatelessWidget {
 
     Widget imageWidget;
 
-    // Bellek tasarrufu için dinamik boyutlandırma (OOM önleme)
-    final cacheW = width != null ? (width! * 2).toInt().clamp(200, 1080) : 720;
+    // Bellek tasarrufu için dinamik boyutlandırma (OOM önleme, sonsuz genişlik kontrolü)
+    final cacheW = (width != null && width!.isFinite)
+        ? (width! * 2).toInt().clamp(200, 1080)
+        : 720;
 
     if (trimmed.isEmpty) {
       imageWidget = _buildFallback(isDark);

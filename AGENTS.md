@@ -100,7 +100,16 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
 
 ---
 
-## 🎯 Gelecek Faz (Faz 14 - Canlı Dağıtım ve Yayın Öncesi)
+14. **Faz 14 (Detay Görsel Düzeltmesi, Kullanıcı Şikayet Silme & 429 Rate Limit Yönetimi):**
+   - **Şikayet Detayı Görsel Yüklenmeme Hatası Kökten Çözüldü:** `ComplaintDetailScreen` içinde görsel genişliği `double.infinity` verildiğinde `SeffafImage` içerisindeki bellek boyutlandırmasında `double.infinity.toInt()` çağrısının `UnsupportedError` fırlatması ve görselin render edilememesi engellendi; `width.isFinite` denetimi getirilerek hem detayda hem akışta fotoğrafların kusursuz görüntülenmesi sağlandı.
+   - **Kullanıcı Şikayet Silme Özelliği:** Şikayeti paylaşan kullanıcının kendi şikayetini silebilmesi için Supabase üzerinde `public delete access for complaints` RLS politikası oluşturulup canlıya pushlandı (`20260928000001_add_complaint_delete_policy.sql`). `ComplaintDetailScreen` AppBar'ına silme aksiyonu, çift onay diyaloğu eklendi; Storage üzerindeki görseller ve bağlı yorumlar/beğeniler temizlenerek Riverpod akışından anında kaldırılması sağlandı.
+   - **AuthApiException 429 (Rate Limit) Yönetimi:** Supabase e-posta gönderim limitine ulaşıldığında kullanıcıya net ve anlaşılır rehberlik sunuldu; ayrıca 60 saniye beklemek istemeyen veya daha önceden e-posta almış kullanıcılar için Step 1'e *"Daha önce kod aldım, şifre belirleyeceğim"* doğrudan geçiş butonu eklendi.
+   - **Sürüm Güncellemesi:** Uygulama sürümü `1.2.1+4` olarak güncellendi.
+   - **Test & Analiz:** `flutter analyze` 0 hata ile tamamlandı, 20 testin 20'si de başarıyla geçti.
+
+---
+
+## 🎯 Gelecek Faz (Faz 15 - Canlı Dağıtım ve Yayın Öncesi)
 - Canlı SMS sağlayıcısı (Netgsm / Twilio) ile harici SMS gönderimi.
 
 

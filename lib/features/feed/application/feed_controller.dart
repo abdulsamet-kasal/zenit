@@ -171,6 +171,15 @@ class FeedController extends Notifier<FeedState> {
       }
     } catch (_) {}
   }
+
+  Future<void> deleteComplaint(String complaintId, String userId) async {
+    final repo = ref.read(complaintRepositoryProvider);
+    await repo.deleteComplaint(complaintId, userId);
+
+    final updated =
+        state.complaints.where((c) => c.id != complaintId).toList();
+    state = state.copyWith(complaints: updated);
+  }
 }
 
 final feedControllerProvider =

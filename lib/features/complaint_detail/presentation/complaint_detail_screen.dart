@@ -212,15 +212,92 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
     );
   }
 
+  void _showDeleteConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: const Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: AppColors.danger),
+            SizedBox(width: 8),
+            Text('Şikayeti Sil'),
+          ],
+        ),
+        content: const Text(
+          'Bu şikayeti ve ilişkili tüm verileri kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.',
+          style: TextStyle(fontSize: 14),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Vazgeç'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.danger,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () async {
+              final nav = Navigator.of(context);
+              final scaffoldMsg = ScaffoldMessenger.of(context);
+              Navigator.of(ctx).pop();
+              try {
+                final user = await ref.read(currentUserProvider.future);
+                await ref
+                    .read(feedControllerProvider.notifier)
+                    .deleteComplaint(_complaint.id, user.id);
+
+                if (mounted) {
+                  scaffoldMsg.showSnackBar(
+                    const SnackBar(
+                      content: Text('Şikayetiniz başarıyla silindi.'),
+                      backgroundColor: AppColors.accent,
+                    ),
+                  );
+                  nav.pop(); // Akış ekranına geri dön
+                }
+              } catch (e) {
+                if (mounted) {
+                  scaffoldMsg.showSnackBar(
+                    SnackBar(
+                      content: Text('Şikayet silinirken hata oluştu: $e'),
+                      backgroundColor: AppColors.danger,
+                    ),
+                  );
+                }
+              }
+            },
+            child: const Text('Evet, Sil'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final category = CategoryDefaults.getById(_complaint.categoryId);
+    final currentUserAsync = ref.watch(currentUserProvider);
+    final currentUser = currentUserAsync.asData?.value;
+    final isAuthor = currentUser != null &&
+        (currentUser.id == _complaint.anonymousUserId ||
+            (currentUser.email != null &&
+                currentUser.email == _complaint.anonymousUserId));
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Şikayet Detayı'),
         actions: [
+          if (isAuthor)
+            IconButton(
+              icon: const Icon(Icons.delete_outline, color: AppColors.danger),
+              tooltip: 'Şikayeti Sil',
+              onPressed: _showDeleteConfirmationDialog,
+            ),
           IconButton(
             icon: const Icon(Icons.share_outlined),
             tooltip: 'Paylaş',

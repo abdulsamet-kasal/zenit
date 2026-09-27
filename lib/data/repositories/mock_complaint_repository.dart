@@ -390,5 +390,33 @@ class MockComplaintRepository implements ComplaintRepository {
       'submittedAt': DateTime.now().toIso8601String(),
     });
   }
+
+  @override
+  Future<void> deleteComplaint(String complaintId, String userId) async {
+    await _ensureLoaded();
+    _cachedComplaints?.removeWhere((c) => c.id == complaintId);
+
+    // Yerel depodan ve kullanıcının şikayet listesinden temizle
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final customListJson =
+          prefs.getStringList(AppConstants.keyCustomComplaints) ?? [];
+      customListJson.removeWhere((item) {
+        try {
+          final map = jsonDecode(item) as Map<String, dynamic>;
+          return map['id'] == complaintId;
+        } catch (_) {
+          return false;
+        }
+      });
+      await prefs.setStringList(
+          AppConstants.keyCustomComplaints, customListJson);
+
+      final createdIds =
+          prefs.getStringList('seffaf_created_complaints') ?? [];
+      createdIds.remove(complaintId);
+      await prefs.setStringList('seffaf_created_complaints', createdIds);
+    } catch (_) {}
+  }
 }
 

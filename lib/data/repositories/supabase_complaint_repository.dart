@@ -357,4 +357,52 @@ class SupabaseComplaintRepository implements ComplaintRepository {
 
     return updated;
   }
+
+  @override
+  Future<void> deleteComplaint(String complaintId, String userId) async {
+    // 1. Yerel depodan / önbellekten sil
+    await _fallbackRepo.deleteComplaint(complaintId, userId);
+
+    final client = SupabaseConfig.client;
+    if (client != null) {
+      try {
+        // İlgili şikayetin fotoğraflarını storage'dan temizle
+        final existing = await client
+            .from('complaints')
+            .select('photo_urls')
+            .eq('id', complaintId)
+            .maybeSingle();
+
+        if (existing != null && existing['photo_urls'] != null) {
+          final urls = (existing['photo_urls'] as List<dynamic>)
+              .map((e) => e.toString())
+              .toList();
+          final filePaths = <String>[];
+          for (final url in urls) {
+            if (url.contains('complaint-photos/')) {
+              final path = url.split('complaint-photos/').last;
+              filePaths.add(path);
+            }
+          }
+          if (filePaths.isNotEmpty) {
+            try {
+              await client.storage.from('complaint-photos').remove(filePaths);
+            } catch (e) {
+              debugPrint('⚠️ Storage dosya silme uyarısı: $e');
+            }
+          }
+        }
+
+        // Veritabanından şikayeti sil (Cascade ile beğeniler, yorumlar silinir)
+        await client
+            .from('complaints')
+            .delete()
+            .eq('id', complaintId)
+            .eq('author_id', userId);
+      } catch (e) {
+        debugPrint('⚠️ Supabase deleteComplaint hatası: $e');
+        rethrow;
+      }
+    }
+  }
 }

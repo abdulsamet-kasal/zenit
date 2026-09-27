@@ -32,5 +32,7 @@ abstract class ComplaintRepository {
   Future<void> submitDispute(String complaintId, String userId, String reason);
 
   Future<Complaint> rateComplaint(String complaintId, String userId, int rating);
+
+  Future<void> deleteComplaint(String complaintId, String userId);
 }
 
