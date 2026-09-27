@@ -7,7 +7,10 @@ enum ComplaintStatus {
   final String label;
   final String emoji;
 
+  String get displayName => label;
+
   const ComplaintStatus(this.label, this.emoji);
+
 
   static ComplaintStatus fromString(String value) {
     switch (value.toLowerCase()) {

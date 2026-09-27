@@ -119,9 +119,35 @@ class GeoUtils {
         GeoPoint(41.2200, 26.6300),
       ],
     ),
+    // Çorlu Sınır Poligonu (Tekirdağ)
+    const DistrictBoundary(
+      municipalityId: 'muni_tekirdag_corlu',
+      districtName: 'Çorlu',
+      provinceName: 'Tekirdağ',
+      polygon: [
+        GeoPoint(41.2200, 27.7500),
+        GeoPoint(41.2200, 27.8800),
+        GeoPoint(41.1200, 27.8800),
+        GeoPoint(41.1200, 27.7500),
+      ],
+    ),
+    // Lüleburgaz Sınır Poligonu (Kırklareli)
+    const DistrictBoundary(
+      municipalityId: 'muni_kirklareli_luleburgaz',
+      districtName: 'Lüleburgaz',
+      provinceName: 'Kırklareli',
+      polygon: [
+        GeoPoint(41.4500, 27.3000),
+        GeoPoint(41.4500, 27.4200),
+        GeoPoint(41.3500, 27.4200),
+        GeoPoint(41.3500, 27.3000),
+      ],
+    ),
   ];
 
-  /// Verilen GPS koordinatından belediyeyi tespit eder
+  /// Verilen GPS koordinatından belediyeyi tespit eder.
+  /// Önce hassas ray-casting poligon kontrolü yapar.
+  /// Poligon dışına düşerse en yakın belediyeyi centroid mesafesine göre belirler.
   static DistrictBoundary detectMunicipality(double lat, double lon) {
     final point = GeoPoint(lat, lon);
     for (final boundary in knownBoundaries) {
@@ -129,7 +155,28 @@ class GeoUtils {
         return boundary;
       }
     }
-    // Eşleşmezse varsayılan olarak Edirne Merkez döner
-    return knownBoundaries.first;
+
+    // Poligon bulunamazsa en yakın belediyeyi (Haversine centroid) bul
+    DistrictBoundary nearest = knownBoundaries.first;
+    double minDistance = double.infinity;
+
+    for (final boundary in knownBoundaries) {
+      double sumLat = 0;
+      double sumLon = 0;
+      for (final p in boundary.polygon) {
+        sumLat += p.latitude;
+        sumLon += p.longitude;
+      }
+      final centerLat = sumLat / boundary.polygon.length;
+      final centerLon = sumLon / boundary.polygon.length;
+
+      final dist = calculateDistanceInMeters(lat, lon, centerLat, centerLon);
+      if (dist < minDistance) {
+        minDistance = dist;
+        nearest = boundary;
+      }
+    }
+
+    return nearest;
   }
 }

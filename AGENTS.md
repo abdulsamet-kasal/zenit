@@ -34,19 +34,28 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
 
 ---
 
-## 🚦 Tamamlanan Aşamalar (Faz 1 - Faz 8)
+## 🚦 Tamamlanan Aşamalar (Faz 1 - Faz 9)
 1. **Faz 1:** Temiz Mimari (`core/`, `data/`, `features/`, `shared/`), veri modelleri, SLA ve puanlama motoru.
-2. **Faz 2:** Mock veri setleri (Edirne, Kadıköy, Çankaya vb.) ve repository katmanı.
+2. **Faz 2:** Mock veri setleri (Edirne, Keşan, Uzunköprü, Çorlu, Lüleburgaz) ve repository katmanı.
 3. **Faz 3:** Onboarding ve Misafir Kullanıcı kimliği (UUID).
 4. **Faz 4:** 5 sekmeli ana navigasyon ve Instagram tarzı Şikayet Akışı (Feed).
 5. **Faz 5:** OpenStreetMap haritası, kümeleme (clustering) ve pin bottom sheet önizlemesi.
 6. **Faz 6:** 4 adımlı Şikayet Oluşturma Sihirbazı, ray-casting ile otomatik belediye tespiti ve offline kuyruk.
 7. **Faz 7:** Şikayet Detay ekranı, çoklu görsel galerisi, SLA zaman çizelgesi, itiraz ve yorum akışı.
 8. **Faz 8:** Belediye Karnesi profili (0-100 puan göstergesi, fl_chart trendi) ve Sıralama (Leaderboard) ekranı.
+9. **Faz 9 (Kalıcılık, Çözüm Kanıtı, Doğrulama & UX İleri Geliştirmeler):**
+   - **Kalıcı Yerel Depolama:** Kullanıcının açtığı şikayetler, beğenileri, onayları, yorumları ve oyları SharedPreferences ile cihazda kalıcı hale getirildi.
+   - **Otomatik Çevrimdışı Eşitleme (Offline Sync Engine):** `connectivity_plus` dinleyicisi ile internet geldiğinde arka plandaki taslakların otomatik aktarılması ve kullanıcıya durum gösterimi.
+   - **Çözüm Kanıtı (Önce / Sonra):** Çözülmüş şikayetlerde vatandaş bildirimi ile belediyenin çözüm fotoğrafının yan yana karşılaştırılması.
+   - **Resmi Belediye Yanıtı & Vatandaş Memnuniyet Anketi:** Belediyenin resmi açıklama notu, vatandaşın 1-5 yıldız vermesi ve bunun şeffaflık puanına doğrudan etki etmesi.
+   - **Tam Ekran Görsel Görüntüleyici:** Detaydaki tüm görsellere dokunulduğunda pinch-to-zoom (`InteractiveViewer`) tam ekran modu.
+   - **SMS OTP Vatandaş Doğrulaması:** 6 haneli SMS onay akışı, profilde "🛡️ Doğrulanmış Vatandaş" rozeti ve takip edilen belediyeler listesi.
+   - **Genişletilmiş Coğrafi Kapsam:** Çorlu ve Lüleburgaz poligonları ve poligon dışı alanlar için en yakın centroid mesafesi yedek tespit algoritması.
+   - **Gelişmiş Sıralama Ölçütleri:** Akışta En Yeni / En Çok Desteklenen / SLA Acil Olanlar; Sıralamada Şeffaflık Puanı / Çözüm Oranı / En Hızlı Çözenler.
 
 ---
 
-## 🎯 Gelecek Faz (Faz 9 - Sıradaki Yol Haritası)
-- **Backend Entegrasyonu:** `lib/data/repositories/` altındaki Mock sınıfları yerine gerçek API / Supabase / Firebase veya REST API servislerinin bağlanması.
-- **Gerçek Kimlik Doğrulama:** Misafir UUID modeline ek olarak e-Devlet veya SMS OTP entegrasyonu.
+## 🎯 Gelecek Faz (Faz 10 - Sıradaki Yol Haritası)
+- **Harici Bulut Backend:** Supabase / Firebase veya REST API servislerinin bağlanması.
 - **Harici Coğrafi Veri:** Türkiye geneli 922 ilçe sınır poligonlarının GeoJSON olarak yüklenmesi.
+

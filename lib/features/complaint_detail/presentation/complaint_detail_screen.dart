@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/category_defaults.dart';
@@ -9,7 +10,9 @@ import '../../../data/models/complaint.dart';
 import '../../../data/models/complaint_status.dart';
 import '../../../data/repositories/providers.dart';
 import '../../../shared/widgets/category_badge.dart';
+import '../../../shared/widgets/full_screen_image_viewer.dart';
 import '../../../shared/widgets/status_badge.dart';
+import '../../feed/application/feed_controller.dart';
 
 class ComplaintDetailScreen extends ConsumerStatefulWidget {
   final Complaint complaint;
@@ -79,8 +82,75 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
 
     setState(() {
       _comments.insert(0, newComment);
-      _complaint = _complaint.copyWith(commentCount: _complaint.commentCount + 1);
+      _complaint =
+          _complaint.copyWith(commentCount: _complaint.commentCount + 1);
     });
+  }
+
+  Future<void> _toggleLike() async {
+    try {
+      final user = await ref.read(currentUserProvider.future);
+      final repo = ref.read(complaintRepositoryProvider);
+      final updated = await repo.toggleLike(_complaint.id, user.id);
+      if (mounted) {
+        setState(() => _complaint = updated);
+      }
+      ref.read(feedControllerProvider.notifier).loadInitial();
+    } catch (_) {}
+  }
+
+  Future<void> _toggleConfirm() async {
+    try {
+      final user = await ref.read(currentUserProvider.future);
+      final repo = ref.read(complaintRepositoryProvider);
+      final updated = await repo.toggleConfirm(_complaint.id, user.id);
+      if (mounted) {
+        setState(() => _complaint = updated);
+      }
+      ref.read(feedControllerProvider.notifier).loadInitial();
+    } catch (_) {}
+  }
+
+  Future<void> _rateComplaint(int rating) async {
+    try {
+      final user = await ref.read(currentUserProvider.future);
+      final repo = ref.read(complaintRepositoryProvider);
+      final updated =
+          await repo.rateComplaint(_complaint.id, user.id, rating);
+      if (mounted) {
+        setState(() => _complaint = updated);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Değerlendirmeniz kaydedildi: $rating Yıldız ⭐'),
+          ),
+        );
+      }
+      ref.read(feedControllerProvider.notifier).loadInitial();
+    } catch (_) {}
+  }
+
+  void _shareComplaint() {
+    final title = _complaint.title ?? 'Şikayet Detayı';
+    final shareText =
+        '📢 $title\n📍 ${_complaint.address}\n📊 Durum: ${_complaint.status.displayName}\nŞeffaf Platformu üzerinden inceleyin: https://seffaf.gov.tr/sikayet/${_complaint.id}';
+    Clipboard.setData(ClipboardData(text: shareText));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Şikayet bilgileri panoya kopyalandı! Paylaşabilirsiniz.'),
+      ),
+    );
+  }
+
+  void _openImageViewer(List<String> urls, int index) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => FullScreenImageViewer(
+          imageUrls: urls,
+          initialIndex: index,
+        ),
+      ),
+    );
   }
 
   void _showDisputeDialog() {
@@ -153,11 +223,8 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.share_outlined),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Bağlantı kopyalandı')),
-              );
-            },
+            tooltip: 'Paylaş',
+            onPressed: _shareComplaint,
           ),
         ],
       ),
@@ -179,12 +246,36 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                             onPageChanged: (i) =>
                                 setState(() => _activePhotoIndex = i),
                             itemBuilder: (context, i) {
-                              return CachedNetworkImage(
-                                imageUrl: _complaint.photoUrls[i],
-                                fit: BoxFit.cover,
-                                width: double.infinity,
+                              return GestureDetector(
+                                onTap: () => _openImageViewer(
+                                    _complaint.photoUrls, i),
+                                child: Hero(
+                                  tag: 'photo_${_complaint.id}_$i',
+                                  child: CachedNetworkImage(
+                                    imageUrl: _complaint.photoUrls[i],
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  ),
+                                ),
                               );
                             },
+                          ),
+                          // Büyütme ikonu ipucu
+                          Positioned(
+                            top: 12,
+                            right: 12,
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.5),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.fullscreen,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
                           ),
                           if (_complaint.photoUrls.length > 1)
                             Positioned(
@@ -198,7 +289,8 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                                   (index) => Container(
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 3),
-                                    width: _activePhotoIndex == index ? 18 : 6,
+                                    width:
+                                        _activePhotoIndex == index ? 18 : 6,
                                     height: 6,
                                     decoration: BoxDecoration(
                                       color: _activePhotoIndex == index
@@ -249,6 +341,10 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                                 : AppColors.textPrimaryLight,
                           ),
                         ),
+                        const SizedBox(height: 16),
+
+                        // Destek ve Doğrulama Butonları (Aksiyon Barı)
+                        _buildActionBar(isDark),
                         const SizedBox(height: 16),
 
                         // Konum Kartı
@@ -302,8 +398,26 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
 
                         // SLA Çözüm Durumu Zaman Çizelgesi (Timeline)
                         _buildSlaTimeline(isDark, category.slaDays),
+                        const SizedBox(height: 20),
 
-                        const SizedBox(height: 24),
+                        // ÖNCE / SONRA Çözüm Kanıtı (Varsa)
+                        if (_complaint.resolvedPhotoUrl != null) ...[
+                          _buildBeforeAfterComparison(isDark),
+                          const SizedBox(height: 20),
+                        ],
+
+                        // Resmi Belediye Yanıtı (Varsa)
+                        if (_complaint.municipalityResponseNote != null) ...[
+                          _buildMunicipalityResponse(isDark),
+                          const SizedBox(height: 20),
+                        ],
+
+                        // Vatandaş Memnuniyet Anketi (Çözülmüşse)
+                        if (_complaint.status == ComplaintStatus.resolved) ...[
+                          _buildSatisfactionRating(isDark),
+                          const SizedBox(height: 20),
+                        ],
+
                         const Divider(),
 
                         // İtiraz / Topluluk Doğrulaması Butonu
@@ -450,6 +564,325 @@ class _ComplaintDetailScreenState extends ConsumerState<ComplaintDetailScreen> {
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionBar(bool isDark) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.surfaceDark : AppColors.backgroundLight,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: isDark ? AppColors.borderDark : AppColors.borderLight,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          // Destek Ol (Like)
+          InkWell(
+            onTap: _toggleLike,
+            borderRadius: BorderRadius.circular(8),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              child: Row(
+                children: [
+                  Icon(
+                    _complaint.isLikedByMe
+                        ? Icons.thumb_up
+                        : Icons.thumb_up_outlined,
+                    size: 18,
+                    color: _complaint.isLikedByMe
+                        ? AppColors.primary
+                        : AppColors.textSecondaryLight,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    'Destek (${_complaint.likeCount})',
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: _complaint.isLikedByMe
+                          ? FontWeight.bold
+                          : FontWeight.w500,
+                      color: _complaint.isLikedByMe
+                          ? AppColors.primary
+                          : AppColors.textSecondaryLight,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Ben de Gördüm (Doğrula)
+          InkWell(
+            onTap: _toggleConfirm,
+            borderRadius: BorderRadius.circular(8),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              child: Row(
+                children: [
+                  Icon(
+                    _complaint.isConfirmedByMe
+                        ? Icons.check_circle
+                        : Icons.check_circle_outline,
+                    size: 18,
+                    color: _complaint.isConfirmedByMe
+                        ? AppColors.accent
+                        : AppColors.textSecondaryLight,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    'Doğrula (${_complaint.confirmCount})',
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: _complaint.isConfirmedByMe
+                          ? FontWeight.bold
+                          : FontWeight.w500,
+                      color: _complaint.isConfirmedByMe
+                          ? AppColors.accent
+                          : AppColors.textSecondaryLight,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBeforeAfterComparison(bool isDark) {
+    final beforeUrl = _complaint.photoUrls.isNotEmpty
+        ? _complaint.photoUrls.first
+        : null;
+    final afterUrl = _complaint.resolvedPhotoUrl;
+
+    if (afterUrl == null) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.surfaceDark : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.statusResolved.withValues(alpha: 0.3),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.compare, color: AppColors.statusResolved, size: 20),
+              SizedBox(width: 8),
+              Text(
+                'Çözüm Kanıtı: Önce / Sonra Karşılaştırması',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              // ÖNCE (Bildirilen Durum)
+              if (beforeUrl != null)
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: AppColors.statusRejected.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: const Text(
+                          'ÖNCE (Sorun)',
+                          style: TextStyle(
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.statusRejected,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      GestureDetector(
+                        onTap: () => _openImageViewer([beforeUrl], 0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: CachedNetworkImage(
+                              imageUrl: beforeUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              const SizedBox(width: 12),
+              // SONRA (Belediyenin Çözümü)
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.statusResolved.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        'SONRA (Çözüm)',
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.statusResolved,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    GestureDetector(
+                      onTap: () => _openImageViewer([afterUrl], 0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: CachedNetworkImage(
+                            imageUrl: afterUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMunicipalityResponse(bool isDark) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.25),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  Icon(Icons.verified, color: AppColors.primary, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    'Resmi Belediye Yanıtı',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13.5,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+              ),
+              if (_complaint.municipalityResponseDate != null)
+                Text(
+                  DateFormatter.formatDate(_complaint.municipalityResponseDate!),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: AppColors.textSecondaryLight,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            _complaint.municipalityResponseNote!,
+            style: const TextStyle(fontSize: 13, height: 1.45),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSatisfactionRating(bool isDark) {
+    final myRating = _complaint.myRating ?? 0;
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.surfaceDark : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDark ? AppColors.borderDark : AppColors.borderLight,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Vatandaş Memnuniyeti',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
+              ),
+              if (_complaint.ratingCount > 0)
+                Row(
+                  children: [
+                    const Icon(Icons.star, color: Colors.amber, size: 16),
+                    const SizedBox(width: 3),
+                    Text(
+                      '${_complaint.averageRating.toStringAsFixed(1)} / 5 (${_complaint.ratingCount} oy)',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            'Bu çözüm sizi tatmin etti mi? Puanınız doğrudan belediye şeffaflık karnesine yansır.',
+            style: TextStyle(fontSize: 12, color: AppColors.textSecondaryLight),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(5, (index) {
+              final star = index + 1;
+              final isFilled = star <= myRating;
+              return IconButton(
+                onPressed: () => _rateComplaint(star),
+                icon: Icon(
+                  isFilled ? Icons.star_rounded : Icons.star_outline_rounded,
+                  color: isFilled ? Colors.amber : Colors.grey[400],
+                  size: 32,
+                ),
+              );
+            }),
           ),
         ],
       ),

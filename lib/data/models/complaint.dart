@@ -21,6 +21,12 @@ class Complaint {
   final DateTime slaDeadline;
   final bool isLikedByMe;
   final bool isConfirmedByMe;
+  final String? resolvedPhotoUrl;
+  final String? municipalityResponseNote;
+  final DateTime? municipalityResponseDate;
+  final int? myRating;
+  final double averageRating;
+  final int ratingCount;
 
   Complaint({
     required this.id,
@@ -43,6 +49,12 @@ class Complaint {
     required this.slaDeadline,
     this.isLikedByMe = false,
     this.isConfirmedByMe = false,
+    this.resolvedPhotoUrl,
+    this.municipalityResponseNote,
+    this.municipalityResponseDate,
+    this.myRating,
+    this.averageRating = 0.0,
+    this.ratingCount = 0,
   });
 
   bool get isSlaExceeded {
@@ -85,6 +97,14 @@ class Complaint {
       slaDeadline: DateTime.parse(json['slaDeadline'] as String),
       isLikedByMe: json['isLikedByMe'] as bool? ?? false,
       isConfirmedByMe: json['isConfirmedByMe'] as bool? ?? false,
+      resolvedPhotoUrl: json['resolvedPhotoUrl'] as String?,
+      municipalityResponseNote: json['municipalityResponseNote'] as String?,
+      municipalityResponseDate: json['municipalityResponseDate'] != null
+          ? DateTime.parse(json['municipalityResponseDate'] as String)
+          : null,
+      myRating: json['myRating'] as int?,
+      averageRating: (json['averageRating'] as num?)?.toDouble() ?? 0.0,
+      ratingCount: json['ratingCount'] as int? ?? 0,
     );
   }
 
@@ -110,6 +130,12 @@ class Complaint {
       'slaDeadline': slaDeadline.toIso8601String(),
       'isLikedByMe': isLikedByMe,
       'isConfirmedByMe': isConfirmedByMe,
+      'resolvedPhotoUrl': resolvedPhotoUrl,
+      'municipalityResponseNote': municipalityResponseNote,
+      'municipalityResponseDate': municipalityResponseDate?.toIso8601String(),
+      'myRating': myRating,
+      'averageRating': averageRating,
+      'ratingCount': ratingCount,
     };
   }
 
@@ -134,6 +160,12 @@ class Complaint {
     DateTime? slaDeadline,
     bool? isLikedByMe,
     bool? isConfirmedByMe,
+    String? resolvedPhotoUrl,
+    String? municipalityResponseNote,
+    DateTime? municipalityResponseDate,
+    int? myRating,
+    double? averageRating,
+    int? ratingCount,
   }) {
     return Complaint(
       id: id ?? this.id,
@@ -156,6 +188,14 @@ class Complaint {
       slaDeadline: slaDeadline ?? this.slaDeadline,
       isLikedByMe: isLikedByMe ?? this.isLikedByMe,
       isConfirmedByMe: isConfirmedByMe ?? this.isConfirmedByMe,
+      resolvedPhotoUrl: resolvedPhotoUrl ?? this.resolvedPhotoUrl,
+      municipalityResponseNote:
+          municipalityResponseNote ?? this.municipalityResponseNote,
+      municipalityResponseDate:
+          municipalityResponseDate ?? this.municipalityResponseDate,
+      myRating: myRating ?? this.myRating,
+      averageRating: averageRating ?? this.averageRating,
+      ratingCount: ratingCount ?? this.ratingCount,
     );
   }
 }

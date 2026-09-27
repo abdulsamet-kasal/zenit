@@ -64,7 +64,12 @@
     "likeCount": 34,
     "commentCount": 7,
     "confirmCount": 15,
-    "slaDeadline": "2026-09-23T08:30:00Z"
+    "slaDeadline": "2026-09-23T08:30:00Z",
+    "resolvedPhotoUrl": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&auto=format&fit=crop&q=80",
+    "municipalityResponseNote": "Temizlik İşleri Müdürlüğü ekiplerimizce bölgedeki tüm konteynerler yıkanarak dezenfekte edilmiş ve çevre temizliği tamamlanmıştır.",
+    "municipalityResponseDate": "2026-09-21T14:10:00Z",
+    "averageRating": 4.8,
+    "ratingCount": 12
   },
   {
     "id": "c-004",
@@ -130,7 +135,12 @@
     "likeCount": 8,
     "commentCount": 1,
     "confirmCount": 4,
-    "slaDeadline": "2026-09-25T11:00:00Z"
+    "slaDeadline": "2026-09-25T11:00:00Z",
+    "resolvedPhotoUrl": "https://images.unsplash.com/photo-1578991624414-276ef23a534f?w=800&auto=format&fit=crop&q=80",
+    "municipalityResponseNote": "Trafik Zabıta ekiplerimizce alanda inceleme yapılmış ve mevzuata aykırı tabela kaldırılmıştır.",
+    "municipalityResponseDate": "2026-09-21T09:40:00Z",
+    "averageRating": 4.5,
+    "ratingCount": 6
   },
   {
     "id": "c-007",
@@ -152,7 +162,12 @@
     "likeCount": 42,
     "commentCount": 8,
     "confirmCount": 19,
-    "slaDeadline": "2026-09-29T14:00:00Z"
+    "slaDeadline": "2026-09-29T14:00:00Z",
+    "resolvedPhotoUrl": "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&auto=format&fit=crop&q=80",
+    "municipalityResponseNote": "Veteriner İşleri Müdürlüğü mobil ekibimiz tarafından can dostumuz koruma altına alınmış, tedavisi barınağımızda tamamlanmıştır.",
+    "municipalityResponseDate": "2026-09-25T10:30:00Z",
+    "averageRating": 5.0,
+    "ratingCount": 18
   },
   {
     "id": "c-008",

@@ -89,6 +89,27 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
             },
           ),
           PopupMenuButton<String>(
+            icon: const Icon(Icons.sort),
+            tooltip: 'Sırala',
+            onSelected: (sortBy) {
+              ref.read(feedControllerProvider.notifier).setSortBy(sortBy);
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'newest',
+                child: Text('🕒 En Yeni'),
+              ),
+              const PopupMenuItem(
+                value: 'most_supported',
+                child: Text('👍 En Çok Desteklenen'),
+              ),
+              const PopupMenuItem(
+                value: 'sla_urgent',
+                child: Text('⏳ SLA Acil Olanlar'),
+              ),
+            ],
+          ),
+          PopupMenuButton<String>(
             icon: const Icon(Icons.filter_alt_outlined),
             tooltip: 'Duruma göre filtrele',
             onSelected: (status) {
@@ -117,6 +138,7 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
           ),
         ],
       ),
+
       body: Column(
         children: [
           // Yatay Kategori Filtre Çipleri

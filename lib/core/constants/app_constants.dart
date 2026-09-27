@@ -30,4 +30,10 @@ class AppConstants {
   static const String keyDraftComplaints = 'seffaf_draft_complaints';
   static const String keyLikedComplaints = 'seffaf_liked_complaints';
   static const String keyConfirmedComplaints = 'seffaf_confirmed_complaints';
+  static const String keyCustomComplaints = 'seffaf_custom_complaints';
+  static const String keyUserVerified = 'seffaf_user_verified';
+  static const String keyUserPhone = 'seffaf_user_phone';
+  static const String keyFollowedMunicipalities = 'seffaf_followed_municipalities';
+  static const String keyComplaintRatings = 'seffaf_complaint_ratings';
 }
+

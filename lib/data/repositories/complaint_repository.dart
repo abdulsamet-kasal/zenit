@@ -9,7 +9,9 @@ abstract class ComplaintRepository {
     String? municipalityId,
     String? status,
     String? searchQuery,
+    String? sortBy,
   });
+
 
   Future<Complaint?> getComplaintById(String id);
 
@@ -28,4 +30,7 @@ abstract class ComplaintRepository {
   Future<List<Complaint>> getComplaintsByUser(String userId);
 
   Future<void> submitDispute(String complaintId, String userId, String reason);
+
+  Future<Complaint> rateComplaint(String complaintId, String userId, int rating);
 }
+

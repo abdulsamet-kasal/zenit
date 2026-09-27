@@ -11,6 +11,7 @@ class FeedState {
   final String? selectedCategory;
   final String? selectedStatus;
   final String? searchQuery;
+  final String sortBy;
   final String? errorMessage;
 
   const FeedState({
@@ -22,6 +23,7 @@ class FeedState {
     this.selectedCategory,
     this.selectedStatus,
     this.searchQuery,
+    this.sortBy = 'newest',
     this.errorMessage,
   });
 
@@ -34,6 +36,7 @@ class FeedState {
     String? selectedCategory,
     String? selectedStatus,
     String? searchQuery,
+    String? sortBy,
     String? errorMessage,
   }) {
     return FeedState(
@@ -45,6 +48,7 @@ class FeedState {
       selectedCategory: selectedCategory ?? this.selectedCategory,
       selectedStatus: selectedStatus ?? this.selectedStatus,
       searchQuery: searchQuery ?? this.searchQuery,
+      sortBy: sortBy ?? this.sortBy,
       errorMessage: errorMessage,
     );
   }
@@ -69,6 +73,7 @@ class FeedController extends Notifier<FeedState> {
         categoryId: state.selectedCategory,
         status: state.selectedStatus,
         searchQuery: state.searchQuery,
+        sortBy: state.sortBy,
       );
 
       state = state.copyWith(
@@ -99,6 +104,7 @@ class FeedController extends Notifier<FeedState> {
         categoryId: state.selectedCategory,
         status: state.selectedStatus,
         searchQuery: state.searchQuery,
+        sortBy: state.sortBy,
       );
 
       state = state.copyWith(
@@ -112,7 +118,14 @@ class FeedController extends Notifier<FeedState> {
     }
   }
 
+  Future<void> setSortBy(String sortBy) async {
+    if (state.sortBy == sortBy) return;
+    state = state.copyWith(sortBy: sortBy);
+    await loadInitial();
+  }
+
   Future<void> setCategory(String? categoryId) async {
+
     if (state.selectedCategory == categoryId) return;
     state = state.copyWith(selectedCategory: categoryId);
     await loadInitial();

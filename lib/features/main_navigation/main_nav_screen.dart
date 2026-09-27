@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/network/offline_sync_controller.dart';
 import '../feed/presentation/feed_screen.dart';
 import '../map/presentation/map_screen.dart';
 import '../report_creation/presentation/report_creation_screen.dart';
 import '../leaderboard/presentation/leaderboard_screen.dart';
 import '../profile/presentation/profile_screen.dart';
 
-class MainNavScreen extends StatefulWidget {
+class MainNavScreen extends ConsumerStatefulWidget {
   const MainNavScreen({super.key});
 
   @override
-  State<MainNavScreen> createState() => _MainNavScreenState();
+  ConsumerState<MainNavScreen> createState() => _MainNavScreenState();
 }
 
-class _MainNavScreenState extends State<MainNavScreen> {
+class _MainNavScreenState extends ConsumerState<MainNavScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = const [
@@ -44,11 +46,32 @@ class _MainNavScreenState extends State<MainNavScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
+    // Listen for offline sync events
+    ref.listen<OfflineSyncState>(offlineSyncProvider, (previous, next) {
+      if (next.lastSyncMessage != null &&
+          next.lastSyncMessage != previous?.lastSyncMessage) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: AppColors.accent,
+            behavior: SnackBarBehavior.floating,
+            content: Row(
+              children: [
+                const Icon(Icons.cloud_done, color: Colors.white),
+                const SizedBox(width: 8),
+                Expanded(child: Text(next.lastSyncMessage!)),
+              ],
+            ),
+          ),
+        );
+      }
+    });
+
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
         children: _screens,
       ),
+
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,

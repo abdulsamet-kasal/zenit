@@ -32,7 +32,39 @@ class _MunicipalityProfileScreenState
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _checkFollowingStatus();
     _loadComplaints();
+  }
+
+  Future<void> _checkFollowingStatus() async {
+    try {
+      final user = await ref.read(currentUserProvider.future);
+      if (mounted) {
+        setState(() {
+          _isFollowing =
+              user.followedMunicipalityIds.contains(widget.municipality.id);
+        });
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _toggleFollow() async {
+    final nextState = !_isFollowing;
+    setState(() => _isFollowing = nextState);
+    final authRepo = ref.read(authRepositoryProvider);
+    await authRepo.toggleFollowMunicipality(widget.municipality.id);
+    ref.invalidate(currentUserProvider);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            nextState
+                ? '${widget.municipality.name} takip listenize eklendi.'
+                : '${widget.municipality.name} takipten çıkarıldı.',
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -75,21 +107,11 @@ class _MunicipalityProfileScreenState
               color: _isFollowing ? AppColors.accent : null,
             ),
             tooltip: _isFollowing ? 'Takibi Bırak' : 'Belediyeyi Takip Et',
-            onPressed: () {
-              setState(() => _isFollowing = !_isFollowing);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    _isFollowing
-                        ? '${muni.name} bildirimleri takip listenize eklendi.'
-                        : '${muni.name} takipten çıkarıldı.',
-                  ),
-                ),
-              );
-            },
+            onPressed: _toggleFollow,
           ),
         ],
       ),
+
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [

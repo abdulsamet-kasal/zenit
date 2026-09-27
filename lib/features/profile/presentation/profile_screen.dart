@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:seffaf/core/constants/app_colors.dart';
-import 'package:seffaf/data/models/anonymous_user.dart';
-import 'package:seffaf/data/models/complaint.dart';
-import 'package:seffaf/data/repositories/providers.dart';
-import 'package:seffaf/features/complaint_detail/presentation/complaint_detail_screen.dart';
-import 'package:seffaf/features/feed/presentation/widgets/complaint_card.dart';
-import 'package:seffaf/main.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/network/offline_sync_controller.dart';
+import '../../../data/models/anonymous_user.dart';
+import '../../../data/models/complaint.dart';
+import '../../../data/models/municipality.dart';
+import '../../../data/repositories/providers.dart';
+import '../../complaint_detail/presentation/complaint_detail_screen.dart';
+import '../../feed/presentation/widgets/complaint_card.dart';
+import '../../municipality/presentation/municipality_profile_screen.dart';
+import '../../../main.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -19,11 +22,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   List<Complaint> _myComplaints = [];
   bool _isLoadingComplaints = true;
   bool _notificationsEnabled = true;
+  List<Municipality> _followedMunicipalities = [];
 
   @override
   void initState() {
     super.initState();
     _loadMyComplaints();
+    _loadFollowedMunicipalities();
   }
 
   Future<void> _loadMyComplaints() async {
@@ -44,28 +49,206 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
-  void _showAuthPlaceholderDialog() {
-    showDialog(
+  Future<void> _loadFollowedMunicipalities() async {
+    try {
+      final user = await ref.read(currentUserProvider.future);
+      final muniRepo = ref.read(municipalityRepositoryProvider);
+      final all = await muniRepo.getMunicipalities();
+      final followed = all
+          .where((m) => user.followedMunicipalityIds.contains(m.id))
+          .toList();
+      if (mounted) {
+        setState(() {
+          _followedMunicipalities = followed;
+        });
+      }
+    } catch (_) {}
+  }
+
+  void _showSmsVerificationModal() {
+    final phoneController = TextEditingController();
+    final otpController = TextEditingController();
+    int currentStep = 0;
+    String simulatedCode = '849201';
+
+    showModalBottomSheet(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Row(
-          children: [
-            Icon(Icons.lock_outline, color: AppColors.primary),
-            SizedBox(width: 8),
-            Text('Giriş / Kayıt Ol'),
-          ],
-        ),
-        content: const Text(
-          'Şeffaf şu an tamamen anonim misafir kullanıcı modeli ile çalışmaktadır. Gerçek kimlik doğrulama (e-Devlet / SMS doğrulama) Faz 9 kapsamında eklenecektir.',
-          style: TextStyle(fontSize: 13.5, height: 1.4),
-        ),
-        actions: [
-          ElevatedButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Anladım'),
-          ),
-        ],
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setModalState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 24,
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.verified_user,
+                              color: AppColors.accent, size: 26),
+                          SizedBox(width: 8),
+                          Text(
+                            'Vatandaş Kimlik Doğrulama',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.of(ctx).pop(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    currentStep == 0
+                        ? 'Telefon numaranızı girerek doğrulanmış vatandaş rozeti alabilir, bildirim ve itirazlarınızda öncelik kazanabilirsiniz.'
+                        : 'Telefonunuza SMS ile gönderilen 6 haneli güvenlik kodunu girin.',
+                    style: const TextStyle(
+                        fontSize: 13, color: AppColors.textSecondaryLight),
+                  ),
+                  const SizedBox(height: 18),
+
+                  if (currentStep == 0) ...[
+                    TextField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Cep Telefonu',
+                        hintText: '05XX XXX XX XX',
+                        prefixIcon: Icon(Icons.phone_android),
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    ElevatedButton(
+                      onPressed: () {
+                        final phone = phoneController.text.trim();
+                        if (phone.length < 10) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Lütfen geçerli bir telefon numarası girin.'),
+                            ),
+                          );
+                          return;
+                        }
+
+                        // Simulate SMS transmission
+                        final randomCode =
+                            (100000 + (phone.hashCode.abs() % 900000))
+                                .toString();
+                        simulatedCode = randomCode;
+
+                        setModalState(() {
+                          currentStep = 1;
+                        });
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: const Color(0xFF1E293B),
+                            duration: const Duration(seconds: 8),
+                            content: Row(
+                              children: [
+                                const Icon(Icons.sms,
+                                    color: Colors.amber, size: 20),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    '💬 SMS Doğrulama Kodunuz: $simulatedCode',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Text('Doğrulama Kodu Gönder'),
+                    ),
+                  ] else ...[
+                    TextField(
+                      controller: otpController,
+                      keyboardType: TextInputType.number,
+                      autofocus: true,
+                      maxLength: 6,
+                      decoration: InputDecoration(
+                        labelText: '6 Haneli SMS Kodu',
+                        hintText: simulatedCode,
+                        prefixIcon: const Icon(Icons.security),
+                        suffixIcon: TextButton(
+                          onPressed: () {
+                            otpController.text = simulatedCode;
+                          },
+                          child: const Text('Doldur'),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final code = otpController.text.trim();
+                        if (code != simulatedCode) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Hatalı kod! Lütfen SMS kodunu kontrol edin.'),
+                            ),
+                          );
+                          return;
+                        }
+
+                        final authRepo = ref.read(authRepositoryProvider);
+                        await authRepo.verifyUser(phoneController.text.trim());
+                        ref.invalidate(currentUserProvider);
+
+                        if (ctx.mounted) Navigator.of(ctx).pop();
+
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: AppColors.accent,
+                              content: Row(
+                                children: [
+                                  Icon(Icons.check_circle, color: Colors.white),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Tebrikler! Doğrulanmış Vatandaş Rozetiniz Aktif Edildi.',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('Kodu Doğrula ve Tamamla'),
+                    ),
+                  ],
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -76,7 +259,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         title: const Text('KVKK ve Gizlilik Politikası'),
         content: const SingleChildScrollView(
           child: Text(
-            'Şeffaf uygulamasında hiçbir kişisel veri zorunlu olarak toplanmamaktadır. Bildirimleriniz anonim cihaz kimliği (UUID) üzerinden saklanır. Yüklediğiniz fotoğraflarda üçüncü şahısların yüz veya araç plakası gibi kişisel verilerinin yer almaması kullanıcının sorumluluğundadır.',
+            'Şeffaf platformunda anonimlik esastır. Doğrulama yapıldığında dahi telefon numaranız şifreli olarak cihazınızda ve güvenli veritabanında saklanır; kamuya açık akışta adınız veya numaranız asla üçüncü şahıslara veya belediye personeline ifşa edilmez.',
             style: TextStyle(fontSize: 13, height: 1.4),
           ),
         ),
@@ -96,7 +279,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       builder: (ctx) => AlertDialog(
         title: const Text('Verileri Sıfırla'),
         content: const Text(
-          'Cihazınızda saklanan misafir kullanıcı kimliğiniz ve yerel taslaklarınız silinecektir. Devam etmek istiyor musunuz?',
+          'Cihazınızda saklanan misafir kullanıcı kimliğiniz, beğenileriniz ve yerel taslaklarınız silinecektir. Devam etmek istiyor musunuz?',
           style: TextStyle(fontSize: 13.5),
         ),
         actions: [
@@ -116,7 +299,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 const SnackBar(content: Text('Kullanıcı verileri sıfırlandı.')),
               );
               if (mounted) {
-                setState(() => _myComplaints = []);
+                setState(() {
+                  _myComplaints = [];
+                  _followedMunicipalities = [];
+                });
               }
             },
             style: ElevatedButton.styleFrom(
@@ -133,6 +319,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final userAsync = ref.watch(currentUserProvider);
     final themeMode = ref.watch(themeModeProvider);
+    final offlineSync = ref.watch(offlineSyncProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -147,13 +334,27 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Misafir Kullanıcı Kartı
+              // Kullanıcı Kartı
               _buildUserCard(user, isDark),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
-              // Auth CTA Banner
-              _buildAuthBanner(isDark),
-              const SizedBox(height: 24),
+              // Çevrimdışı Taslak Uyarısı (Varsa)
+              if (offlineSync.pendingDraftCount > 0) ...[
+                _buildOfflineDraftsCard(offlineSync, isDark),
+                const SizedBox(height: 14),
+              ],
+
+              // Doğrulama CTA Banner (Yalnızca doğrulanmamışsa)
+              if (!user.isVerified) ...[
+                _buildAuthBanner(isDark),
+                const SizedBox(height: 20),
+              ],
+
+              // Takip Ettiğim Belediyeler (Varsa)
+              if (_followedMunicipalities.isNotEmpty) ...[
+                _buildFollowedMunicipalitiesSection(isDark),
+                const SizedBox(height: 20),
+              ],
 
               // Bildirdiğim Şikayetler Başlığı
               Row(
@@ -166,6 +367,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  if (_isLoadingComplaints)
+                    const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -298,7 +505,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ListTile(
                       leading: const Icon(Icons.info_outline),
                       title: const Text('Şeffaf Hakkında'),
-                      subtitle: const Text('Sürüm 1.0.0 (Açık Kaynak Prototip)',
+                      subtitle: const Text('Sürüm 1.0.0 (Açık Kaynak Platform)',
                           style: TextStyle(fontSize: 12)),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () {
@@ -324,7 +531,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       leading: const Icon(Icons.delete_outline,
                           color: AppColors.statusRejected),
                       title: const Text(
-                        'Misafir Verilerimi Sıfırla',
+                        'Cihaz Verilerimi Sıfırla',
                         style: TextStyle(color: AppColors.statusRejected),
                       ),
                       onTap: _showResetDataDialog,
@@ -347,18 +554,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         color: isDark ? AppColors.surfaceDark : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? AppColors.borderDark : AppColors.borderLight,
+          color: user.isVerified
+              ? AppColors.accent.withValues(alpha: 0.5)
+              : (isDark ? AppColors.borderDark : AppColors.borderLight),
         ),
       ),
       child: Row(
         children: [
           CircleAvatar(
             radius: 28,
-            backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-            child: const Icon(
-              Icons.person,
+            backgroundColor: user.isVerified
+                ? AppColors.accent.withValues(alpha: 0.15)
+                : AppColors.primary.withValues(alpha: 0.1),
+            child: Icon(
+              user.isVerified ? Icons.verified : Icons.person,
               size: 32,
-              color: AppColors.primary,
+              color: user.isVerified ? AppColors.accent : AppColors.primary,
             ),
           ),
           const SizedBox(width: 14),
@@ -366,26 +577,43 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  user.displayName,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        user.displayName,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    if (user.isVerified) ...[
+                      const SizedBox(width: 6),
+                      const Icon(Icons.check_circle,
+                          color: AppColors.accent, size: 18),
+                    ],
+                  ],
                 ),
                 const SizedBox(height: 4),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.08),
+                    color: user.isVerified
+                        ? AppColors.accent.withValues(alpha: 0.1)
+                        : AppColors.primary.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    'Anonim Kullanıcı ID: ${user.id.substring(0, 8)}...',
-                    style: const TextStyle(
+                    user.isVerified
+                        ? '🛡️ Doğrulanmış Vatandaş (${user.phoneNumber ?? ''})'
+                        : 'Anonim Kimlik ID: ${user.id.substring(0, 8)}...',
+                    style: TextStyle(
                       fontSize: 11,
-                      color: AppColors.primary,
+                      color: user.isVerified
+                          ? AppColors.accent
+                          : AppColors.primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -419,7 +647,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Hesabını Doğrula (Yakında)',
+                  'Hesabını Doğrula (SMS ile)',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -428,7 +656,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  'e-Devlet ile doğrulanmış vatandaş rozeti al ve itiraz ağırlığını artır.',
+                  'Doğrulanmış vatandaş rozeti al ve itirazlarının ağırlığını artır.',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.85),
                     fontSize: 12,
@@ -438,18 +666,171 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
           ),
           ElevatedButton(
-            onPressed: _showAuthPlaceholderDialog,
+            onPressed: _showSmsVerificationModal,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               foregroundColor: AppColors.primary,
               minimumSize: const Size(80, 36),
               padding: const EdgeInsets.symmetric(horizontal: 12),
             ),
-            child: const Text('Giriş',
+            child: const Text('Doğrula',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildOfflineDraftsCard(OfflineSyncState state, bool isDark) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.amber.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.cloud_upload_outlined,
+              color: Color(0xFFD97706), size: 28),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${state.pendingDraftCount} Çevrimdışı Taslak Bekliyor',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13.5,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                const Text(
+                  'Bağlantı kurulduğunda otomatik olarak sisteme yüklenecektir.',
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    color: AppColors.textSecondaryLight,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            onPressed: state.isSyncing
+                ? null
+                : () async {
+                    final count = await ref
+                        .read(offlineSyncProvider.notifier)
+                        .syncNow();
+                    if (mounted) {
+                      _loadMyComplaints();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(count > 0
+                              ? '$count adet şikayet başarıyla senkronize edildi!'
+                              : 'İnternet bağlantısı bekleniyor...'),
+                        ),
+                      );
+                    }
+                  },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFD97706),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              minimumSize: const Size(70, 34),
+            ),
+            child: state.isSyncing
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : const Text('Şimdi Eşitle', style: TextStyle(fontSize: 11.5)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFollowedMunicipalitiesSection(bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Takip Ettiğim Belediyeler (${_followedMunicipalities.length})',
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 72,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: _followedMunicipalities.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 10),
+            itemBuilder: (context, index) {
+              final muni = _followedMunicipalities[index];
+              return InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => MunicipalityProfileScreen(
+                        municipality: muni,
+                      ),
+                    ),
+                  );
+                },
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.surfaceDark : Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isDark
+                          ? AppColors.borderDark
+                          : AppColors.borderLight,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.apartment,
+                          color: AppColors.primary, size: 24),
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            muni.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            'Puan: ${muni.transparencyScore.toStringAsFixed(1)} / 100',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color:
+                                  AppColors.scoreColor(muni.transparencyScore),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

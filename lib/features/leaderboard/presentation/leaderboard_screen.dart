@@ -16,6 +16,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   List<Municipality> _municipalities = [];
   bool _isLoading = true;
   String _selectedProvince = 'Tümü';
+  String _sortBy = 'score';
   final TextEditingController _searchController = TextEditingController();
 
   final List<String> _provinces = ['Tümü', 'Edirne', 'Tekirdağ', 'Kırklareli'];
@@ -62,6 +63,17 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           m.province.toLowerCase().contains(query);
     }).toList();
 
+    // Sort according to _sortBy
+    displayedList.sort((a, b) {
+      if (_sortBy == 'resolution_rate') {
+        return b.resolutionRate.compareTo(a.resolutionRate);
+      } else if (_sortBy == 'fastest') {
+        return a.avgResolutionDays.compareTo(b.avgResolutionDays);
+      } else {
+        return b.transparencyScore.compareTo(a.transparencyScore);
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -71,7 +83,29 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             Text('Şeffaflık Sıralaması'),
           ],
         ),
+        actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.sort),
+            tooltip: 'Sıralama Ölçütü',
+            onSelected: (val) => setState(() => _sortBy = val),
+            itemBuilder: (ctx) => [
+              const PopupMenuItem(
+                value: 'score',
+                child: Text('🏆 Şeffaflık Puanı'),
+              ),
+              const PopupMenuItem(
+                value: 'resolution_rate',
+                child: Text('📈 Çözüm Oranı'),
+              ),
+              const PopupMenuItem(
+                value: 'fastest',
+                child: Text('⚡ En Hızlı Çözenler'),
+              ),
+            ],
+          ),
+        ],
       ),
+
       body: Column(
         children: [
           // Arama Çubuğu

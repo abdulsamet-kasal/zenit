@@ -158,13 +158,46 @@ class _ComplaintCardState extends State<ComplaintCard> {
                     Positioned(
                       top: 12,
                       left: 12,
-                      child: StatusBadge(status: complaint.status),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          StatusBadge(status: complaint.status),
+                          if (complaint.resolvedPhotoUrl != null) ...[
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 7, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.65),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: const Row(
+                                children: [
+                                  Icon(Icons.check_circle,
+                                      color: AppColors.statusResolved,
+                                      size: 12),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'Çözüm Kanıtlı',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
 
             // Konum Çubuğu
+
             InkWell(
               onTap: widget.onLocationTap,
               child: Container(

@@ -15,16 +15,25 @@ class ScoringCalculator {
       final actualDays = complaint.resolvedAt!.difference(complaint.createdAt).inDays;
       final diff = slaDays - actualDays;
 
+      double baseImpact;
       if (diff >= 0) {
         // Erken / zamanında çözüm bonusu (max ~15)
         final bonusFactor = min(1.0, (diff / slaDays) + 0.5);
-        return 10.0 * bonusFactor;
+        baseImpact = 10.0 * bonusFactor;
       } else {
         // Geç çözüm cezası (taban -15 ile sınırlı)
         final penaltyFactor = (diff.abs() / slaDays);
         final penalty = -5.0 * penaltyFactor;
-        return max(-15.0, penalty);
+        baseImpact = max(-15.0, penalty);
       }
+
+      // Vatandaş memnuniyeti etkisi (%20 etki: 1 ila 5 yıldız değerlendirmesi)
+      if (complaint.averageRating > 0) {
+        final satisfactionFactor = (complaint.averageRating - 3.0); // -2.0 ile +2.0 arası
+        baseImpact += satisfactionFactor;
+      }
+
+      return baseImpact;
     } else if (complaint.status == ComplaintStatus.pending ||
         complaint.status == ComplaintStatus.inReview) {
       if (now.isAfter(complaint.slaDeadline)) {

@@ -7,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/category_defaults.dart';
 import '../../../core/network/offline_manager.dart';
+import '../../../core/network/offline_sync_controller.dart';
 import '../../../core/utils/geo_utils.dart';
 import '../../../data/models/complaint.dart';
 import '../../../data/models/complaint_status.dart';
@@ -173,6 +174,7 @@ class _ReportCreationScreenState extends ConsumerState<ReportCreationScreen> {
     final isOnline = await OfflineManager.isConnected();
     if (!isOnline) {
       await OfflineManager.saveDraftComplaint(newComplaint);
+      await ref.read(offlineSyncProvider.notifier).refreshDraftCount();
       if (mounted) {
         setState(() => _isSubmitting = false);
         _showSuccessDialog(
@@ -186,6 +188,12 @@ class _ReportCreationScreenState extends ConsumerState<ReportCreationScreen> {
 
     final repo = ref.read(complaintRepositoryProvider);
     await repo.createComplaint(newComplaint);
+
+    // Track user's created complaint
+    await ref
+        .read(authRepositoryProvider)
+        .addCreatedComplaintId(newComplaint.id);
+    ref.invalidate(currentUserProvider);
 
     // Refresh feed
     ref.read(feedControllerProvider.notifier).loadInitial();

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/constants/app_constants.dart';
 import '../models/comment.dart';
 import '../models/complaint.dart';
 import '../models/complaint_status.dart';
@@ -14,20 +16,84 @@ class MockComplaintRepository implements ComplaintRepository {
     if (_cachedComplaints != null) return;
 
     try {
+      final prefs = await SharedPreferences.getInstance();
+
+      // 1. Load base mock complaints from assets
       final jsonString =
           await rootBundle.loadString('assets/mock/complaints.json');
       final List<dynamic> jsonList = jsonDecode(jsonString);
-      _cachedComplaints =
-          jsonList.map((e) => Complaint.fromJson(e as Map<String, dynamic>)).toList();
+      final baseComplaints = jsonList
+          .map((e) => Complaint.fromJson(e as Map<String, dynamic>))
+          .toList();
 
-      // Mock default comments for first few complaints
+      // 2. Load custom user complaints from SharedPreferences
+      final customListJson =
+          prefs.getStringList(AppConstants.keyCustomComplaints) ?? [];
+      final customComplaints = customListJson
+          .map((e) =>
+              Complaint.fromJson(jsonDecode(e) as Map<String, dynamic>))
+          .toList();
+
+      // Combine: custom complaints first
+      final all = [...customComplaints, ...baseComplaints];
+
+      // 3. Apply persistent likes and confirms
+      final likedIds =
+          prefs.getStringList(AppConstants.keyLikedComplaints) ?? [];
+      final confirmedIds =
+          prefs.getStringList(AppConstants.keyConfirmedComplaints) ?? [];
+
+      // 4. Apply persistent ratings
+      final ratingsRaw =
+          prefs.getString(AppConstants.keyComplaintRatings);
+      Map<String, dynamic> ratingsMap = {};
+      if (ratingsRaw != null) {
+        try {
+          ratingsMap = jsonDecode(ratingsRaw) as Map<String, dynamic>;
+        } catch (_) {}
+      }
+
+      _cachedComplaints = all.map((c) {
+        final isLiked = likedIds.contains(c.id);
+        final isConfirmed = confirmedIds.contains(c.id);
+        final userRating = ratingsMap[c.id] as int?;
+
+        var updated = c;
+        if (isLiked != c.isLikedByMe) {
+          updated = updated.copyWith(
+            isLikedByMe: isLiked,
+            likeCount: isLiked ? c.likeCount + 1 : c.likeCount,
+          );
+        }
+        if (isConfirmed != c.isConfirmedByMe) {
+          updated = updated.copyWith(
+            isConfirmedByMe: isConfirmed,
+            confirmCount: isConfirmed ? c.confirmCount + 1 : c.confirmCount,
+          );
+        }
+        if (userRating != null) {
+          final count = updated.ratingCount > 0 ? updated.ratingCount : 1;
+          final avg = updated.averageRating > 0
+              ? (updated.averageRating * count + userRating) / (count + 1)
+              : userRating.toDouble();
+          updated = updated.copyWith(
+            myRating: userRating,
+            ratingCount: count,
+            averageRating: avg,
+          );
+        }
+        return updated;
+      }).toList();
+
+      // 5. Load default mock comments
       _commentsByComplaintId['c-001'] = [
         Comment(
           id: 'comm-1',
           complaintId: 'c-001',
           anonymousUserId: 'u-55',
           anonymousUserName: 'Misafir Vatandaş #2109',
-          text: 'Dün akşam geçerken neredeyse ayağım takılıp düşüyordum, acilen tamir edilmeli.',
+          text:
+              'Dün akşam geçerken neredeyse ayağım takılıp düşüyordum, acilen tamir edilmeli.',
           createdAt: DateTime.now().subtract(const Duration(hours: 18)),
         ),
         Comment(
@@ -35,10 +101,23 @@ class MockComplaintRepository implements ComplaintRepository {
           complaintId: 'c-001',
           anonymousUserId: 'u-88',
           anonymousUserName: 'Misafir Vatandaş #6543',
-          text: 'Fen İşleri ekiplerine telefonla da bildirdik, umarım en kısa sürede gelirler.',
+          text:
+              'Fen İşleri ekiplerine telefonla da bildirdik, umarım en kısa sürede gelirler.',
           createdAt: DateTime.now().subtract(const Duration(hours: 6)),
         ),
       ];
+
+      // Load custom saved comments from SharedPreferences
+      final savedCommentsJson = prefs.getStringList('seffaf_custom_comments') ?? [];
+      for (final raw in savedCommentsJson) {
+        try {
+          final comm = Comment.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+          final list = _commentsByComplaintId.putIfAbsent(comm.complaintId, () => []);
+          if (!list.any((c) => c.id == comm.id)) {
+            list.insert(0, comm);
+          }
+        } catch (_) {}
+      }
     } catch (e) {
       _cachedComplaints = [];
     }
@@ -52,6 +131,7 @@ class MockComplaintRepository implements ComplaintRepository {
     String? municipalityId,
     String? status,
     String? searchQuery,
+    String? sortBy,
   }) async {
     await _ensureLoaded();
 
@@ -78,9 +158,29 @@ class MockComplaintRepository implements ComplaintRepository {
           (c.title != null && c.title!.toLowerCase().contains(query)));
     }
 
-    // Sort by createdAt descending (newest first)
-    final sortedList = filtered.toList()
-      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    // Sort by requested criteria
+    final sortedList = filtered.toList();
+    if (sortBy == 'most_supported') {
+      sortedList.sort((a, b) =>
+          (b.likeCount + b.confirmCount).compareTo(a.likeCount + a.confirmCount));
+    } else if (sortBy == 'sla_urgent') {
+      // Unresolved first, closest to deadline first
+      sortedList.sort((a, b) {
+        if (a.status == ComplaintStatus.resolved &&
+            b.status != ComplaintStatus.resolved) {
+          return 1;
+        }
+        if (b.status == ComplaintStatus.resolved &&
+            a.status != ComplaintStatus.resolved) {
+          return -1;
+        }
+        return a.slaDeadline.compareTo(b.slaDeadline);
+      });
+    } else {
+      // Default: newest first
+      sortedList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    }
+
 
     // Pagination
     final startIndex = (page - 1) * limit;
@@ -106,6 +206,17 @@ class MockComplaintRepository implements ComplaintRepository {
   Future<Complaint> createComplaint(Complaint complaint) async {
     await _ensureLoaded();
     _cachedComplaints!.insert(0, complaint);
+
+    // Save to SharedPreferences for persistence across restarts
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final customListJson =
+          prefs.getStringList(AppConstants.keyCustomComplaints) ?? [];
+      customListJson.insert(0, jsonEncode(complaint.toJson()));
+      await prefs.setStringList(
+          AppConstants.keyCustomComplaints, customListJson);
+    } catch (_) {}
+
     return complaint;
   }
 
@@ -123,6 +234,19 @@ class MockComplaintRepository implements ComplaintRepository {
     );
 
     _cachedComplaints![index] = updated;
+
+    // Persist likes
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final liked = prefs.getStringList(AppConstants.keyLikedComplaints) ?? [];
+      if (isLiked) {
+        if (!liked.contains(complaintId)) liked.add(complaintId);
+      } else {
+        liked.remove(complaintId);
+      }
+      await prefs.setStringList(AppConstants.keyLikedComplaints, liked);
+    } catch (_) {}
+
     return updated;
   }
 
@@ -141,6 +265,65 @@ class MockComplaintRepository implements ComplaintRepository {
     );
 
     _cachedComplaints![index] = updated;
+
+    // Persist confirms
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final confirmed =
+          prefs.getStringList(AppConstants.keyConfirmedComplaints) ?? [];
+      if (isConfirmed) {
+        if (!confirmed.contains(complaintId)) confirmed.add(complaintId);
+      } else {
+        confirmed.remove(complaintId);
+      }
+      await prefs.setStringList(
+          AppConstants.keyConfirmedComplaints, confirmed);
+    } catch (_) {}
+
+    return updated;
+  }
+
+  @override
+  Future<Complaint> rateComplaint(
+      String complaintId, String userId, int rating) async {
+    await _ensureLoaded();
+    final index = _cachedComplaints!.indexWhere((c) => c.id == complaintId);
+    if (index == -1) throw Exception('Şikayet bulunamadı');
+
+    final existing = _cachedComplaints![index];
+    final previousRating = existing.myRating;
+    final newCount = previousRating == null
+        ? existing.ratingCount + 1
+        : existing.ratingCount;
+    final totalRatingSum = (existing.averageRating * existing.ratingCount) -
+        (previousRating ?? 0) +
+        rating;
+    final newAvg = newCount > 0 ? (totalRatingSum / newCount) : rating.toDouble();
+
+    final updated = existing.copyWith(
+      myRating: rating,
+      ratingCount: newCount,
+      averageRating: double.parse(newAvg.toStringAsFixed(1)),
+    );
+
+    _cachedComplaints![index] = updated;
+
+    // Persist rating
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final ratingsRaw =
+          prefs.getString(AppConstants.keyComplaintRatings);
+      Map<String, dynamic> ratingsMap = {};
+      if (ratingsRaw != null) {
+        try {
+          ratingsMap = jsonDecode(ratingsRaw) as Map<String, dynamic>;
+        } catch (_) {}
+      }
+      ratingsMap[complaintId] = rating;
+      await prefs.setString(
+          AppConstants.keyComplaintRatings, jsonEncode(ratingsMap));
+    } catch (_) {}
+
     return updated;
   }
 
@@ -153,7 +336,8 @@ class MockComplaintRepository implements ComplaintRepository {
   @override
   Future<Comment> addComment(Comment comment) async {
     await _ensureLoaded();
-    final list = _commentsByComplaintId.putIfAbsent(comment.complaintId, () => []);
+    final list =
+        _commentsByComplaintId.putIfAbsent(comment.complaintId, () => []);
     list.insert(0, comment);
 
     // Update comment count on complaint
@@ -165,6 +349,16 @@ class MockComplaintRepository implements ComplaintRepository {
         commentCount: existing.commentCount + 1,
       );
     }
+
+    // Persist comment
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final savedCommentsJson =
+          prefs.getStringList('seffaf_custom_comments') ?? [];
+      savedCommentsJson.insert(0, jsonEncode(comment.toJson()));
+      await prefs.setStringList(
+          'seffaf_custom_comments', savedCommentsJson);
+    } catch (_) {}
 
     return comment;
   }
@@ -197,3 +391,4 @@ class MockComplaintRepository implements ComplaintRepository {
     });
   }
 }
+
