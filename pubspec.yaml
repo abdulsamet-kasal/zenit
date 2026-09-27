@@ -51,6 +51,7 @@ dependencies:
   flutter_svg: ^2.3.0
   uuid: ^4.6.0
   fl_chart: ^1.2.0
+  supabase_flutter: ^2.8.0
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +77,7 @@ flutter:
 
   assets:
     - assets/mock/
+    - assets/data/
     - assets/images/
     - assets/icons/
 

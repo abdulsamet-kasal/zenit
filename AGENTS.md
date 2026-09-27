@@ -34,7 +34,7 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
 
 ---
 
-## 🚦 Tamamlanan Aşamalar (Faz 1 - Faz 9)
+## 🚦 Tamamlanan Aşamalar (Faz 1 - Faz 10)
 1. **Faz 1:** Temiz Mimari (`core/`, `data/`, `features/`, `shared/`), veri modelleri, SLA ve puanlama motoru.
 2. **Faz 2:** Mock veri setleri (Edirne, Keşan, Uzunköprü, Çorlu, Lüleburgaz) ve repository katmanı.
 3. **Faz 3:** Onboarding ve Misafir Kullanıcı kimliği (UUID).
@@ -44,18 +44,28 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
 7. **Faz 7:** Şikayet Detay ekranı, çoklu görsel galerisi, SLA zaman çizelgesi, itiraz ve yorum akışı.
 8. **Faz 8:** Belediye Karnesi profili (0-100 puan göstergesi, fl_chart trendi) ve Sıralama (Leaderboard) ekranı.
 9. **Faz 9 (Kalıcılık, Çözüm Kanıtı, Doğrulama & UX İleri Geliştirmeler):**
-   - **Kalıcı Yerel Depolama:** Kullanıcının açtığı şikayetler, beğenileri, onayları, yorumları ve oyları SharedPreferences ile cihazda kalıcı hale getirildi.
-   - **Otomatik Çevrimdışı Eşitleme (Offline Sync Engine):** `connectivity_plus` dinleyicisi ile internet geldiğinde arka plandaki taslakların otomatik aktarılması ve kullanıcıya durum gösterimi.
-   - **Çözüm Kanıtı (Önce / Sonra):** Çözülmüş şikayetlerde vatandaş bildirimi ile belediyenin çözüm fotoğrafının yan yana karşılaştırılması.
-   - **Resmi Belediye Yanıtı & Vatandaş Memnuniyet Anketi:** Belediyenin resmi açıklama notu, vatandaşın 1-5 yıldız vermesi ve bunun şeffaflık puanına doğrudan etki etmesi.
-   - **Tam Ekran Görsel Görüntüleyici:** Detaydaki tüm görsellere dokunulduğunda pinch-to-zoom (`InteractiveViewer`) tam ekran modu.
-   - **SMS OTP Vatandaş Doğrulaması:** 6 haneli SMS onay akışı, profilde "🛡️ Doğrulanmış Vatandaş" rozeti ve takip edilen belediyeler listesi.
-   - **Genişletilmiş Coğrafi Kapsam:** Çorlu ve Lüleburgaz poligonları ve poligon dışı alanlar için en yakın centroid mesafesi yedek tespit algoritması.
-   - **Gelişmiş Sıralama Ölçütleri:** Akışta En Yeni / En Çok Desteklenen / SLA Acil Olanlar; Sıralamada Şeffaflık Puanı / Çözüm Oranı / En Hızlı Çözenler.
+   - **Kalıcı Yerel Depolama:** SharedPreferences kalıcılığı.
+   - **Otomatik Çevrimdışı Eşitleme (Offline Sync Engine):** `connectivity_plus` dinleyicisi.
+   - **Çözüm Kanıtı (Önce / Sonra):** Vatandaş bildirimi ve belediye çözüm fotoğrafı karşılaştırması.
+   - **Resmi Belediye Yanıtı & Vatandaş Memnuniyet Anketi:** 1-5 yıldız oylama.
+   - **Tam Ekran Görsel Görüntüleyici:** Pinch-to-zoom tam ekran modu.
+   - **SMS OTP Vatandaş Doğrulaması:** 6 haneli SMS akışı ve rozet.
+10. **Faz 10 (Tüm Türkiye Verisi & Supabase Bulut Backend Entegrasyonu):**
+   - **Türkiye Geneli 81 İl ve 972 İlçe:** `assets/data/turkey_provinces.json` ve `assets/data/turkey_municipalities.json` veri setleri oluşturuldu. Tüm ilçe merkez koordinatları, şeffaflık puanları, kategori performansları ve sınır poligonları hazırlandı.
+   - **Ülke Geneli GPS Belediye Tespiti:** `GeoUtils` 972 ilçenin tamamını dinamik olarak yükleyerek Ray-Casting poligon ve Haversine centroid mesafe formülüyle Türkiye'nin her noktasından anında ilçe belediyesi tespit edebilir hale getirildi.
+   - **Dinamik Liderlik Sıralaması:** `LeaderboardScreen` hardcoded iller yerine 81 ilin tamamını dinamik filtreleme ve anlık arama desteğiyle sunar hale getirildi.
+   - **Supabase Entegrasyonu (Proje Ref: `txhpstratzihirwlpixu`):**
+     - `supabase_flutter: ^2.8.0` bağımlılığı eklendi.
+     - `supabase/config.toml` proje referansı `txhpstratzihirwlpixu` olarak güncellendi.
+     - `supabase/migrations/20260927000000_create_seffaf_schema.sql`: `municipalities`, `complaints`, `complaint_likes`, `complaint_confirmations`, `complaint_comments`, `complaint_disputes`, `citizen_profiles` tabloları, RLS politikaları ve trigger fonksiyonları hazırlandı.
+     - `supabase/seed.sql`: 972 belediye ve başlangıç şikayetlerinin SQL aktarımı oluşturuldu.
+     - `SupabaseConfig`: Güvenli başlatma (`publishableKey`), ağ veya anahtar yokluğunda çökmeden yerel moda geçiş.
+     - `SupabaseComplaintRepository` & `SupabaseMunicipalityRepository`: Canlı Supabase veri akışı ve kesintisiz Offline-First / SharedPreferences fallback mimarisi.
+     - MCP Supabase konfigürasyonu (`~/.gemini/antigravity/mcp_config.json`) ve `supabase/agent-skills` entegre edildi.
 
 ---
 
-## 🎯 Gelecek Faz (Faz 10 - Sıradaki Yol Haritası)
-- **Harici Bulut Backend:** Supabase / Firebase veya REST API servislerinin bağlanması.
-- **Harici Coğrafi Veri:** Türkiye geneli 922 ilçe sınır poligonlarının GeoJSON olarak yüklenmesi.
+## 🎯 Gelecek Faz (Faz 11 - Canlı Dağıtım ve Yayın Öncesi)
+- Supabase Auth SMS Provider (Twilio / Netgsm) ile canlı OTP SMS gönderimi.
+- Supabase Storage Bucket'a fotoğraf yükleme (`complaint-photos` bucket).
 

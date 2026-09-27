@@ -70,41 +70,65 @@ class Complaint {
   }
 
   factory Complaint.fromJson(Map<String, dynamic> json) {
+    // Fotoğraflar List veya String listesi
+    List<String> photos = [];
+    final rawPhotos = json['photoUrls'] ?? json['photo_urls'];
+    if (rawPhotos is List) {
+      photos = rawPhotos.map((e) => e.toString()).toList();
+    }
+
+    // Çözüm fotoğrafları
+    String? resolvedPhoto = json['resolvedPhotoUrl'] as String? ?? json['resolved_photo_url'] as String?;
+    if (resolvedPhoto == null) {
+      final rawSolutionPhotos = json['solution_photo_urls'];
+      if (rawSolutionPhotos is List && rawSolutionPhotos.isNotEmpty) {
+        resolvedPhoto = rawSolutionPhotos.first.toString();
+      }
+    }
+
     return Complaint(
       id: json['id'] as String,
-      anonymousUserId: json['anonymousUserId'] as String,
-      anonymousUserName:
-          json['anonymousUserName'] as String? ?? 'Misafir Vatandaş',
+      anonymousUserId: (json['anonymousUserId'] ?? json['author_id'] ?? json['authorId'] ?? 'user-guest').toString(),
+      anonymousUserName: (json['anonymousUserName'] ?? json['author_name'] ?? json['authorName'] ?? 'Misafir Vatandaş').toString(),
       title: json['title'] as String?,
-      description: json['description'] as String,
-      categoryId: json['categoryId'] as String,
-      photoUrls: (json['photoUrls'] as List<dynamic>?)
-              ?.map((e) => e.toString())
-              .toList() ??
-          [],
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
-      address: json['address'] as String,
-      municipalityId: json['municipalityId'] as String,
-      status: ComplaintStatus.fromString(json['status'] as String),
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      description: (json['description'] ?? '') as String,
+      categoryId: (json['categoryId'] ?? json['category_id'] ?? 'other') as String,
+      photoUrls: photos,
+      latitude: (json['latitude'] as num?)?.toDouble() ?? 0.0,
+      longitude: (json['longitude'] as num?)?.toDouble() ?? 0.0,
+      address: (json['address'] ?? '') as String,
+      municipalityId: (json['municipalityId'] ?? json['municipality_id'] ?? '') as String,
+      status: ComplaintStatus.fromString((json['status'] ?? 'pending') as String),
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : (json['created_at'] != null
+              ? DateTime.parse(json['created_at'] as String)
+              : DateTime.now()),
       resolvedAt: json['resolvedAt'] != null
           ? DateTime.parse(json['resolvedAt'] as String)
-          : null,
-      likeCount: json['likeCount'] as int? ?? 0,
-      commentCount: json['commentCount'] as int? ?? 0,
-      confirmCount: json['confirmCount'] as int? ?? 0,
-      slaDeadline: DateTime.parse(json['slaDeadline'] as String),
-      isLikedByMe: json['isLikedByMe'] as bool? ?? false,
-      isConfirmedByMe: json['isConfirmedByMe'] as bool? ?? false,
-      resolvedPhotoUrl: json['resolvedPhotoUrl'] as String?,
-      municipalityResponseNote: json['municipalityResponseNote'] as String?,
+          : (json['resolved_at'] != null
+              ? DateTime.parse(json['resolved_at'] as String)
+              : null),
+      likeCount: (json['likeCount'] ?? json['likes_count'] ?? 0) as int,
+      commentCount: (json['commentCount'] ?? json['comment_count'] ?? 0) as int,
+      confirmCount: (json['confirmCount'] ?? json['confirmations_count'] ?? 0) as int,
+      slaDeadline: json['slaDeadline'] != null
+          ? DateTime.parse(json['slaDeadline'] as String)
+          : (json['sla_deadline'] != null
+              ? DateTime.parse(json['sla_deadline'] as String)
+              : DateTime.now().add(const Duration(days: 14))),
+      isLikedByMe: (json['isLikedByMe'] ?? false) as bool,
+      isConfirmedByMe: (json['isConfirmedByMe'] ?? false) as bool,
+      resolvedPhotoUrl: resolvedPhoto,
+      municipalityResponseNote: (json['municipalityResponseNote'] ?? json['official_response_note']) as String?,
       municipalityResponseDate: json['municipalityResponseDate'] != null
           ? DateTime.parse(json['municipalityResponseDate'] as String)
-          : null,
-      myRating: json['myRating'] as int?,
+          : (json['official_response_date'] != null
+              ? DateTime.parse(json['official_response_date'] as String)
+              : null),
+      myRating: (json['myRating'] ?? json['citizen_satisfaction_rating']) as int?,
       averageRating: (json['averageRating'] as num?)?.toDouble() ?? 0.0,
-      ratingCount: json['ratingCount'] as int? ?? 0,
+      ratingCount: (json['ratingCount'] ?? 0) as int,
     );
   }
 
@@ -136,6 +160,35 @@ class Complaint {
       'myRating': myRating,
       'averageRating': averageRating,
       'ratingCount': ratingCount,
+    };
+  }
+
+  Map<String, dynamic> toSupabaseMap() {
+    return {
+      'id': id,
+      'title': title ?? (description.length > 30 ? '${description.substring(0, 30)}...' : description),
+      'description': description,
+      'category_id': categoryId,
+      'category_name': categoryId,
+      'status': status.toJson(),
+      'created_at': createdAt.toIso8601String(),
+      'municipality_id': municipalityId,
+      'municipality_name': '',
+      'latitude': latitude,
+      'longitude': longitude,
+      'address': address,
+      'photo_urls': photoUrls,
+      'solution_photo_urls': resolvedPhotoUrl != null ? [resolvedPhotoUrl!] : [],
+      'official_response_note': municipalityResponseNote,
+      'official_response_date': municipalityResponseDate?.toIso8601String(),
+      'citizen_satisfaction_rating': myRating,
+      'author_id': anonymousUserId,
+      'author_name': anonymousUserName,
+      'is_anonymous': true,
+      'likes_count': likeCount,
+      'confirmations_count': confirmCount,
+      'sla_deadline': slaDeadline.toIso8601String(),
+      'resolved_at': resolvedAt?.toIso8601String(),
     };
   }
 

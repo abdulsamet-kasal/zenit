@@ -12,12 +12,16 @@ class DistrictBoundary {
   final String districtName;
   final String provinceName;
   final List<GeoPoint> polygon;
+  final double? centerLat;
+  final double? centerLon;
 
   const DistrictBoundary({
     required this.municipalityId,
     required this.districtName,
     required this.provinceName,
     required this.polygon,
+    this.centerLat,
+    this.centerLon,
   });
 }
 
@@ -81,13 +85,56 @@ class GeoUtils {
     }
   }
 
-  // Trakya & Edirne İlçe Sınırları (Mock Polygon Verileri)
+  // Dinamik olarak kayıtlı tüm Türkiye ilçe sınırları
+  static List<DistrictBoundary> _allDistricts = [];
+
+  static void setMunicipalities(List<dynamic> municipalities) {
+    _allDistricts = municipalities.map((m) {
+      final id = m.id as String;
+      final province = m.province as String;
+      final district = m.district as String;
+      final lat = (m.latitude as num).toDouble();
+      final lon = (m.longitude as num).toDouble();
+
+      List<GeoPoint> poly = [];
+      if (m.boundaryPolygon != null && m.boundaryPolygon is List) {
+        for (final p in m.boundaryPolygon) {
+          if (p is List && p.length >= 2) {
+            poly.add(GeoPoint((p[0] as num).toDouble(), (p[1] as num).toDouble()));
+          }
+        }
+      }
+
+      if (poly.isEmpty) {
+        // 0.05 derecelik (~5.5 km) varsayılan bir sınır kutusu oluştur
+        poly = [
+          GeoPoint(lat + 0.05, lon - 0.05),
+          GeoPoint(lat + 0.05, lon + 0.05),
+          GeoPoint(lat - 0.05, lon + 0.05),
+          GeoPoint(lat - 0.05, lon - 0.05),
+        ];
+      }
+
+      return DistrictBoundary(
+        municipalityId: id,
+        districtName: district,
+        provinceName: province,
+        polygon: poly,
+        centerLat: lat,
+        centerLon: lon,
+      );
+    }).toList();
+  }
+
+  // Trakya & Edirne Başlangıç Sınırları (Fallback)
   static final List<DistrictBoundary> knownBoundaries = [
     // Edirne Merkez Sınır Poligonu
     const DistrictBoundary(
       municipalityId: 'muni_edirne_merkez',
       districtName: 'Merkez',
       provinceName: 'Edirne',
+      centerLat: 41.6750,
+      centerLon: 26.5600,
       polygon: [
         GeoPoint(41.7200, 26.5000),
         GeoPoint(41.7200, 26.6200),
@@ -100,6 +147,8 @@ class GeoUtils {
       municipalityId: 'muni_edirne_kesan',
       districtName: 'Keşan',
       provinceName: 'Edirne',
+      centerLat: 40.8550,
+      centerLon: 26.6400,
       polygon: [
         GeoPoint(40.9100, 26.5800),
         GeoPoint(40.9100, 26.7000),
@@ -112,6 +161,8 @@ class GeoUtils {
       municipalityId: 'muni_edirne_uzunkopru',
       districtName: 'Uzunköprü',
       provinceName: 'Edirne',
+      centerLat: 41.2700,
+      centerLon: 26.6900,
       polygon: [
         GeoPoint(41.3200, 26.6300),
         GeoPoint(41.3200, 26.7500),
@@ -124,6 +175,8 @@ class GeoUtils {
       municipalityId: 'muni_tekirdag_corlu',
       districtName: 'Çorlu',
       provinceName: 'Tekirdağ',
+      centerLat: 41.1700,
+      centerLon: 27.8150,
       polygon: [
         GeoPoint(41.2200, 27.7500),
         GeoPoint(41.2200, 27.8800),
@@ -136,6 +189,8 @@ class GeoUtils {
       municipalityId: 'muni_kirklareli_luleburgaz',
       districtName: 'Lüleburgaz',
       provinceName: 'Kırklareli',
+      centerLat: 41.4000,
+      centerLon: 27.3600,
       polygon: [
         GeoPoint(41.4500, 27.3000),
         GeoPoint(41.4500, 27.4200),
@@ -146,31 +201,39 @@ class GeoUtils {
   ];
 
   /// Verilen GPS koordinatından belediyeyi tespit eder.
-  /// Önce hassas ray-casting poligon kontrolü yapar.
+  /// Önce tüm kayıtlı ilçelerde hassas ray-casting poligon kontrolü yapar.
   /// Poligon dışına düşerse en yakın belediyeyi centroid mesafesine göre belirler.
   static DistrictBoundary detectMunicipality(double lat, double lon) {
+    final searchList = _allDistricts.isNotEmpty ? _allDistricts : knownBoundaries;
     final point = GeoPoint(lat, lon);
-    for (final boundary in knownBoundaries) {
+
+    // 1. Hassas Ray-Casting Poligon Kontrolü
+    for (final boundary in searchList) {
       if (isPointInPolygon(point, boundary.polygon)) {
         return boundary;
       }
     }
 
-    // Poligon bulunamazsa en yakın belediyeyi (Haversine centroid) bul
-    DistrictBoundary nearest = knownBoundaries.first;
+    // 2. Poligon içine düşmezse en yakın ilçe merkezini (Haversine) bul
+    DistrictBoundary nearest = searchList.first;
     double minDistance = double.infinity;
 
-    for (final boundary in knownBoundaries) {
-      double sumLat = 0;
-      double sumLon = 0;
-      for (final p in boundary.polygon) {
-        sumLat += p.latitude;
-        sumLon += p.longitude;
-      }
-      final centerLat = sumLat / boundary.polygon.length;
-      final centerLon = sumLon / boundary.polygon.length;
+    for (final boundary in searchList) {
+      double cLat = boundary.centerLat ?? 0;
+      double cLon = boundary.centerLon ?? 0;
 
-      final dist = calculateDistanceInMeters(lat, lon, centerLat, centerLon);
+      if (cLat == 0 && boundary.polygon.isNotEmpty) {
+        double sumLat = 0;
+        double sumLon = 0;
+        for (final p in boundary.polygon) {
+          sumLat += p.latitude;
+          sumLon += p.longitude;
+        }
+        cLat = sumLat / boundary.polygon.length;
+        cLon = sumLon / boundary.polygon.length;
+      }
+
+      final dist = calculateDistanceInMeters(lat, lon, cLat, cLon);
       if (dist < minDistance) {
         minDistance = dist;
         nearest = boundary;

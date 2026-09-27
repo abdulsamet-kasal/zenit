@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import '../../core/utils/geo_utils.dart';
 import '../models/municipality.dart';
 import 'municipality_repository.dart';
 
 class MockMunicipalityRepository implements MunicipalityRepository {
   List<Municipality>? _cachedMunicipalities;
+  List<String>? _cachedProvinces;
 
   Future<void> _ensureLoaded() async {
     if (_cachedMunicipalities != null) return;
@@ -16,7 +18,12 @@ class MockMunicipalityRepository implements MunicipalityRepository {
       _cachedMunicipalities = jsonList
           .map((e) => Municipality.fromJson(e as Map<String, dynamic>))
           .toList();
-    } catch (_) {
+      
+      // GeoUtils için tüm Türkiye ilçe ve sınırlarını kaydet
+      GeoUtils.setMunicipalities(_cachedMunicipalities!);
+    } catch (e, st) {
+      // ignore: avoid_print
+      print('DETAILED ERROR: $e\n$st');
       _cachedMunicipalities = [];
     }
   }
@@ -47,5 +54,24 @@ class MockMunicipalityRepository implements MunicipalityRepository {
     final sorted = list.toList()
       ..sort((a, b) => b.transparencyScore.compareTo(a.transparencyScore));
     return sorted;
+  }
+
+  @override
+  Future<List<String>> getProvinces() async {
+    if (_cachedProvinces != null) return _cachedProvinces!;
+    try {
+      final jsonStr =
+          await rootBundle.loadString('assets/data/turkey_provinces.json');
+      final Map<String, dynamic> map = jsonDecode(jsonStr);
+      final list = ['Tümü', ...map.keys.toList()..sort()];
+      _cachedProvinces = list;
+      return list;
+    } catch (_) {
+      await _ensureLoaded();
+      final set = _cachedMunicipalities!.map((m) => m.province).toSet().toList()
+        ..sort();
+      _cachedProvinces = ['Tümü', ...set];
+      return _cachedProvinces!;
+    }
   }
 }

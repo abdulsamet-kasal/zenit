@@ -3,17 +3,18 @@ import '../models/anonymous_user.dart';
 import 'auth_repository.dart';
 import 'complaint_repository.dart';
 import 'mock_auth_repository.dart';
-import 'mock_complaint_repository.dart';
-import 'mock_municipality_repository.dart';
 import 'municipality_repository.dart';
+
+import 'supabase_complaint_repository.dart';
+import 'supabase_municipality_repository.dart';
 
 // Repository Providers (Dependency Injection interface üzerinden)
 final complaintRepositoryProvider = Provider<ComplaintRepository>((ref) {
-  return MockComplaintRepository();
+  return SupabaseComplaintRepository();
 });
 
 final municipalityRepositoryProvider = Provider<MunicipalityRepository>((ref) {
-  return MockMunicipalityRepository();
+  return SupabaseMunicipalityRepository();
 });
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {

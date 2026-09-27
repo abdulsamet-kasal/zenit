@@ -6,4 +6,6 @@ abstract class MunicipalityRepository {
   Future<Municipality?> getMunicipalityById(String id);
 
   Future<List<Municipality>> getLeaderboard({String? province});
+
+  Future<List<String>> getProvinces();
 }

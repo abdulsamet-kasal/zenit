@@ -41,6 +41,12 @@ class _ReportCreationScreenState extends ConsumerState<ReportCreationScreen> {
   bool _isSubmitting = false;
 
   @override
+  void initState() {
+    super.initState();
+    ref.read(municipalityRepositoryProvider).getMunicipalities();
+  }
+
+  @override
   void dispose() {
     _pageController.dispose();
     _titleController.dispose();

@@ -64,6 +64,10 @@ class Municipality {
   final String province;
   final String district;
   final String? logoUrl;
+  final double latitude;
+  final double longitude;
+  final int? plateNumber;
+  final List<dynamic>? boundaryPolygon;
   final double transparencyScore; // 0-100
   final int totalComplaints;
   final int resolvedComplaints;
@@ -77,6 +81,10 @@ class Municipality {
     required this.province,
     required this.district,
     this.logoUrl,
+    this.latitude = 39.0,
+    this.longitude = 35.0,
+    this.plateNumber,
+    this.boundaryPolygon,
     required this.transparencyScore,
     required this.totalComplaints,
     required this.resolvedComplaints,
@@ -96,16 +104,20 @@ class Municipality {
       name: json['name'] as String,
       province: json['province'] as String,
       district: json['district'] as String,
-      logoUrl: json['logoUrl'] as String?,
-      transparencyScore: (json['transparencyScore'] as num).toDouble(),
-      totalComplaints: json['totalComplaints'] as int? ?? 0,
-      resolvedComplaints: json['resolvedComplaints'] as int? ?? 0,
-      avgResolutionDays: (json['avgResolutionDays'] as num?)?.toDouble() ?? 0.0,
-      scoreHistory: (json['scoreHistory'] as List<dynamic>?)
+      logoUrl: (json['logoUrl'] ?? json['logo_url']) as String?,
+      latitude: ((json['latitude'] ?? 39.0) as num).toDouble(),
+      longitude: ((json['longitude'] ?? 35.0) as num).toDouble(),
+      plateNumber: (json['plateNumber'] ?? json['plate_number']) as int?,
+      boundaryPolygon: (json['boundaryPolygon'] ?? json['boundary_polygon']) as List<dynamic>?,
+      transparencyScore: ((json['transparencyScore'] ?? json['transparency_score'] ?? 70.0) as num).toDouble(),
+      totalComplaints: (json['totalComplaints'] ?? json['total_complaints'] ?? 0) as int,
+      resolvedComplaints: (json['resolvedComplaints'] ?? json['resolved_complaints'] ?? 0) as int,
+      avgResolutionDays: ((json['avgResolutionDays'] ?? json['avg_resolution_days'] ?? 0.0) as num).toDouble(),
+      scoreHistory: ((json['scoreHistory'] ?? json['score_history']) as List<dynamic>?)
               ?.map((e) => ScorePoint.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      categoryPerformance: (json['categoryPerformance'] as List<dynamic>?)
+      categoryPerformance: ((json['categoryPerformance'] ?? json['category_performance']) as List<dynamic>?)
               ?.map((e) =>
                   CategoryPerformance.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -120,6 +132,10 @@ class Municipality {
       'province': province,
       'district': district,
       'logoUrl': logoUrl,
+      'latitude': latitude,
+      'longitude': longitude,
+      'plateNumber': plateNumber,
+      'boundaryPolygon': boundaryPolygon,
       'transparencyScore': transparencyScore,
       'totalComplaints': totalComplaints,
       'resolvedComplaints': resolvedComplaints,
@@ -136,6 +152,10 @@ class Municipality {
     String? province,
     String? district,
     String? logoUrl,
+    double? latitude,
+    double? longitude,
+    int? plateNumber,
+    List<dynamic>? boundaryPolygon,
     double? transparencyScore,
     int? totalComplaints,
     int? resolvedComplaints,
@@ -149,6 +169,10 @@ class Municipality {
       province: province ?? this.province,
       district: district ?? this.district,
       logoUrl: logoUrl ?? this.logoUrl,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      plateNumber: plateNumber ?? this.plateNumber,
+      boundaryPolygon: boundaryPolygon ?? this.boundaryPolygon,
       transparencyScore: transparencyScore ?? this.transparencyScore,
       totalComplaints: totalComplaints ?? this.totalComplaints,
       resolvedComplaints: resolvedComplaints ?? this.resolvedComplaints,

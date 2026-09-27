@@ -19,7 +19,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   String _sortBy = 'score';
   final TextEditingController _searchController = TextEditingController();
 
-  final List<String> _provinces = ['Tümü', 'Edirne', 'Tekirdağ', 'Kırklareli'];
+  List<String> _provinces = ['Tümü'];
 
   @override
   void initState() {
@@ -36,11 +36,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   Future<void> _loadLeaderboard() async {
     try {
       final repo = ref.read(municipalityRepositoryProvider);
+      final provinces = await repo.getProvinces();
       final list = await repo.getLeaderboard(
         province: _selectedProvince == 'Tümü' ? null : _selectedProvince,
       );
       if (mounted) {
         setState(() {
+          _provinces = provinces;
           _municipalities = list;
           _isLoading = false;
         });
