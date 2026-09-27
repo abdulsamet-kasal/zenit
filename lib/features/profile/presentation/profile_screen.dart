@@ -226,15 +226,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
               const SizedBox(height: 12),
 
-              Container(
-                decoration: BoxDecoration(
-                  color: isDark ? AppColors.surfaceDark : Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color:
-                        isDark ? AppColors.borderDark : AppColors.borderLight,
-                  ),
-                ),
+              Card(
+                clipBehavior: Clip.antiAlias,
                 child: Column(
                   children: [
                     // Tema Seçimi
