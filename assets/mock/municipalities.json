@@ -1,0 +1,120 @@
+[
+  {
+    "id": "muni_edirne_merkez",
+    "name": "Edirne Belediyesi",
+    "province": "Edirne",
+    "district": "Merkez",
+    "logoUrl": "https://images.unsplash.com/photo-1577495508048-b635879837f1?w=200&auto=format&fit=crop&q=80",
+    "transparencyScore": 84.5,
+    "totalComplaints": 420,
+    "resolvedComplaints": 365,
+    "avgResolutionDays": 5.2,
+    "scoreHistory": [
+      {"date": "2026-06-01T00:00:00Z", "score": 72.0},
+      {"date": "2026-07-01T00:00:00Z", "score": 76.5},
+      {"date": "2026-08-01T00:00:00Z", "score": 81.0},
+      {"date": "2026-09-01T00:00:00Z", "score": 84.5}
+    ],
+    "categoryPerformance": [
+      {"categoryId": "waste_cleaning", "categoryName": "Çöp / Temizlik", "total": 120, "resolved": 115, "successRate": 95.8},
+      {"categoryId": "lighting", "categoryName": "Aydınlatma", "total": 85, "resolved": 78, "successRate": 91.7},
+      {"categoryId": "road_pavement", "categoryName": "Yol / Kaldırım", "total": 110, "resolved": 88, "successRate": 80.0},
+      {"categoryId": "water_sewage", "categoryName": "Su / Kanalizasyon", "total": 60, "resolved": 52, "successRate": 86.6},
+      {"categoryId": "parks_green", "categoryName": "Park / Yeşil Alan", "total": 45, "resolved": 32, "successRate": 71.1}
+    ]
+  },
+  {
+    "id": "muni_edirne_kesan",
+    "name": "Keşan Belediyesi",
+    "province": "Edirne",
+    "district": "Keşan",
+    "logoUrl": "https://images.unsplash.com/photo-1577495508048-b635879837f1?w=200&auto=format&fit=crop&q=80",
+    "transparencyScore": 76.8,
+    "totalComplaints": 210,
+    "resolvedComplaints": 168,
+    "avgResolutionDays": 7.8,
+    "scoreHistory": [
+      {"date": "2026-06-01T00:00:00Z", "score": 70.0},
+      {"date": "2026-07-01T00:00:00Z", "score": 72.0},
+      {"date": "2026-08-01T00:00:00Z", "score": 75.0},
+      {"date": "2026-09-01T00:00:00Z", "score": 76.8}
+    ],
+    "categoryPerformance": [
+      {"categoryId": "waste_cleaning", "categoryName": "Çöp / Temizlik", "total": 70, "resolved": 62, "successRate": 88.5},
+      {"categoryId": "road_pavement", "categoryName": "Yol / Kaldırım", "total": 65, "resolved": 45, "successRate": 69.2},
+      {"categoryId": "lighting", "categoryName": "Aydınlatma", "total": 45, "resolved": 38, "successRate": 84.4},
+      {"categoryId": "water_sewage", "categoryName": "Su / Kanalizasyon", "total": 30, "resolved": 23, "successRate": 76.6}
+    ]
+  },
+  {
+    "id": "muni_edirne_uzunkopru",
+    "name": "Uzunköprü Belediyesi",
+    "province": "Edirne",
+    "district": "Uzunköprü",
+    "logoUrl": "https://images.unsplash.com/photo-1577495508048-b635879837f1?w=200&auto=format&fit=crop&q=80",
+    "transparencyScore": 68.2,
+    "totalComplaints": 140,
+    "resolvedComplaints": 98,
+    "avgResolutionDays": 9.4,
+    "scoreHistory": [
+      {"date": "2026-06-01T00:00:00Z", "score": 64.0},
+      {"date": "2026-07-01T00:00:00Z", "score": 66.5},
+      {"date": "2026-08-01T00:00:00Z", "score": 67.0},
+      {"date": "2026-09-01T00:00:00Z", "score": 68.2}
+    ],
+    "categoryPerformance": [
+      {"categoryId": "road_pavement", "categoryName": "Yol / Kaldırım", "total": 50, "resolved": 30, "successRate": 60.0},
+      {"categoryId": "lighting", "categoryName": "Aydınlatma", "total": 35, "resolved": 26, "successRate": 74.2},
+      {"categoryId": "waste_cleaning", "categoryName": "Çöp / Temizlik", "total": 40, "resolved": 32, "successRate": 80.0},
+      {"categoryId": "water_sewage", "categoryName": "Su / Kanalizasyon", "total": 15, "resolved": 10, "successRate": 66.6}
+    ]
+  },
+  {
+    "id": "muni_tekirdag_corlu",
+    "name": "Çorlu Belediyesi",
+    "province": "Tekirdağ",
+    "district": "Çorlu",
+    "logoUrl": "https://images.unsplash.com/photo-1577495508048-b635879837f1?w=200&auto=format&fit=crop&q=80",
+    "transparencyScore": 88.0,
+    "totalComplaints": 650,
+    "resolvedComplaints": 585,
+    "avgResolutionDays": 4.1,
+    "scoreHistory": [
+      {"date": "2026-06-01T00:00:00Z", "score": 81.0},
+      {"date": "2026-07-01T00:00:00Z", "score": 83.5},
+      {"date": "2026-08-01T00:00:00Z", "score": 86.0},
+      {"date": "2026-09-01T00:00:00Z", "score": 88.0}
+    ],
+    "categoryPerformance": [
+      {"categoryId": "waste_cleaning", "categoryName": "Çöp / Temizlik", "total": 210, "resolved": 204, "successRate": 97.1},
+      {"categoryId": "lighting", "categoryName": "Aydınlatma", "total": 140, "resolved": 132, "successRate": 94.2},
+      {"categoryId": "road_pavement", "categoryName": "Yol / Kaldırım", "total": 180, "resolved": 150, "successRate": 83.3},
+      {"categoryId": "water_sewage", "categoryName": "Su / Kanalizasyon", "total": 80, "resolved": 72, "successRate": 90.0},
+      {"categoryId": "parks_green", "categoryName": "Park / Yeşil Alan", "total": 40, "resolved": 27, "successRate": 67.5}
+    ]
+  },
+  {
+    "id": "muni_kirklareli_luleburgaz",
+    "name": "Lüleburgaz Belediyesi",
+    "province": "Kırklareli",
+    "district": "Lüleburgaz",
+    "logoUrl": "https://images.unsplash.com/photo-1577495508048-b635879837f1?w=200&auto=format&fit=crop&q=80",
+    "transparencyScore": 82.3,
+    "totalComplaints": 310,
+    "resolvedComplaints": 268,
+    "avgResolutionDays": 5.9,
+    "scoreHistory": [
+      {"date": "2026-06-01T00:00:00Z", "score": 75.0},
+      {"date": "2026-07-01T00:00:00Z", "score": 77.0},
+      {"date": "2026-08-01T00:00:00Z", "score": 80.0},
+      {"date": "2026-09-01T00:00:00Z", "score": 82.3}
+    ],
+    "categoryPerformance": [
+      {"categoryId": "waste_cleaning", "categoryName": "Çöp / Temizlik", "total": 95, "resolved": 90, "successRate": 94.7},
+      {"categoryId": "lighting", "categoryName": "Aydınlatma", "total": 60, "resolved": 54, "successRate": 90.0},
+      {"categoryId": "road_pavement", "categoryName": "Yol / Kaldırım", "total": 90, "resolved": 70, "successRate": 77.7},
+      {"categoryId": "parks_green", "categoryName": "Park / Yeşil Alan", "total": 40, "resolved": 33, "successRate": 82.5},
+      {"categoryId": "water_sewage", "categoryName": "Su / Kanalizasyon", "total": 25, "resolved": 21, "successRate": 84.0}
+    ]
+  }
+]
