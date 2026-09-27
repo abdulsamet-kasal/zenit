@@ -5,11 +5,11 @@ class SupabaseConfig {
   static const String projectRef = 'txhpstratzihirwlpixu';
   static const String supabaseUrl = 'https://txhpstratzihirwlpixu.supabase.co';
   
-  // Anon Public Key: Supabase Dashboard -> Project Settings -> API sayfasından alınır.
-  // Varsayılan geçici değer veya çevre değişkeni:
+  // Anon Public Key: Supabase Dashboard -> Project Settings -> API
   static const String defaultAnonKey = String.fromEnvironment(
     'SUPABASE_ANON_KEY',
-    defaultValue: '***REMOVED***',
+    defaultValue:
+        '***REMOVED***',
   );
 
   static bool _isInitialized = false;
