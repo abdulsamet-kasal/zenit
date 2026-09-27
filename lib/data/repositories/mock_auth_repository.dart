@@ -5,8 +5,14 @@ import '../models/anonymous_user.dart';
 import 'auth_repository.dart';
 
 class MockAuthRepository implements AuthRepository {
+  static AnonymousUser? _cachedUser;
+
   @override
   Future<AnonymousUser> getCurrentUser() async {
+    if (_cachedUser != null) {
+      return _cachedUser!;
+    }
+
     final prefs = await SharedPreferences.getInstance();
     String? id = prefs.getString(AppConstants.keyGuestUserId);
     String? name = prefs.getString(AppConstants.keyGuestUserName);
@@ -26,7 +32,7 @@ class MockAuthRepository implements AuthRepository {
 
     final createdIds = prefs.getStringList('seffaf_created_complaints') ?? [];
 
-    return AnonymousUser(
+    final user = AnonymousUser(
       id: id,
       displayName: name ?? 'Misafir Vatandaş',
       createdComplaintIds: createdIds,
@@ -34,10 +40,14 @@ class MockAuthRepository implements AuthRepository {
       phoneNumber: phone,
       followedMunicipalityIds: followed,
     );
+
+    _cachedUser = user;
+    return user;
   }
 
   @override
   Future<void> saveUser(AnonymousUser user) async {
+    _cachedUser = user;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(AppConstants.keyGuestUserId, user.id);
     await prefs.setString(AppConstants.keyGuestUserName, user.displayName);
@@ -54,6 +64,7 @@ class MockAuthRepository implements AuthRepository {
 
   @override
   Future<void> clearUserData() async {
+    _cachedUser = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(AppConstants.keyGuestUserId);
     await prefs.remove(AppConstants.keyGuestUserName);
@@ -83,6 +94,7 @@ class MockAuthRepository implements AuthRepository {
 
   @override
   Future<void> verifyUser(String phoneNumber) async {
+    _cachedUser = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(AppConstants.keyUserVerified, true);
     await prefs.setString(AppConstants.keyUserPhone, phoneNumber);

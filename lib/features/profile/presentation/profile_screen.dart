@@ -327,17 +327,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       appBar: AppBar(
         title: const Text('Profil & Ayarlar'),
       ),
-      body: userAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('Hata: $err')),
-        data: (user) => SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Kullanıcı Kartı
-              _buildUserCard(user, isDark),
-              const SizedBox(height: 14),
+      body: Builder(
+        builder: (context) {
+          final user = userAsync.asData?.value ??
+              AnonymousUser(
+                id: 'misafir-vatandas',
+                displayName: 'Misafir Vatandaş',
+                createdComplaintIds: const [],
+                isGuest: true,
+              );
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Kullanıcı Kartı
+                _buildUserCard(user, isDark),
+                const SizedBox(height: 14),
 
               // Çevrimdışı Taslak Uyarısı (Varsa)
               if (offlineSync.pendingDraftCount > 0) ...[
@@ -594,10 +601,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               const SizedBox(height: 32),
             ],
           ),
-        ),
-      ),
-    );
-  }
+        );
+      },
+    ),
+  );
+}
 
   Widget _buildUserCard(AnonymousUser user, bool isDark) {
     return Container(
@@ -708,6 +716,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
+                    minimumSize: const Size(0, 36),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 8),
                     textStyle: const TextStyle(
