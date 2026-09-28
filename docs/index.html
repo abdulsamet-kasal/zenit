@@ -54,16 +54,16 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
       </div>
-      <h2 class="text-lg font-bold text-white mb-2" id="invalidTitle">Bağlantı Süresi Dolmuş</h2>
+      <h2 class="text-lg font-bold text-white mb-2" id="invalidTitle">Bağlantı Geçersiz</h2>
       <p id="invalidMessage" class="text-slate-300 text-sm mb-6 leading-relaxed">
-        Bu sıfırlama bağlantısı daha önce kullanılmış veya süresi dolmuş olabilir. Lütfen ŞEFFAF uygulamasından tekrar bağlantı gönderin.
+        Sıfırlama bağlantısı bulunamadı veya süresi dolmuş.
       </p>
       <a href="seffaf://login" class="inline-flex items-center justify-center w-full px-6 py-3 text-sm font-semibold text-slate-200 bg-slate-700 hover:bg-slate-600 rounded-xl transition-all">
         Uygulamaya Dön
       </a>
     </div>
 
-    <!-- Şifre Belirleme Formu (VARSAYILAN OLARAK DOĞRUDAN AÇIK!) -->
+    <!-- Şifre Belirleme Formu -->
     <div id="formState">
       <div class="mb-4">
         <h2 class="text-lg font-bold text-white mb-1">Yeni Şifrenizi Belirleyin</h2>
@@ -80,6 +80,18 @@
       <div id="errorBox" class="hidden mb-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-medium leading-relaxed"></div>
 
       <form id="resetForm" onsubmit="handleReset(event)" class="space-y-4">
+        
+        <!-- Manuel Kod Girişi (Yalnızca token URL'de yoksa otomatik görünür) -->
+        <div id="manualOtpGroup" class="hidden">
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">E-posta Adresiniz</label>
+          <input type="email" id="manualEmail" placeholder="ornek@mail.com"
+            class="w-full px-4 py-3 bg-slate-900/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3">
+          
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Doğrulama Kodu</label>
+          <input type="text" id="manualCode" placeholder="E-postadaki 6-8 haneli kod"
+            class="w-full px-4 py-3 bg-slate-900/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-mono tracking-wider">
+        </div>
+
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1.5">Yeni Şifre</label>
           <div class="relative">
@@ -118,10 +130,10 @@
   </div>
 
   <script>
-    // Tamamen bağımsız, sıfır harici kütüphane gerektiren saf REST API motoru
     const SUPABASE_URL = "https://txhpstratzihirwlpixu.supabase.co";
     const SUPABASE_ANON_KEY = "***REMOVED***";
 
+    let tokenHash = "";
     let accessToken = "";
     let userEmail = "";
 
@@ -165,57 +177,71 @@
           return payload.email || "";
         }
       } catch (e) {
-        console.warn("JWT parse:", e);
+        console.warn("JWT parse error:", e);
       }
       return "";
     }
 
-    // Sayfa açıldığında URL'yi anında ayrıştır
+    function setBadge(email) {
+      if (!email) return;
+      userEmail = email;
+      const badge = document.getElementById("accountBadge");
+      const container = document.getElementById("accountBadgeContainer");
+      if (badge && container) {
+        badge.textContent = email;
+        container.classList.remove("hidden");
+      }
+    }
+
+    // Sayfa açıldığında URL parametrelerini ayrıştır
     function init() {
       const hashStr = window.location.hash.startsWith("#") ? window.location.hash.substring(1) : window.location.hash;
       const hashParams = new URLSearchParams(hashStr);
       const queryParams = new URLSearchParams(window.location.search);
 
-      // 1. URL'de hata bildirimi var mı?
+      // 1. Email parametresi
+      const qEmail = queryParams.get("email") || hashParams.get("email") || "";
+      if (qEmail) setBadge(qEmail);
+
+      // 2. Token hash parametresi (Modern güvenli yöntem)
+      tokenHash = queryParams.get("token_hash") || hashParams.get("token_hash") || "";
+
+      // 3. Access token parametresi (Doğrudan oturum)
+      accessToken = hashParams.get("access_token") || queryParams.get("access_token") || "";
+
+      if (accessToken) {
+        const jwtEmail = parseEmailFromJwt(accessToken);
+        if (jwtEmail) setBadge(jwtEmail);
+        return; // Hazır!
+      }
+
+      if (tokenHash) {
+        return; // Token hash hazır, form submit edildiğinde doğrulanacak!
+      }
+
+      // 4. Eğer URL'de hata bildirimi varsa ve token yoksa
       if (hashParams.has("error") || queryParams.has("error")) {
-        const errCode = hashParams.get("error_code") || queryParams.get("error_code") || "";
         const errDesc = hashParams.get("error_description") || queryParams.get("error_description") || "";
-        
-        let msg = "Bu sıfırlama bağlantısı daha önce kullanılmış veya süresi (1 saat) dolmuş.";
+        let msg = "Bu sıfırlama bağlantısı daha önce kullanılmış veya süresi dolmuş olabilir.";
         if (errDesc) {
           msg = decodeURIComponent(errDesc.replace(/\+/g, " "));
         }
-        showInvalid("Bağlantı Geçersiz veya Süresi Dolmuş", msg + " Lütfen ŞEFFAF uygulamasından tekrar 'Bağlantı Gönder' butonuna basarak yeni bir e-posta isteyin.");
+        showInvalid("Bağlantı Geçersiz", msg);
         return;
       }
 
-      // 2. Hash üzerinden access_token var mı?
-      if (hashParams.has("access_token")) {
-        accessToken = hashParams.get("access_token");
-        userEmail = parseEmailFromJwt(accessToken);
+      // 5. Hiçbir token parametresi yoksa: Manuel kod girme modunu aktif et
+      const manualGroup = document.getElementById("manualOtpGroup");
+      if (manualGroup) {
+        manualGroup.classList.remove("hidden");
         if (userEmail) {
-          document.getElementById("accountBadge").textContent = userEmail;
-          document.getElementById("accountBadgeContainer").classList.remove("hidden");
+          const mEmail = document.getElementById("manualEmail");
+          if (mEmail) mEmail.value = userEmail;
         }
-        return;
       }
-
-      // 3. Query string'den token var mı?
-      if (queryParams.has("access_token")) {
-        accessToken = queryParams.get("access_token");
-        userEmail = parseEmailFromJwt(accessToken);
-        if (userEmail) {
-          document.getElementById("accountBadge").textContent = userEmail;
-          document.getElementById("accountBadgeContainer").classList.remove("hidden");
-        }
-        return;
-      }
-
-      // 4. Eğer hiçbir token yoksa (kullanıcı doğrudan URL yazıp girdiyse)
-      showInvalid("Bağlantı Bulunamadı", "Lütfen e-postanıza gelen 'Yeni Şifremi Belirle' bağlantısına tıklayarak bu sayfayı açın.");
     }
 
-    // Şifre Sıfırlama Gönderimi
+    // Şifre Sıfırlama Formu Gönderimi
     async function handleReset(e) {
       e.preventDefault();
       hideError();
@@ -234,38 +260,97 @@
         return;
       }
 
-      if (!accessToken) {
-        showError("Oturum anahtarı bulunamadı. Lütfen e-postanızdaki bağlantıya tekrar tıklayın.");
-        return;
-      }
-
       btn.disabled = true;
       btn.innerHTML = '<span class="inline-flex items-center"><svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Şifre Güncelleniyor...</span>';
 
       try {
-        // Doğrudan Supabase Auth REST API PUT isteği
-        const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+        let activeToken = accessToken;
+
+        // Adım A: Eğer accessToken yok ama tokenHash varsa, verify endpoint'i ile al
+        if (!activeToken && tokenHash) {
+          const verifyRes = await fetch(`${SUPABASE_URL}/auth/v1/verify`, {
+            method: "POST",
+            headers: {
+              "apikey": SUPABASE_ANON_KEY,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              type: "recovery",
+              token_hash: tokenHash
+            })
+          });
+
+          const verifyData = await verifyRes.json();
+          if (!verifyRes.ok || !verifyData.access_token) {
+            const err = verifyData.msg || verifyData.message || verifyData.error_description || "Doğrulama anahtarı geçersiz veya süresi dolmuş.";
+            throw new Error(err);
+          }
+
+          activeToken = verifyData.access_token;
+          if (verifyData.user && verifyData.user.email) {
+            userEmail = verifyData.user.email;
+          }
+        }
+
+        // Adım B: Eğer tokenHash da yoksa, manuel girilen OTP kodunu doğrula
+        if (!activeToken && !tokenHash) {
+          const mEmail = document.getElementById("manualEmail").value.trim();
+          const mCode = document.getElementById("manualCode").value.trim();
+
+          if (!mEmail || !mCode) {
+            throw new Error("Lütfen e-posta adresinizi ve doğrulama kodunuzu girin.");
+          }
+
+          const verifyRes = await fetch(`${SUPABASE_URL}/auth/v1/verify`, {
+            method: "POST",
+            headers: {
+              "apikey": SUPABASE_ANON_KEY,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              type: "recovery",
+              email: mEmail,
+              token: mCode
+            })
+          });
+
+          const verifyData = await verifyRes.json();
+          if (!verifyRes.ok || !verifyData.access_token) {
+            const err = verifyData.msg || verifyData.message || verifyData.error_description || "Girdiğiniz doğrulama kodu hatalı veya süresi dolmuş.";
+            throw new Error(err);
+          }
+
+          activeToken = verifyData.access_token;
+          userEmail = mEmail;
+        }
+
+        if (!activeToken) {
+          throw new Error("Oturum doğrulanamadı. Lütfen e-postanızı kontrol edin.");
+        }
+
+        // Adım C: PUT /auth/v1/user ile yeni şifreyi güncelle
+        const updateRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
           method: "PUT",
           headers: {
             "apikey": SUPABASE_ANON_KEY,
-            "Authorization": `Bearer ${accessToken}`,
+            "Authorization": `Bearer ${activeToken}`,
             "Content-Type": "application/json"
           },
           body: JSON.stringify({ password: pass })
         });
 
-        const resData = await response.json();
+        const updateData = await updateRes.json();
 
-        if (response.ok && (resData.id || resData.email)) {
+        if (updateRes.ok && (updateData.id || updateData.email)) {
           // Başarılı!
           document.getElementById("formState").classList.add("hidden");
           document.getElementById("successState").classList.remove("hidden");
-          const emailToShow = resData.email || userEmail;
-          if (emailToShow) {
-            document.getElementById("successEmail").textContent = emailToShow;
+          const finalEmail = updateData.email || userEmail;
+          if (finalEmail) {
+            document.getElementById("successEmail").textContent = finalEmail;
           }
         } else {
-          const errMsg = resData.msg || resData.error_description || resData.message || "Şifre güncellenemedi.";
+          const errMsg = updateData.msg || updateData.error_description || updateData.message || "Şifre güncellenemedi.";
           throw new Error(errMsg);
         }
       } catch (err) {
@@ -275,7 +360,6 @@
       }
     }
 
-    // Sayfa hazır olduğunda çalıştır
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", init);
     } else {
