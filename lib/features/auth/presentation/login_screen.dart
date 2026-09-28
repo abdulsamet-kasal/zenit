@@ -79,13 +79,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void _showForgotPasswordDialog() {
     final emailCtrl = TextEditingController(text: _emailController.text);
-    final codeCtrl = TextEditingController();
-    final newPasswordCtrl = TextEditingController();
-    final confirmPasswordCtrl = TextEditingController();
-    int step = 1; // 1: Send OTP, 2: Enter OTP & New Password
+    int step = 1; // 1: Send link, 2: Sent confirmation
     bool isSubmitting = false;
     String? dialogError;
-    bool obscureNew = true;
 
     showDialog(
       context: context,
@@ -106,7 +102,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      step == 1 ? 'Şifre Sıfırlama' : 'Yeni Şifre Belirle',
+                      step == 1 ? 'Şifre Sıfırlama' : 'E-posta Gönderildi',
                       style: const TextStyle(fontSize: 18),
                     ),
                   ),
@@ -128,39 +124,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             color: AppColors.danger.withValues(alpha: 0.3),
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              dialogError!,
-                              style: const TextStyle(
-                                color: AppColors.danger,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            if (step == 1 && dialogError!.contains('429')) ...[
-                              const SizedBox(height: 8),
-                              OutlinedButton.icon(
-                                icon: const Icon(Icons.pin, size: 16),
-                                label: const Text(
-                                  'Gelen Kodu Girerek Devam Et',
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: AppColors.primary,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 4),
-                                ),
-                                onPressed: () {
-                                  setDialogState(() {
-                                    dialogError = null;
-                                    step = 2;
-                                  });
-                                },
-                              ),
-                            ],
-                          ],
+                        child: Text(
+                          dialogError!,
+                          style: const TextStyle(
+                            color: AppColors.danger,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
@@ -178,31 +148,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           prefixIcon: Icon(Icons.email_outlined),
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: TextButton.icon(
-                          icon: const Icon(Icons.pin, size: 16),
-                          label: const Text(
-                            'Elimde 6 haneli kod var',
-                            style: TextStyle(fontSize: 12.5),
-                          ),
-                          onPressed: () {
-                            final email = emailCtrl.text.trim();
-                            if (email.isEmpty || !email.contains('@')) {
-                              setDialogState(() => dialogError =
-                                  'Lütfen önce e-posta adresinizi girin.');
-                              return;
-                            }
-                            setDialogState(() {
-                              dialogError = null;
-                              step = 3;
-                            });
-                          },
-                        ),
-                      ),
-                    ] else if (step == 2) ...[
-                      // Bağlantı Gönderildi Başarı Durumu
+                    ] else ...[
                       Center(
                         child: Column(
                           children: [
@@ -243,50 +189,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ],
                         ),
                       ),
-                    ] else ...[
-                      // Step 3: Kod ile Sıfırlama
-                      Text(
-                        '${emailCtrl.text.trim()} adresine gelen 6 haneli kodu ve yeni şifrenizi girin:',
-                        style: const TextStyle(fontSize: 13),
-                      ),
-                      const SizedBox(height: 14),
-                      TextField(
-                        controller: codeCtrl,
-                        keyboardType: TextInputType.number,
-                        maxLength: 6,
-                        decoration: const InputDecoration(
-                          labelText: '6 Haneli Doğrulama Kodu',
-                          prefixIcon: Icon(Icons.pin_outlined),
-                          counterText: '',
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: newPasswordCtrl,
-                        obscureText: obscureNew,
-                        decoration: InputDecoration(
-                          labelText: 'Yeni Şifre',
-                          prefixIcon: const Icon(Icons.lock_outline),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              obscureNew
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                            ),
-                            onPressed: () =>
-                                setDialogState(() => obscureNew = !obscureNew),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: confirmPasswordCtrl,
-                        obscureText: obscureNew,
-                        decoration: const InputDecoration(
-                          labelText: 'Yeni Şifre Tekrar',
-                          prefixIcon: Icon(Icons.lock_clock_outlined),
-                        ),
-                      ),
                     ],
                   ],
                 ),
@@ -303,150 +205,58 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   )
                 else ...[
                   TextButton(
+                    onPressed: isSubmitting ? null : () => Navigator.of(ctx).pop(),
+                    child: const Text('İptal'),
+                  ),
+                  ElevatedButton(
                     onPressed: isSubmitting
                         ? null
-                        : () {
-                            if (step == 3) {
-                              setDialogState(() => step = 1);
-                            } else {
-                              Navigator.of(ctx).pop();
+                        : () async {
+                            final email = emailCtrl.text.trim();
+                            if (email.isEmpty || !email.contains('@')) {
+                              setDialogState(() => dialogError =
+                                  'Geçerli bir e-posta adresi girin.');
+                              return;
+                            }
+                            setDialogState(() {
+                              isSubmitting = true;
+                              dialogError = null;
+                            });
+                            try {
+                              await ref
+                                  .read(authRepositoryProvider)
+                                  .resetPassword(email);
+                              setDialogState(() {
+                                isSubmitting = false;
+                                step = 2; // Gönderildi onay ekranı
+                              });
+                            } catch (e) {
+                              setDialogState(() {
+                                isSubmitting = false;
+                                final errStr = e.toString();
+                                if (errStr.contains('429') ||
+                                    errStr.contains('rate limit') ||
+                                    errStr.contains('security purposes')) {
+                                  dialogError =
+                                      'Çok sık talep yapıldı (Limit: 429). Güvenlik amacıyla lütfen 60 saniye bekleyin veya daha önce gönderilen e-postayı kontrol edin.';
+                                } else {
+                                  dialogError =
+                                      'Sıfırlama bağlantısı gönderilemedi: $e';
+                                }
+                              });
                             }
                           },
-                    child: Text(step == 3 ? 'Geri' : 'İptal'),
+                    child: isSubmitting
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text('Bağlantı Gönder'),
                   ),
-                  if (step == 1)
-                    ElevatedButton(
-                      onPressed: isSubmitting
-                          ? null
-                          : () async {
-                              final email = emailCtrl.text.trim();
-                              if (email.isEmpty || !email.contains('@')) {
-                                setDialogState(() => dialogError =
-                                    'Geçerli bir e-posta adresi girin.');
-                                return;
-                              }
-                              setDialogState(() {
-                                isSubmitting = true;
-                                dialogError = null;
-                              });
-                              try {
-                                await ref
-                                    .read(authRepositoryProvider)
-                                    .resetPassword(email);
-                                setDialogState(() {
-                                  isSubmitting = false;
-                                  step = 2; // Gönderildi onay ekranı
-                                });
-                              } catch (e) {
-                                setDialogState(() {
-                                  isSubmitting = false;
-                                  final errStr = e.toString();
-                                  if (errStr.contains('429') ||
-                                      errStr.contains('rate limit') ||
-                                      errStr.contains('security purposes')) {
-                                    dialogError =
-                                        'Çok sık talep yapıldı (Limit: 429). Güvenlik amacıyla lütfen 60 saniye bekleyin veya daha önce gönderilen e-postayı kontrol edin.';
-                                  } else {
-                                    dialogError =
-                                        'Sıfırlama bağlantısı gönderilemedi: $e';
-                                  }
-                                });
-                              }
-                            },
-                      child: isSubmitting
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text('Bağlantı Gönder'),
-                    )
-                  else if (step == 3)
-                    ElevatedButton(
-                      onPressed: isSubmitting
-                          ? null
-                          : () async {
-                              final token = codeCtrl.text.trim();
-                              final newPass = newPasswordCtrl.text.trim();
-                              final confirmPass =
-                                  confirmPasswordCtrl.text.trim();
-
-                              if (token.length != 6) {
-                                setDialogState(() => dialogError =
-                                    'Lütfen 6 haneli kodu eksiksiz girin.');
-                                return;
-                              }
-                              if (newPass.length < 6) {
-                                setDialogState(() => dialogError =
-                                    'Şifre en az 6 karakter olmalıdır.');
-                                return;
-                              }
-                              if (newPass != confirmPass) {
-                                setDialogState(() => dialogError =
-                                    'Girdiğiniz şifreler uyuşmuyor.');
-                                return;
-                              }
-
-                              setDialogState(() {
-                                isSubmitting = true;
-                                dialogError = null;
-                              });
-
-                              try {
-                                await ref
-                                    .read(authRepositoryProvider)
-                                    .verifyOtpAndResetPassword(
-                                      emailCtrl.text.trim(),
-                                      token,
-                                      newPass,
-                                    );
-                                if (ctx.mounted) {
-                                  Navigator.of(ctx).pop();
-                                }
-                                if (mounted) {
-                                  _passwordController.text = newPass;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'Şifreniz başarıyla güncellendi! Yeni şifrenizle giriş yapabilirsiniz.',
-                                      ),
-                                      backgroundColor: AppColors.accent,
-                                    ),
-                                  );
-                                }
-                              } catch (e) {
-                                setDialogState(() {
-                                  isSubmitting = false;
-                                  final errStr = e.toString();
-                                  if (errStr.contains('429')) {
-                                    dialogError =
-                                        'Çok fazla deneme yapıldı. Lütfen biraz bekleyin.';
-                                  } else if (errStr.contains('Token') ||
-                                      errStr.contains('invalid') ||
-                                      errStr.contains('expired')) {
-                                    dialogError =
-                                        'Girdiğiniz 6 haneli kod hatalı veya süresi dolmuş.';
-                                  } else {
-                                    dialogError =
-                                        'Şifre sıfırlanamadı: $e';
-                                  }
-                                });
-                              }
-                            },
-                      child: isSubmitting
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text('Şifreyi Güncelle'),
-                    ),
                 ],
               ],
             );

@@ -119,7 +119,16 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
 
 ---
 
-## 🎯 Gelecek Faz (Faz 16 - Canlı Dağıtım ve Yayın Öncesi)
+16. **Faz 16 (Sadeleştirilmiş Mobil Şifre Sıfırlama Akışı, Çift Katmanlı Web Sıfırlama & E-Posta Şablon Kılavuzu):**
+   - **Mobil Şifre Sıfırlama Arayüzünün Sadeleştirilmesi:** `LoginScreen` içerisindeki kafa karıştıran 6 haneli kod girme, "Elimde kod var" geçişleri ve Step 3 adımları tamamen kaldırıldı. Kullanıcı e-postasını girip "Bağlantı Gönder" butonuna bastığında anlaşılır bir başarı bildirim ekranı sunulur; e-postadaki resmi güvenli bağlantıya yönlendirilir.
+   - **Çift Katmanlı Web Şifre Sıfırlama Portalı (`docs/reset-password.html` & `docs/index.html`):** Mobil tarayıcılar ve Gmail içi WebView'lerde cookie/localStorage kısıtları nedeniyle oluşan oturum kaybı sorunu kökten çözüldü. Sayfa, URL hash'indeki `access_token`'ı doğrudan ayrıştırarak hem Supabase JS SDK hem de doğrudan REST API (`PUT /auth/v1/user`) ile şifreyi veritabanında garanti şekilde günceller; ardından canlı doğrulama yaparak başarı mesajı verir ve `seffaf://login` derin bağlantısıyla uygulamayı açtırır.
+   - **Supabase E-Posta Özelleştirme & SMTP Durumu:** Supabase Free Tier üzerinde varsayılan e-posta sağlayıcısı kullanılırken API üzerinden şablon değişiminin kısıtlı olduğu doğrulandı; Türkçe ve kurumsal e-posta gönderimi için Custom SMTP (Gmail App Password veya Resend) entegrasyonu belgelendi ve rehberi hazırlandı.
+   - **Sürüm Güncellemesi:** Uygulama sürümü `1.2.3+6` olarak güncellendi.
+   - **Test & Analiz:** `flutter analyze` 0 hata ile tamamlandı, 20 testin 20'si de başarıyla geçti.
+
+---
+
+## 🎯 Gelecek Faz (Faz 17 - Canlı Dağıtım ve Yayın Öncesi)
 - Canlı SMS sağlayıcısı (Netgsm / Twilio) ile harici SMS gönderimi.
 
 
