@@ -186,7 +186,16 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
    - **Sürüm Güncellemesi:** Uygulama sürümü `1.4.0+9` olarak güncellendi.
    - **Test & Analiz:** `flutter analyze` 0 hata ile tamamlandı, 20 testin 20'si de başarıyla geçti.
 
+21. **Faz 21 (Private Repo Güvenliği, Saf Uygulama İçi OTP Şifre Sıfırlama & Web Bağımlılığının Kaldırılması):**
+   - **GitHub Repo Güvenliği (Private):** Zenit GitHub reposu başarıyla gizliye (`private`) çekilerek kaynak kodlarının sadece repo sahibine açık olması sağlandı.
+   - **Supabase E-Posta Şablonu Güncellemesi:** Web bağlantısı (`github.io`) ve `localhost` bağımlılıkları tamamen kaldırılarak e-posta şablonu saf 6 haneli doğrulama koduna (`{{ .Token }}`) odaklandı. Modern, kurumsal ve sade bir HTML şablonu API üzerinden yüklendi.
+   - **Mobil Şifre Sıfırlama Sadeleştirmesi:**
+     - `LoginScreen`: Web linkiyle ilgili tüm açıklamalar arındırıldı, kullanıcı doğrudan e-postasına gelen kodu ve yeni şifresini uygulama içinde girerek şifresini anında yeniler hale getirildi.
+     - `SupabaseAuthRepository`: `resetPasswordForEmail` çağrısından gereksiz `redirectTo` parametresi temizlendi.
+   - **Test & Analiz:** `flutter analyze` 0 hata, 20 testin 20'si de başarıyla geçti.
+
 ---
 
-## 🎯 Gelecek Faz (Faz 21 - Canlı Dağıtım ve Yayın Öncesi)
+## 🎯 Gelecek Faz (Faz 22 - Canlı Dağıtım ve Yayın Öncesi)
 - Canlı SMS sağlayıcısı (Netgsm / Twilio) ile harici SMS gönderimi.
+

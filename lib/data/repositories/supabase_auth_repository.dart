@@ -207,11 +207,7 @@ class SupabaseAuthRepository implements AuthRepository {
     final client = SupabaseConfig.client;
     if (client != null) {
       try {
-        await client.auth.resetPasswordForEmail(
-          email,
-          redirectTo:
-              'https://abdulsamet-kasal.github.io/zenit/reset-password.html',
-        );
+        await client.auth.resetPasswordForEmail(email);
         return;
       } catch (e) {
         debugPrint('⚠️ Supabase resetPassword hatası: $e');

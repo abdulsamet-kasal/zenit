@@ -204,10 +204,10 @@
     "semantic_hash": "b1ede59ca139669ec4a2de480d72851e"
   },
   "lib/data/repositories/supabase_auth_repository.dart": {
-    "mtime": 1790547120.4031024,
-    "seen": 1790590605.5195825,
-    "ast_hash": "1cd0d9fd299c73cf39281efd73fdfd5d",
-    "semantic_hash": "1cd0d9fd299c73cf39281efd73fdfd5d"
+    "mtime": 1790592982.7148283,
+    "seen": 1790593053.0242198,
+    "ast_hash": "80ec4f2cf5fd48ee86b81252c42b6458",
+    "semantic_hash": ""
   },
   "lib/data/repositories/supabase_complaint_repository.dart": {
     "mtime": 1790584816.5985265,
@@ -222,10 +222,10 @@
     "semantic_hash": "754be4f7ae2aad12ca93f20ebbe7484f"
   },
   "lib/features/auth/presentation/login_screen.dart": {
-    "mtime": 1790582696.2399073,
-    "seen": 1790590605.5195909,
-    "ast_hash": "9923b827f5db91b0dc87ca16ea488b1b",
-    "semantic_hash": "9923b827f5db91b0dc87ca16ea488b1b"
+    "mtime": 1790593005.2783704,
+    "seen": 1790593053.0243456,
+    "ast_hash": "fe13d37f3112e4a4a9a7669d961b5a29",
+    "semantic_hash": ""
   },
   "lib/features/auth/presentation/register_screen.dart": {
     "mtime": 1790582702.4031355,
@@ -1172,13 +1172,13 @@
   "assets/data/turkey_municipalities.json": {
     "mtime": 1790505192.4046857,
     "seen": 1790591823.4878259,
-    "ast_hash": "e70dbfd76f9d93a07ad9fb03a35f40c9",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "assets/mock/municipalities.json": {
     "mtime": 1790505192.4636858,
     "seen": 1790591823.4878392,
-    "ast_hash": "e70dbfd76f9d93a07ad9fb03a35f40c9",
+    "ast_hash": "",
     "semantic_hash": ""
   }
 }

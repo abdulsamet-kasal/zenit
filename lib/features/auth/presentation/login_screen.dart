@@ -147,7 +147,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ],
                       if (step == 1) ...[
                         const Text(
-                          'Kayıtlı e-posta adresinizi girin. Size hem tıklayabileceğiniz bir web bağlantısı hem de uygulama içinde kullanabileceğiniz doğrulama kodu gönderilecektir.',
+                          'Kayıtlı e-posta adresinizi girin. Şifrenizi sıfırlayabilmeniz için e-postanıza tek kullanımlık bir doğrulama kodu gönderilecektir.',
                           style: TextStyle(fontSize: 13.5, height: 1.4),
                         ),
                         const SizedBox(height: 16),
@@ -271,7 +271,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                         const SizedBox(height: 10),
                         const Text(
-                          '💡 Not: Dilerseniz e-postanızdaki web bağlantısına tıklayarak tarayıcınızdan da şifrenizi yenileyebilirsiniz.',
+                          '💡 Not: E-postanıza gelen doğrulama kodunu buraya girip yeni şifrenizi belirleyerek işleminizi anında tamamlayabilirsiniz.',
                           style: TextStyle(
                             fontSize: 11.5,
                             color: AppColors.textSecondaryLight,
@@ -347,7 +347,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text('Kod ve Bağlantı Gönder'),
+                        : const Text('Doğrulama Kodu Gönder'),
                   )
                 else
                   ElevatedButton(
