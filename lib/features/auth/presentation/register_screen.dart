@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../data/repositories/providers.dart';
+import '../../../shared/widgets/seffaf_logo.dart';
 import '../../main_navigation/main_nav_screen.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -99,22 +100,33 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         title: const Text('Kayıt Ol'),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 8),
-                const Text(
-                  'Vatandaş Hesabı Oluştur',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -0.5,
-                  ),
-                ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 440),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 8),
+                    const Center(
+                      child: SeffafLogo(
+                        size: 68,
+                        showText: false,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Vatandaş Hesabı Oluştur',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
                 const SizedBox(height: 6),
                 Text(
                   'Şikayet oluşturmak, belediye aksaklıklarını bildirmek ve çözüm süreçlerini izlemek için kaydolun.',
@@ -303,8 +315,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 const SizedBox(height: 20),
 
                 // Giriş Yap Yönlendirmesi
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Text(
                       'Zaten hesabınız var mı?',
@@ -335,6 +348,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  ),
+);
+}
 }

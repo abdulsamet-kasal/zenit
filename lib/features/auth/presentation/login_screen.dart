@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../data/repositories/providers.dart';
+import '../../../shared/widgets/seffaf_logo.dart';
 import '../../main_navigation/main_nav_screen.dart';
 import 'register_screen.dart';
 
@@ -79,9 +80,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void _showForgotPasswordDialog() {
     final emailCtrl = TextEditingController(text: _emailController.text);
-    int step = 1; // 1: Send link, 2: Sent confirmation
+    final codeCtrl = TextEditingController();
+    final newPasswordCtrl = TextEditingController();
+    final confirmPasswordCtrl = TextEditingController();
+    int step = 1; // 1: Send link & code, 2: Reset form with OTP code
     bool isSubmitting = false;
     String? dialogError;
+    bool obscureNew = true;
+    bool obscureConfirm = true;
 
     showDialog(
       context: context,
@@ -96,118 +102,204 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               title: Row(
                 children: [
                   Icon(
-                    step == 1 ? Icons.lock_reset : Icons.mark_email_read_outlined,
+                    step == 1
+                        ? Icons.lock_reset_rounded
+                        : Icons.verified_user_rounded,
                     color: AppColors.primary,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      step == 1 ? 'Şifre Sıfırlama' : 'E-posta Gönderildi',
-                      style: const TextStyle(fontSize: 18),
+                      step == 1 ? 'Şifre Sıfırlama' : 'Yeni Şifre Belirle',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
               ),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (dialogError != null) ...[
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        margin: const EdgeInsets.only(bottom: 12),
-                        decoration: BoxDecoration(
-                          color: AppColors.danger.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: AppColors.danger.withValues(alpha: 0.3),
+              content: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (dialogError != null) ...[
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.only(bottom: 12),
+                          decoration: BoxDecoration(
+                            color: AppColors.danger.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: AppColors.danger.withValues(alpha: 0.3),
+                            ),
+                          ),
+                          child: Text(
+                            dialogError!,
+                            style: const TextStyle(
+                              color: AppColors.danger,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                        child: Text(
-                          dialogError!,
-                          style: const TextStyle(
-                            color: AppColors.danger,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
+                      ],
+                      if (step == 1) ...[
+                        const Text(
+                          'Kayıtlı e-posta adresinizi girin. Size hem tıklayabileceğiniz bir web bağlantısı hem de uygulama içinde kullanabileceğiniz doğrulama kodu gönderilecektir.',
+                          style: TextStyle(fontSize: 13.5, height: 1.4),
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: emailCtrl,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: const InputDecoration(
+                            labelText: 'E-posta Adresi',
+                            prefixIcon: Icon(Icons.email_outlined),
                           ),
                         ),
-                      ),
-                    ],
-                    if (step == 1) ...[
-                      const Text(
-                        'Kayıtlı e-posta adresinizi girin. Yeni şifrenizi belirleyebileceğiniz güvenli bir sıfırlama bağlantısı gönderilecektir.',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      const SizedBox(height: 16),
-                      TextField(
-                        controller: emailCtrl,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          labelText: 'E-posta Adresi',
-                          prefixIcon: Icon(Icons.email_outlined),
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton.icon(
+                            icon: const Icon(Icons.pin_outlined, size: 16),
+                            label: const Text(
+                              'Elimde zaten doğrulama kodu var',
+                              style: TextStyle(fontSize: 12.5),
+                            ),
+                            onPressed: () {
+                              final email = emailCtrl.text.trim();
+                              if (email.isEmpty || !email.contains('@')) {
+                                setDialogState(() => dialogError =
+                                    'Lütfen önce kayıtlı e-posta adresinizi girin.');
+                                return;
+                              }
+                              setDialogState(() {
+                                dialogError = null;
+                                step = 2;
+                              });
+                            },
+                          ),
                         ),
-                      ),
-                    ] else ...[
-                      Center(
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: AppColors.accent.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.mark_email_read_outlined,
-                                color: AppColors.accent,
-                                size: 36,
-                              ),
+                      ] else ...[
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: AppColors.accent.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: AppColors.accent.withValues(alpha: 0.3),
                             ),
-                            const SizedBox(height: 16),
-                            Text(
-                              emailCtrl.text.trim(),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.mark_email_read_outlined,
+                                      size: 18, color: AppColors.accent),
+                                  const SizedBox(width: 6),
+                                  Expanded(
+                                    child: Text(
+                                      emailCtrl.text.trim(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
+                                        color: AppColors.accent,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'adresine şifre sıfırlama bağlantısı başarıyla gönderildi.\n\nLütfen e-postanızı açıp bağlantıya tıklayarak yeni şifrenizi belirleyin. Ardından uygulamadan yeni şifrenizle giriş yapabilirsiniz.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? AppColors.textSecondaryDark
-                                    : AppColors.textSecondaryLight,
-                                height: 1.4,
+                              const SizedBox(height: 4),
+                              const Text(
+                                'adresine gelen kodu ve yeni şifrenizi girin:',
+                                style: TextStyle(fontSize: 12.5),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 14),
+                        TextField(
+                          controller: codeCtrl,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            labelText: 'Doğrulama Kodu',
+                            hintText: 'E-postadaki 6-8 haneli kod',
+                            prefixIcon: Icon(Icons.pin_outlined),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: newPasswordCtrl,
+                          obscureText: obscureNew,
+                          decoration: InputDecoration(
+                            labelText: 'Yeni Şifre',
+                            hintText: 'En az 6 karakter',
+                            prefixIcon: const Icon(Icons.lock_outline),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                obscureNew
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                                size: 20,
+                              ),
+                              onPressed: () => setDialogState(
+                                  () => obscureNew = !obscureNew),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: confirmPasswordCtrl,
+                          obscureText: obscureConfirm,
+                          decoration: InputDecoration(
+                            labelText: 'Yeni Şifre (Tekrar)',
+                            prefixIcon: const Icon(Icons.lock_clock_outlined),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                obscureConfirm
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                                size: 20,
+                              ),
+                              onPressed: () => setDialogState(
+                                  () => obscureConfirm = !obscureConfirm),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          '💡 Not: Dilerseniz e-postanızdaki web bağlantısına tıklayarak tarayıcınızdan da şifrenizi yenileyebilirsiniz.',
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: AppColors.textSecondaryLight,
+                            height: 1.3,
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
               actions: [
-                if (step == 2)
-                  ElevatedButton(
-                    onPressed: () => Navigator.of(ctx).pop(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text('Tamam, Anladım'),
-                  )
-                else ...[
-                  TextButton(
-                    onPressed: isSubmitting ? null : () => Navigator.of(ctx).pop(),
-                    child: const Text('İptal'),
-                  ),
+                TextButton(
+                  onPressed: isSubmitting
+                      ? null
+                      : () {
+                          if (step == 2) {
+                            setDialogState(() {
+                              dialogError = null;
+                              step = 1;
+                            });
+                          } else {
+                            Navigator.of(ctx).pop();
+                          }
+                        },
+                  child: Text(step == 2 ? 'Geri' : 'İptal'),
+                ),
+                if (step == 1)
                   ElevatedButton(
                     onPressed: isSubmitting
                         ? null
@@ -228,7 +320,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   .resetPassword(email);
                               setDialogState(() {
                                 isSubmitting = false;
-                                step = 2; // Gönderildi onay ekranı
+                                step = 2;
                               });
                             } catch (e) {
                               setDialogState(() {
@@ -238,7 +330,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     errStr.contains('rate limit') ||
                                     errStr.contains('security purposes')) {
                                   dialogError =
-                                      'Çok sık talep yapıldı (Limit: 429). Güvenlik amacıyla lütfen 60 saniye bekleyin veya daha önce gönderilen e-postayı kontrol edin.';
+                                      'Çok sık talep yapıldı. Lütfen 60 saniye bekleyin veya daha önce gönderilen e-postayı kontrol edin.';
                                 } else {
                                   dialogError =
                                       'Sıfırlama bağlantısı gönderilemedi: $e';
@@ -255,9 +347,94 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text('Bağlantı Gönder'),
+                        : const Text('Kod ve Bağlantı Gönder'),
+                  )
+                else
+                  ElevatedButton(
+                    onPressed: isSubmitting
+                        ? null
+                        : () async {
+                            final email = emailCtrl.text.trim();
+                            final token = codeCtrl.text.trim();
+                            final newPass = newPasswordCtrl.text.trim();
+                            final confirmPass =
+                                confirmPasswordCtrl.text.trim();
+
+                            if (token.isEmpty) {
+                              setDialogState(() => dialogError =
+                                  'Lütfen e-postanıza gelen kodu girin.');
+                              return;
+                            }
+                            if (newPass.length < 6) {
+                              setDialogState(() => dialogError =
+                                  'Şifre en az 6 karakter olmalıdır.');
+                              return;
+                            }
+                            if (newPass != confirmPass) {
+                              setDialogState(() => dialogError =
+                                  'Girdiğiniz şifreler uyuşmuyor.');
+                              return;
+                            }
+
+                            setDialogState(() {
+                              isSubmitting = true;
+                              dialogError = null;
+                            });
+
+                            try {
+                              await ref
+                                  .read(authRepositoryProvider)
+                                  .verifyOtpAndResetPassword(
+                                    email,
+                                    token,
+                                    newPass,
+                                  );
+
+                              if (ctx.mounted) Navigator.of(ctx).pop();
+
+                              if (mounted) {
+                                _emailController.text = email;
+                                _passwordController.text = newPass;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    backgroundColor: AppColors.accent,
+                                    content: Text(
+                                      'Tebrikler! Şifreniz başarıyla güncellendi. Giriş yapabilirsiniz.',
+                                    ),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              setDialogState(() {
+                                isSubmitting = false;
+                                final errStr = e.toString();
+                                if (errStr.contains('429')) {
+                                  dialogError =
+                                      'Çok fazla deneme yapıldı. Lütfen biraz bekleyin.';
+                                } else if (errStr.contains('Token') ||
+                                    errStr.contains('invalid') ||
+                                    errStr.contains('expired') ||
+                                    errStr.contains('otp')) {
+                                  dialogError =
+                                      'Girdiğiniz kod hatalı veya süresi dolmuş.';
+                                } else {
+                                  dialogError =
+                                      'Şifre güncellenemedi: $e';
+                                }
+                              });
+                            }
+                          },
+                    child: isSubmitting
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text('Şifremi Güncelle'),
                   ),
-                ],
               ],
             );
           },
@@ -281,39 +458,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             : null,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 12),
-                Center(
-                  child: Container(
-                    width: 72,
-                    height: 72,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 440),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 12),
+                    const Center(
+                      child: SeffafLogo(
+                        size: 76,
+                        showText: false,
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.shield_outlined,
-                      size: 40,
-                      color: AppColors.primary,
+                    const SizedBox(height: 20),
+                    const Text(
+                      'ŞEFFAF\'a Hoş Geldiniz',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.5,
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'ŞEFFAF\'a Hoş Geldiniz',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -0.5,
-                  ),
-                ),
                 const SizedBox(height: 8),
                 Text(
                   'Şikayetlerinizi takip etmek ve belediyenizi puanlamak için giriş yapın.',
@@ -455,8 +626,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 28),
 
                 // Kayıt Ol Yönlendirmesi
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Text(
                       'Hesabınız yok mu?',
@@ -492,6 +664,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  ),
+);
+}
 }

@@ -128,7 +128,25 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
 
 ---
 
-## 🎯 Gelecek Faz (Faz 17 - Canlı Dağıtım ve Yayın Öncesi)
+17. **Faz 17 (Uygulama İçi OTP Şifre Sıfırlama, Kurumsal SeffafLogo, Launcher İkonları ve Responsive Çıkış Tasarımı):**
+   - **Uygulama İçi Doğrulama Kodu ile Şifre Sıfırlama:**
+     - Supabase Custom SMTP (Gmail) e-posta kurtarma şablonu API üzerinden güncellendi: Hem "Web Sayfasında Şifremi Belirle" butonu hem de doğrudan mobil uygulama içinde girilebilen sayısal kurtarma kodu (`{{ .Token }}`) eklendi.
+     - `LoginScreen` içerisindeki `_showForgotPasswordDialog` iki adımlı akışa kavuşturuldu: Kullanıcı e-postasına gönderilen 6-8 haneli kodu ve yeni şifresini doğrudan uygulama içinde girerek `verifyOtpAndResetPassword` ile anında şifresini sıfırlayabilir; ayrıca "Elimde zaten doğrulama kodu var" seçeneğiyle doğrudan şifre belirleme adımına geçebilir.
+   - **Kurumsal Logo & Launcher İkonları:**
+     - `SeffafLogo` (`lib/shared/widgets/seffaf_logo.dart`): Mavi-yeşil degrade kalkan, beyaz iç halka ve adalet/şeffaflık onay sembolü içeren modern vektörel logo bileşeni oluşturuldu.
+     - Android launcher ikonları (`mipmap-{mdpi,hdpi,xhdpi,xxhdpi,xxxhdpi}`) ve uygulama içi varlıklar (`assets/icons/app_logo_512.png`, `assets/images/app_logo.png`) 512x512 yüksek çözünürlüklü şeffaf kurumsal logo ile yenilendi.
+     - `LoginScreen` ve `RegisterScreen` başlıklarına `SeffafLogo` entegre edildi.
+   - **Responsive UI ve Çıkış Butonu Optimizasyonu:**
+     - `ProfileScreen` üzerindeki kaba ve büyük çıkış ListTile'ı kaldırılarak ayarlar kartının altına ortalanmış, orantılı ve estetik kırmızı kenarlıklı (`OutlinedButton.icon`) modern çıkış butonu yerleştirildi.
+     - Çıkış onay diyaloğu yuvarlak köşeli (`BorderRadius.circular(16)`) ve responsive butonlarla yeniden tasarlandı.
+     - `LoginScreen` ve `RegisterScreen` formları `Center` ve `ConstrainedBox(maxWidth: 440)` ile sarılarak tablet/geniş ekranlarda formun yayılması engellendi; alt yönlendirme satırları `Wrap` ile dönüştürülerek tüm ekran boyutlarında taşma (overflow) riski tamamen ortadan kaldırıldı.
+   - **Sürüm Güncellemesi:** Uygulama sürümü `1.2.4+7` olarak güncellendi.
+   - **Test & Analiz:** `flutter analyze` 0 hata ile tamamlandı, 20 testin 20'si de başarıyla geçti.
+
+---
+
+## 🎯 Gelecek Faz (Faz 18 - Canlı Dağıtım ve Yayın Öncesi)
 - Canlı SMS sağlayıcısı (Netgsm / Twilio) ile harici SMS gönderimi.
+
 
 

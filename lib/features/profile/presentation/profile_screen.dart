@@ -320,9 +320,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Çıkış Yap'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Row(
+          children: [
+            Icon(Icons.logout_rounded, color: AppColors.danger, size: 22),
+            SizedBox(width: 8),
+            Text('Çıkış Yap',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          ],
+        ),
         content: const Text(
-            'Hesabınızdan çıkış yapmak istediğinize emin misiniz?'),
+          'Hesabınızdan çıkış yapmak istediğinize emin misiniz?',
+          style: TextStyle(fontSize: 14),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -333,6 +343,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.danger,
               foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             ),
             child: const Text('Çıkış Yap'),
           ),
@@ -581,7 +594,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     const Divider(height: 1),
 
                     // Verileri Temizle
-                      ListTile(
+                    ListTile(
                       leading: const Icon(Icons.delete_outline,
                           color: AppColors.statusRejected),
                       title: const Text(
@@ -590,24 +603,40 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                       onTap: _showResetDataDialog,
                     ),
-
-                    const Divider(height: 1),
-                    ListTile(
-                      leading: const Icon(Icons.logout,
-                          color: AppColors.danger),
-                      title: const Text(
-                        'Hesaptan Çıkış Yap',
-                        style: TextStyle(
-                          color: AppColors.danger,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onTap: _confirmSignOut,
-                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+
+              // Zarif ve Responsive Çıkış Butonu
+              Padding(
+                padding: const EdgeInsets.only(top: 24, bottom: 36),
+                child: Center(
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.logout_rounded,
+                        size: 16, color: AppColors.danger),
+                    label: const Text(
+                      'Hesaptan Çıkış Yap',
+                      style: TextStyle(
+                        color: AppColors.danger,
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        color: AppColors.danger.withValues(alpha: 0.35),
+                      ),
+                      backgroundColor: AppColors.danger.withValues(alpha: 0.04),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 22, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: _confirmSignOut,
+                  ),
+                ),
+              ),
             ],
           ),
         );
