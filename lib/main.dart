@@ -77,7 +77,7 @@ class SeffafApp extends ConsumerWidget {
     final userAsync = ref.watch(currentUserProvider);
 
     return MaterialApp(
-      title: 'Şeffaf',
+      title: 'Seffaf',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

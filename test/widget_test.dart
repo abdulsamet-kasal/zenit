@@ -24,6 +24,6 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('Sorunu Fotoğrafla ve Bildir'), findsOneWidget);
+    expect(find.text("Seffaf'a Hoş Geldiniz"), findsOneWidget);
   });
 }

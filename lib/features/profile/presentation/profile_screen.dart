@@ -10,6 +10,7 @@ import '../../auth/presentation/login_screen.dart';
 import '../../complaint_detail/presentation/complaint_detail_screen.dart';
 import '../../feed/presentation/widgets/complaint_card.dart';
 import '../../municipality/presentation/municipality_profile_screen.dart';
+import '../../onboarding/presentation/onboarding_screen.dart';
 import '../../../main.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -568,20 +569,41 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     const Divider(height: 1),
 
+                    // Uygulama Rehberi
+                    ListTile(
+                      leading: const Icon(Icons.menu_book_outlined,
+                          color: AppColors.primary),
+                      title: const Text('Uygulama Rehberi (Nasıl Çalışır?)'),
+                      subtitle: const Text(
+                        'Şikayet bildirme, SLA süresi ve şeffaflık puanlama rehberi',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const OnboardingScreen(isFromProfile: true),
+                          ),
+                        );
+                      },
+                    ),
+                    const Divider(height: 1),
+
                     // Hakkında
                     ListTile(
                       leading: const Icon(Icons.info_outline),
-                      title: const Text('Şeffaf Hakkında'),
-                      subtitle: const Text('Sürüm 1.0.0 (Açık Kaynak Platform)',
+                      title: const Text('Seffaf Hakkında'),
+                      subtitle: const Text('Sürüm 1.2.4 (Açık Kaynak Platform)',
                           style: TextStyle(fontSize: 12)),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () {
                         showAboutDialog(
                           context: context,
-                          applicationName: 'Şeffaf',
-                          applicationVersion: '1.0.0',
+                          applicationName: 'Seffaf',
+                          applicationVersion: '1.2.4',
                           applicationLegalese:
-                              '© 2026 Şeffaf Belediye Şeffaflık Platformu',
+                              '© 2026 Seffaf Belediye Şeffaflık Platformu',
                           children: const [
                             SizedBox(height: 12),
                             Text(

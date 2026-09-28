@@ -143,10 +143,29 @@ Bu dosya, gelecekteki yapay zeka asistanlarının (Antigravity, Cursor, Claude C
    - **Sürüm Güncellemesi:** Uygulama sürümü `1.2.4+7` olarak güncellendi.
    - **Test & Analiz:** `flutter analyze` 0 hata ile tamamlandı, 20 testin 20'si de başarıyla geçti.
 
+18. **Faz 18 (Seffaf Marka & SEO Standartları, 4 Adımlı Başlangıç Rehberi, Canlı Beğeni, Onay & Yorum Motoru):**
+   - **Seffaf Marka & SEO Tanımı:**
+     - Uygulama adı her yerde standart `Seffaf` olarak güncellendi (`AndroidManifest.xml: android:label="Seffaf"`, `web/index.html`, `pubspec.yaml`, `main.dart: title="Seffaf"`, `AppConstants.appName`).
+     - Arama motorları ve mağazalar için zenginleştirilmiş açıklama (`Vatandaş Odaklı Şeffaf Belediyecilik ve Denetim Platformu`) entegre edildi.
+   - **4 Adımlı Başlangıç Rehberi (Onboarding Walkthrough):**
+     - `OnboardingScreen` `SeffafLogo` merkezli 4 adımlı, modern ve zengin bir rehber haline getirildi: (1. Seffaf'a Hoş Geldiniz, 2. Sorunu Fotoğrafla & Konumlandır, 3. Yasal Süre (SLA) & Canlı Karne, 4. Topluluk Desteği & Çözüm Kanıtı).
+     - Küçük ekranlarda taşmayı engelleyen `SingleChildScrollView` ve dinamik padding yapısı kuruldu.
+     - `ProfileScreen` ayarlar menüsüne "Uygulama Rehberi (Nasıl Çalışır?)" seçeneği eklendi; kayıtlı kullanıcılar da dilediklerinde rehbere tekrar ulaşabilir hale getirildi.
+   - **Canlı Beğeni (Like), "Ben de Gördüm" (Confirm) & Yorum (Comment) Motoru:**
+     - `SupabaseComplaintRepository` canlı Supabase-first mimarisiyle yeniden inşa edildi:
+       - `toggleLike`: `complaint_likes` tablosu, trigger ve `SharedPreferences` kalıcılığı ile sıfır exception garantili çalışır.
+       - `toggleConfirm`: `complaint_confirmations` tablosu ve yerel onay durumu ile kesintisiz çalışır.
+       - `addComment` & `getComments`: `complaint_comments` tablosuna canlı INSERT ve anlık getirme; mock şikayet çakışmaları ve boş liste hataları tamamen giderildi.
+       - `rateComplaint` & `submitDispute`: Canlı Supabase tablolarına entegre edildi.
+     - `MockComplaintRepository` içerisindeki tüm `throw Exception('Şikayet bulunamadı')` blokları güvenli fallback nesnelerine dönüştürüldü.
+   - **Sürüm Güncellemesi:** Uygulama sürümü `1.3.0+8` olarak güncellendi.
+   - **Test & Analiz:** `flutter analyze` 0 hata ile tamamlandı, 20 testin 20'si de başarıyla geçti.
+
 ---
 
-## 🎯 Gelecek Faz (Faz 18 - Canlı Dağıtım ve Yayın Öncesi)
+## 🎯 Gelecek Faz (Faz 19 - Canlı Dağıtım ve Yayın Öncesi)
 - Canlı SMS sağlayıcısı (Netgsm / Twilio) ile harici SMS gönderimi.
+
 
 
 

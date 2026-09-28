@@ -1,14 +1,55 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/config/supabase_config.dart';
+import '../../core/constants/app_constants.dart';
 import '../models/comment.dart';
 import '../models/complaint.dart';
+import '../models/complaint_status.dart';
 import 'complaint_repository.dart';
 import 'mock_complaint_repository.dart';
 
 class SupabaseComplaintRepository implements ComplaintRepository {
   final MockComplaintRepository _fallbackRepo = MockComplaintRepository();
+
+  /// Kullanıcının beğendiği ve onayladığı (ben de gördüm) yerel şikayet ID listesini uygular
+  Future<List<Complaint>> _applyLocalStateToList(List<Complaint> list) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final liked = prefs.getStringList(AppConstants.keyLikedComplaints) ?? [];
+      final confirmed =
+          prefs.getStringList(AppConstants.keyConfirmedComplaints) ?? [];
+
+      return list.map((c) {
+        final isLiked = liked.contains(c.id);
+        final isConfirmed = confirmed.contains(c.id);
+        return c.copyWith(
+          isLikedByMe: isLiked,
+          isConfirmedByMe: isConfirmed,
+        );
+      }).toList();
+    } catch (_) {
+      return list;
+    }
+  }
+
+  /// Tek bir şikayet için yerel beğeni ve onay durumunu uygular
+  Future<Complaint> _applyLocalStateToSingle(Complaint complaint) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final liked = prefs.getStringList(AppConstants.keyLikedComplaints) ?? [];
+      final confirmed =
+          prefs.getStringList(AppConstants.keyConfirmedComplaints) ?? [];
+
+      return complaint.copyWith(
+        isLikedByMe: liked.contains(complaint.id),
+        isConfirmedByMe: confirmed.contains(complaint.id),
+      );
+    } catch (_) {
+      return complaint;
+    }
+  }
 
   @override
   Future<List<Complaint>> getFeed({
@@ -22,7 +63,7 @@ class SupabaseComplaintRepository implements ComplaintRepository {
   }) async {
     final client = SupabaseConfig.client;
     if (client == null) {
-      return _fallbackRepo.getFeed(
+      final fallbackList = await _fallbackRepo.getFeed(
         page: page,
         limit: limit,
         categoryId: categoryId,
@@ -31,6 +72,7 @@ class SupabaseComplaintRepository implements ComplaintRepository {
         searchQuery: searchQuery,
         sortBy: sortBy,
       );
+      return _applyLocalStateToList(fallbackList);
     }
 
     try {
@@ -52,7 +94,7 @@ class SupabaseComplaintRepository implements ComplaintRepository {
 
       // Sıralama
       dynamic transformQuery;
-      if (sortBy == 'supported') {
+      if (sortBy == 'supported' || sortBy == 'most_supported') {
         transformQuery = filterQuery.order('likes_count', ascending: false);
       } else if (sortBy == 'sla_urgent') {
         transformQuery = filterQuery.order('sla_deadline', ascending: true);
@@ -69,13 +111,13 @@ class SupabaseComplaintRepository implements ComplaintRepository {
           .toList();
 
       if (list.isNotEmpty) {
-        return list;
+        return await _applyLocalStateToList(list);
       }
     } catch (e) {
       debugPrint('⚠️ Supabase getFeed hatası: $e. Mock veriye geçiliyor.');
     }
 
-    return _fallbackRepo.getFeed(
+    final fallbackList = await _fallbackRepo.getFeed(
       page: page,
       limit: limit,
       categoryId: categoryId,
@@ -84,30 +126,34 @@ class SupabaseComplaintRepository implements ComplaintRepository {
       searchQuery: searchQuery,
       sortBy: sortBy,
     );
+    return _applyLocalStateToList(fallbackList);
   }
 
   @override
   Future<Complaint?> getComplaintById(String id) async {
     final client = SupabaseConfig.client;
-    if (client == null) {
-      return _fallbackRepo.getComplaintById(id);
-    }
+    if (client != null) {
+      try {
+        final response = await client
+            .from('complaints')
+            .select()
+            .eq('id', id)
+            .maybeSingle();
 
-    try {
-      final response = await client
-          .from('complaints')
-          .select()
-          .eq('id', id)
-          .maybeSingle();
-
-      if (response != null) {
-        return Complaint.fromJson(response);
+        if (response != null) {
+          final c = Complaint.fromJson(response);
+          return await _applyLocalStateToSingle(c);
+        }
+      } catch (e) {
+        debugPrint('⚠️ Supabase getComplaintById hatası: $e');
       }
-    } catch (e) {
-      debugPrint('⚠️ Supabase getComplaintById hatası: $e');
     }
 
-    return _fallbackRepo.getComplaintById(id);
+    final fallback = await _fallbackRepo.getComplaintById(id);
+    if (fallback != null) {
+      return _applyLocalStateToSingle(fallback);
+    }
+    return null;
   }
 
   Future<List<String>> _uploadPhotos(List<String> photoUrls) async {
@@ -152,7 +198,7 @@ class SupabaseComplaintRepository implements ComplaintRepository {
           result.add(path);
         }
       } catch (e) {
-        debugPrint('⚠️ Fotoğraf yüklenirken hata: $e. Yerel yol saklanıyor.');
+        debugPrint('⚠️ Fotoğraf yükleme hatası ($path): $e');
         result.add(path);
       }
     }
@@ -161,11 +207,11 @@ class SupabaseComplaintRepository implements ComplaintRepository {
 
   @override
   Future<Complaint> createComplaint(Complaint complaint) async {
-    // 1. Yerel fotoğrafları Supabase Storage'a yükle
-    final uploadedPhotoUrls = await _uploadPhotos(complaint.photoUrls);
-    final complaintToSave = complaint.copyWith(photoUrls: uploadedPhotoUrls);
+    // 1. Önce fotoğrafları Supabase Storage'a yükle
+    final uploadedPhotos = await _uploadPhotos(complaint.photoUrls);
+    final complaintToSave = complaint.copyWith(photoUrls: uploadedPhotos);
 
-    // 2. Yerel önbelleğe ve SharedPreferences'a ekle (çevrimdışı güvenliği)
+    // 2. Mock / Yerel depoya kaydet
     final localResult = await _fallbackRepo.createComplaint(complaintToSave);
 
     final client = SupabaseConfig.client;
@@ -183,12 +229,24 @@ class SupabaseComplaintRepository implements ComplaintRepository {
 
   @override
   Future<Complaint> toggleLike(String complaintId, String userId) async {
-    final updated = await _fallbackRepo.toggleLike(complaintId, userId);
+    // 1. SharedPreferences üzerindeki beğeni listesini oku ve tersine çevir
+    final prefs = await SharedPreferences.getInstance();
+    final likedList = prefs.getStringList(AppConstants.keyLikedComplaints) ?? [];
+    final wasLiked = likedList.contains(complaintId);
+    final isLiked = !wasLiked;
 
+    if (isLiked) {
+      likedList.add(complaintId);
+    } else {
+      likedList.remove(complaintId);
+    }
+    await prefs.setStringList(AppConstants.keyLikedComplaints, likedList);
+
+    // 2. Canlı Supabase tablosunu güncelle
     final client = SupabaseConfig.client;
     if (client != null) {
       try {
-        if (updated.isLikedByMe) {
+        if (isLiked) {
           await client.from('complaint_likes').insert({
             'complaint_id': complaintId,
             'user_id': userId,
@@ -205,17 +263,66 @@ class SupabaseComplaintRepository implements ComplaintRepository {
       }
     }
 
-    return updated;
+    // 3. Fallback repo'yu da güvenli şekilde güncelle
+    try {
+      await _fallbackRepo.toggleLike(complaintId, userId);
+    } catch (_) {}
+
+    // 4. Güncel complaint nesnesini döndür
+    final existing = await getComplaintById(complaintId);
+    if (existing != null) {
+      final currentLikes = existing.likeCount;
+      final newLikes = isLiked
+          ? (wasLiked ? currentLikes : currentLikes + 1)
+          : (wasLiked ? (currentLikes > 0 ? currentLikes - 1 : 0) : currentLikes);
+
+      return existing.copyWith(
+        isLikedByMe: isLiked,
+        likeCount: newLikes,
+      );
+    }
+
+    return Complaint(
+      id: complaintId,
+      anonymousUserId: userId,
+      anonymousUserName: 'Vatandaş',
+      description: '',
+      categoryId: 'other',
+      status: ComplaintStatus.pending,
+      createdAt: DateTime.now(),
+      slaDeadline: DateTime.now().add(const Duration(days: 3)),
+      municipalityId: 'unknown',
+      latitude: 0,
+      longitude: 0,
+      address: '',
+      photoUrls: const [],
+      isLikedByMe: isLiked,
+      likeCount: isLiked ? 1 : 0,
+    );
   }
 
   @override
   Future<Complaint> toggleConfirm(String complaintId, String userId) async {
-    final updated = await _fallbackRepo.toggleConfirm(complaintId, userId);
+    // 1. SharedPreferences üzerindeki onay (ben de gördüm) listesini güncelle
+    final prefs = await SharedPreferences.getInstance();
+    final confirmedList =
+        prefs.getStringList(AppConstants.keyConfirmedComplaints) ?? [];
+    final wasConfirmed = confirmedList.contains(complaintId);
+    final isConfirmed = !wasConfirmed;
 
+    if (isConfirmed) {
+      confirmedList.add(complaintId);
+    } else {
+      confirmedList.remove(complaintId);
+    }
+    await prefs.setStringList(
+        AppConstants.keyConfirmedComplaints, confirmedList);
+
+    // 2. Canlı Supabase tablosunu güncelle
     final client = SupabaseConfig.client;
     if (client != null) {
       try {
-        if (updated.isConfirmedByMe) {
+        if (isConfirmed) {
           await client.from('complaint_confirmations').insert({
             'complaint_id': complaintId,
             'user_id': userId,
@@ -232,30 +339,63 @@ class SupabaseComplaintRepository implements ComplaintRepository {
       }
     }
 
-    return updated;
+    // 3. Fallback repo'yu da güvenli şekilde güncelle
+    try {
+      await _fallbackRepo.toggleConfirm(complaintId, userId);
+    } catch (_) {}
+
+    // 4. Güncel complaint nesnesini döndür
+    final existing = await getComplaintById(complaintId);
+    if (existing != null) {
+      final currentConfirms = existing.confirmCount;
+      final newConfirms = isConfirmed
+          ? (wasConfirmed ? currentConfirms : currentConfirms + 1)
+          : (wasConfirmed
+              ? (currentConfirms > 0 ? currentConfirms - 1 : 0)
+              : currentConfirms);
+
+      return existing.copyWith(
+        isConfirmedByMe: isConfirmed,
+        confirmCount: newConfirms,
+      );
+    }
+
+    return Complaint(
+      id: complaintId,
+      anonymousUserId: userId,
+      anonymousUserName: 'Vatandaş',
+      description: '',
+      categoryId: 'other',
+      status: ComplaintStatus.pending,
+      createdAt: DateTime.now(),
+      slaDeadline: DateTime.now().add(const Duration(days: 3)),
+      municipalityId: 'unknown',
+      latitude: 0,
+      longitude: 0,
+      address: '',
+      photoUrls: const [],
+      isConfirmedByMe: isConfirmed,
+      confirmCount: isConfirmed ? 1 : 0,
+    );
   }
 
   @override
   Future<List<Comment>> getComments(String complaintId) async {
     final client = SupabaseConfig.client;
-    if (client == null) {
-      return _fallbackRepo.getComments(complaintId);
-    }
+    if (client != null) {
+      try {
+        final response = await client
+            .from('complaint_comments')
+            .select()
+            .eq('complaint_id', complaintId)
+            .order('created_at', ascending: true);
 
-    try {
-      final response = await client
-          .from('complaint_comments')
-          .select()
-          .eq('complaint_id', complaintId)
-          .order('created_at', ascending: true);
-
-      final list = (response as List<dynamic>)
-          .map((e) => Comment.fromJson(e as Map<String, dynamic>))
-          .toList();
-
-      if (list.isNotEmpty) return list;
-    } catch (e) {
-      debugPrint('⚠️ Supabase getComments hatası: $e');
+        return (response as List<dynamic>)
+            .map((e) => Comment.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } catch (e) {
+        debugPrint('⚠️ Supabase getComments hatası: $e');
+      }
     }
 
     return _fallbackRepo.getComments(complaintId);
@@ -263,7 +403,9 @@ class SupabaseComplaintRepository implements ComplaintRepository {
 
   @override
   Future<Comment> addComment(Comment comment) async {
-    final localComment = await _fallbackRepo.addComment(comment);
+    try {
+      await _fallbackRepo.addComment(comment);
+    } catch (_) {}
 
     final client = SupabaseConfig.client;
     if (client != null) {
@@ -277,50 +419,77 @@ class SupabaseComplaintRepository implements ComplaintRepository {
           'created_at': comment.createdAt.toIso8601String(),
           'is_official': comment.isOfficial,
         });
+        debugPrint('💬 Yorum Supabase\'e başarıyla eklendi: ${comment.id}');
       } catch (e) {
         debugPrint('⚠️ Supabase addComment hatası: $e');
       }
     }
 
-    return localComment;
+    return comment;
   }
 
   @override
   Future<List<Complaint>> getComplaintsByMunicipality(
       String municipalityId) async {
     final client = SupabaseConfig.client;
-    if (client == null) {
-      return _fallbackRepo.getComplaintsByMunicipality(municipalityId);
+    if (client != null) {
+      try {
+        final response = await client
+            .from('complaints')
+            .select()
+            .eq('municipality_id', municipalityId)
+            .order('created_at', ascending: false);
+
+        final list = (response as List<dynamic>)
+            .map((e) => Complaint.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        if (list.isNotEmpty) {
+          return await _applyLocalStateToList(list);
+        }
+      } catch (e) {
+        debugPrint('⚠️ Supabase getComplaintsByMunicipality hatası: $e');
+      }
     }
 
-    try {
-      final response = await client
-          .from('complaints')
-          .select()
-          .eq('municipality_id', municipalityId)
-          .order('created_at', ascending: false);
-
-      final list = (response as List<dynamic>)
-          .map((e) => Complaint.fromJson(e as Map<String, dynamic>))
-          .toList();
-
-      if (list.isNotEmpty) return list;
-    } catch (e) {
-      debugPrint('⚠️ Supabase getComplaintsByMunicipality hatası: $e');
-    }
-
-    return _fallbackRepo.getComplaintsByMunicipality(municipalityId);
+    final fallback =
+        await _fallbackRepo.getComplaintsByMunicipality(municipalityId);
+    return _applyLocalStateToList(fallback);
   }
 
   @override
   Future<List<Complaint>> getComplaintsByUser(String userId) async {
-    return _fallbackRepo.getComplaintsByUser(userId);
+    final client = SupabaseConfig.client;
+    if (client != null) {
+      try {
+        final response = await client
+            .from('complaints')
+            .select()
+            .eq('author_id', userId)
+            .order('created_at', ascending: false);
+
+        final list = (response as List<dynamic>)
+            .map((e) => Complaint.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        if (list.isNotEmpty) {
+          return await _applyLocalStateToList(list);
+        }
+      } catch (e) {
+        debugPrint('⚠️ Supabase getComplaintsByUser hatası: $e');
+      }
+    }
+
+    final fallback = await _fallbackRepo.getComplaintsByUser(userId);
+    return _applyLocalStateToList(fallback);
   }
 
   @override
   Future<void> submitDispute(
       String complaintId, String userId, String reason) async {
-    await _fallbackRepo.submitDispute(complaintId, userId, reason);
+    try {
+      await _fallbackRepo.submitDispute(complaintId, userId, reason);
+    } catch (_) {}
 
     final client = SupabaseConfig.client;
     if (client != null) {
@@ -341,8 +510,9 @@ class SupabaseComplaintRepository implements ComplaintRepository {
   @override
   Future<Complaint> rateComplaint(
       String complaintId, String userId, int rating) async {
-    final updated =
-        await _fallbackRepo.rateComplaint(complaintId, userId, rating);
+    try {
+      await _fallbackRepo.rateComplaint(complaintId, userId, rating);
+    } catch (_) {}
 
     final client = SupabaseConfig.client;
     if (client != null) {
@@ -355,13 +525,35 @@ class SupabaseComplaintRepository implements ComplaintRepository {
       }
     }
 
-    return updated;
+    final updated = await getComplaintById(complaintId);
+    if (updated != null) {
+      return updated.copyWith(myRating: rating);
+    }
+
+    return Complaint(
+      id: complaintId,
+      anonymousUserId: userId,
+      anonymousUserName: 'Vatandaş',
+      description: '',
+      categoryId: 'other',
+      status: ComplaintStatus.resolved,
+      createdAt: DateTime.now(),
+      slaDeadline: DateTime.now().add(const Duration(days: 3)),
+      municipalityId: 'unknown',
+      latitude: 0,
+      longitude: 0,
+      address: '',
+      photoUrls: const [],
+      myRating: rating,
+    );
   }
 
   @override
   Future<void> deleteComplaint(String complaintId, String userId) async {
     // 1. Yerel depodan / önbellekten sil
-    await _fallbackRepo.deleteComplaint(complaintId, userId);
+    try {
+      await _fallbackRepo.deleteComplaint(complaintId, userId);
+    } catch (_) {}
 
     final client = SupabaseConfig.client;
     if (client != null) {

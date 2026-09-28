@@ -1,6 +1,6 @@
 class AppConstants {
-  static const String appName = 'Şeffaf';
-  static const String appTagline = 'Belediye Şeffaflık ve Sorun Takip Platformu';
+  static const String appName = 'Seffaf';
+  static const String appTagline = 'Vatandaş Odaklı Şeffaf Belediyecilik ve Denetim Platformu';
 
   // Harita Yapılandırması (OSM Tile Server - Üretimde değiştirilebilir config)
   static const String osmTileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';

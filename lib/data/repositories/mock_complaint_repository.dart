@@ -224,13 +224,41 @@ class MockComplaintRepository implements ComplaintRepository {
   Future<Complaint> toggleLike(String complaintId, String userId) async {
     await _ensureLoaded();
     final index = _cachedComplaints!.indexWhere((c) => c.id == complaintId);
-    if (index == -1) throw Exception('Şikayet bulunamadı');
+    if (index == -1) {
+      final prefs = await SharedPreferences.getInstance();
+      final liked = prefs.getStringList(AppConstants.keyLikedComplaints) ?? [];
+      final isLiked = !liked.contains(complaintId);
+      if (isLiked) {
+        liked.add(complaintId);
+      } else {
+        liked.remove(complaintId);
+      }
+      await prefs.setStringList(AppConstants.keyLikedComplaints, liked);
+
+      return Complaint(
+        id: complaintId,
+        anonymousUserId: userId,
+        anonymousUserName: 'Vatandaş',
+        description: '',
+        categoryId: 'other',
+        status: ComplaintStatus.pending,
+        createdAt: DateTime.now(),
+        slaDeadline: DateTime.now().add(const Duration(days: 3)),
+        municipalityId: 'unknown',
+        latitude: 0,
+        longitude: 0,
+        address: '',
+        photoUrls: const [],
+        isLikedByMe: isLiked,
+        likeCount: isLiked ? 1 : 0,
+      );
+    }
 
     final existing = _cachedComplaints![index];
     final isLiked = !existing.isLikedByMe;
     final updated = existing.copyWith(
       isLikedByMe: isLiked,
-      likeCount: isLiked ? existing.likeCount + 1 : existing.likeCount - 1,
+      likeCount: isLiked ? existing.likeCount + 1 : (existing.likeCount > 0 ? existing.likeCount - 1 : 0),
     );
 
     _cachedComplaints![index] = updated;
@@ -254,14 +282,44 @@ class MockComplaintRepository implements ComplaintRepository {
   Future<Complaint> toggleConfirm(String complaintId, String userId) async {
     await _ensureLoaded();
     final index = _cachedComplaints!.indexWhere((c) => c.id == complaintId);
-    if (index == -1) throw Exception('Şikayet bulunamadı');
+    if (index == -1) {
+      final prefs = await SharedPreferences.getInstance();
+      final confirmed =
+          prefs.getStringList(AppConstants.keyConfirmedComplaints) ?? [];
+      final isConfirmed = !confirmed.contains(complaintId);
+      if (isConfirmed) {
+        confirmed.add(complaintId);
+      } else {
+        confirmed.remove(complaintId);
+      }
+      await prefs.setStringList(
+          AppConstants.keyConfirmedComplaints, confirmed);
+
+      return Complaint(
+        id: complaintId,
+        anonymousUserId: userId,
+        anonymousUserName: 'Vatandaş',
+        description: '',
+        categoryId: 'other',
+        status: ComplaintStatus.pending,
+        createdAt: DateTime.now(),
+        slaDeadline: DateTime.now().add(const Duration(days: 3)),
+        municipalityId: 'unknown',
+        latitude: 0,
+        longitude: 0,
+        address: '',
+        photoUrls: const [],
+        isConfirmedByMe: isConfirmed,
+        confirmCount: isConfirmed ? 1 : 0,
+      );
+    }
 
     final existing = _cachedComplaints![index];
     final isConfirmed = !existing.isConfirmedByMe;
     final updated = existing.copyWith(
       isConfirmedByMe: isConfirmed,
       confirmCount:
-          isConfirmed ? existing.confirmCount + 1 : existing.confirmCount - 1,
+          isConfirmed ? existing.confirmCount + 1 : (existing.confirmCount > 0 ? existing.confirmCount - 1 : 0),
     );
 
     _cachedComplaints![index] = updated;
@@ -288,7 +346,24 @@ class MockComplaintRepository implements ComplaintRepository {
       String complaintId, String userId, int rating) async {
     await _ensureLoaded();
     final index = _cachedComplaints!.indexWhere((c) => c.id == complaintId);
-    if (index == -1) throw Exception('Şikayet bulunamadı');
+    if (index == -1) {
+      return Complaint(
+        id: complaintId,
+        anonymousUserId: userId,
+        anonymousUserName: 'Vatandaş',
+        description: '',
+        categoryId: 'other',
+        status: ComplaintStatus.resolved,
+        createdAt: DateTime.now(),
+        slaDeadline: DateTime.now().add(const Duration(days: 3)),
+        municipalityId: 'unknown',
+        latitude: 0,
+        longitude: 0,
+        address: '',
+        photoUrls: const [],
+        myRating: rating,
+      );
+    }
 
     final existing = _cachedComplaints![index];
     final previousRating = existing.myRating;
