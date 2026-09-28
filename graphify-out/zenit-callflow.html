@@ -60,7 +60,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
 <div class="container">
 
 <h1>zenit — Complete Call Flow &amp; Architecture Documentation</h1>
-<p class="subtitle">Generated from graphify knowledge graph: 1309 nodes, 1653 edges, 110 communities. Commit: ba1bf57</p>
+<p class="subtitle">Generated from graphify knowledge graph: 1312 nodes, 1653 edges, 118 communities. Commit: 7f9cb9d</p>
 
 <div class="nav">
     <a href="#overview">Architecture Overview</a>
@@ -88,13 +88,13 @@ hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
 
 %%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
 flowchart LR
-    BUILD_GRAPH_321CBB04("Graph Build<br/><small>120 nodes</small>")
+    BUILD_GRAPH_321CBB04("Graph Build<br/><small>73 nodes</small>")
     class BUILD_GRAPH_321CBB04 module;
-    ANALYSIS_CLUSTERING_C79796DA("Analysis &amp; Clustering<br/><small>41 nodes</small>")
+    ANALYSIS_CLUSTERING_C79796DA("Analysis &amp; Clustering<br/><small>39 nodes</small>")
     class ANALYSIS_CLUSTERING_C79796DA module;
-    OUTPUTS_DOCS_ED82387C("Outputs &amp; Docs<br/><small>78 nodes</small>")
+    OUTPUTS_DOCS_ED82387C("Outputs &amp; Docs<br/><small>86 nodes</small>")
     class OUTPUTS_DOCS_ED82387C module;
-    CLI_SKILLS_9964CBB8("CLI &amp; Skill Installers<br/><small>217 nodes</small>")
+    CLI_SKILLS_9964CBB8("CLI &amp; Skill Installers<br/><small>223 nodes</small>")
     class CLI_SKILLS_9964CBB8 module;
     INGEST_CACHE_UPDATE_FF457338("Ingestion &amp; Updates<br/><small>61 nodes</small>")
     class INGEST_CACHE_UPDATE_FF457338 module;
@@ -102,7 +102,7 @@ flowchart LR
     class SERVE_API_35EC8E86 module;
     SECURITY_GLOBAL_5B9C6A04("Security &amp; Global Graph<br/><small>6 nodes</small>")
     class SECURITY_GLOBAL_5B9C6A04 module;
-    TESTS_FIXTURES_B84B1DCC("Tests &amp; Fixtures<br/><small>144 nodes</small>")
+    TESTS_FIXTURES_B84B1DCC("Tests &amp; Fixtures<br/><small>110 nodes</small>")
     class TESTS_FIXTURES_B84B1DCC module;
     WIN32WINDOW_35C42976("Win32Window<br/><small>66 nodes</small>")
     class WIN32WINDOW_35C42976 module;
@@ -112,24 +112,24 @@ flowchart LR
     class COMPLAINT_DART_71CA04A1 module;
     MUNICIPALITY_DART_BF05739A("municipality.dart<br/><small>40 nodes</small>")
     class MUNICIPALITY_DART_BF05739A module;
-    GEO_UTILS_DART_FDD3F1EC("geo_utils.dart<br/><small>39 nodes</small>")
+    GEO_UTILS_DART_FDD3F1EC("geo_utils.dart<br/><small>35 nodes</small>")
     class GEO_UTILS_DART_FDD3F1EC module;
     APP_CONSTANTS_DART_93DC8589("app_constants.dart<br/><small>30 nodes</small>")
     class APP_CONSTANTS_DART_93DC8589 module;
-    OTHER_D0941E68("Other<br/><small>375 nodes</small>")
+    OTHER_D0941E68("Other<br/><small>451 nodes</small>")
     class OTHER_D0941E68 module;
-    OTHER_D0941E68 -->|defines x41| OUTPUTS_DOCS_ED82387C
-    OTHER_D0941E68 -->|imports x31| BUILD_GRAPH_321CBB04
-    OTHER_D0941E68 -->|imports x18| TESTS_FIXTURES_B84B1DCC
+    OTHER_D0941E68 -->|defines x42| OUTPUTS_DOCS_ED82387C
+    OTHER_D0941E68 -->|imports x19| TESTS_FIXTURES_B84B1DCC
+    OTHER_D0941E68 -->|imports x18| CLI_SKILLS_9964CBB8
     TESTS_FIXTURES_B84B1DCC -->|imports x17| OTHER_D0941E68
-    CLI_SKILLS_9964CBB8 -->|imports x11| BUILD_GRAPH_321CBB04
-    OTHER_D0941E68 -->|references x10| CLI_SKILLS_9964CBB8
-    TESTS_FIXTURES_B84B1DCC -->|imports x8| BUILD_GRAPH_321CBB04
-    CLI_SKILLS_9964CBB8 -->|references x8| OTHER_D0941E68
-    CLI_SKILLS_9964CBB8 -->|inherits x8| OUTPUTS_DOCS_ED82387C
-    CLI_SKILLS_9964CBB8 -->|imports x7| TESTS_FIXTURES_B84B1DCC
-    OUTPUTS_DOCS_ED82387C -->|imports x7| OTHER_D0941E68
-    OUTPUTS_DOCS_ED82387C -->|imports x5| BUILD_GRAPH_321CBB04
+    OTHER_D0941E68 -->|imports x13| BUILD_GRAPH_321CBB04
+    OUTPUTS_DOCS_ED82387C -->|imports x10| OTHER_D0941E68
+    CLI_SKILLS_9964CBB8 -->|imports x9| OTHER_D0941E68
+    CLI_SKILLS_9964CBB8 -->|imports x8| TESTS_FIXTURES_B84B1DCC
+    CLI_SKILLS_9964CBB8 -->|references x8| OUTPUTS_DOCS_ED82387C
+    CLI_SKILLS_9964CBB8 -->|imports x6| BUILD_GRAPH_321CBB04
+    OTHER_D0941E68 -->|references x6| GEO_UTILS_DART_FDD3F1EC
+    OUTPUTS_DOCS_ED82387C -->|inherits x6| CLI_SKILLS_9964CBB8
     classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
     classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
     classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
@@ -146,23 +146,23 @@ flowchart LR
     <h4>Architecture Layers</h4>
     <table style="width:100%;font-size:0.85rem;">
       <tr><th>Layer</th><th>Nodes</th><th>Communities</th></tr>
-      <tr><td>Graph Build</td><td>120</td><td><code>25, 16, 45, 40, 63, 43, 72, 100, 101, 102, 103, 98, 99, 55, 56</code></td></tr><tr><td>Analysis &amp; Clustering</td><td>41</td><td><code>17, 66, 90, 92, 93, 94, 95, 96, 97</code></td></tr><tr><td>Outputs &amp; Docs</td><td>78</td><td><code>2, 12, 41, 64</code></td></tr><tr><td>CLI &amp; Skill Installers</td><td>217</td><td><code>15, 6, 28, 49, 33, 29, 48, 11, 52, 67, 70, 51</code></td></tr><tr><td>Ingestion &amp; Updates</td><td>61</td><td><code>26, 37, 47, 69, 71, 73</code></td></tr><tr><td>Serving API</td><td>3</td><td><code>76, 60</code></td></tr><tr><td>Security &amp; Global Graph</td><td>6</td><td><code>104, 105, 106</code></td></tr><tr><td>Tests &amp; Fixtures</td><td>144</td><td><code>3, 10, 22, 19, 32, 27</code></td></tr><tr><td>Win32Window</td><td>66</td><td><code>0</code></td></tr><tr><td>GeneratedPluginRegistrant.swift</td><td>49</td><td><code>1</code></td></tr><tr><td>complaint.dart</td><td>40</td><td><code>4</code></td></tr><tr><td>municipality.dart</td><td>40</td><td><code>9</code></td></tr><tr><td>geo_utils.dart</td><td>39</td><td><code>5</code></td></tr><tr><td>app_constants.dart</td><td>30</td><td><code>8</code></td></tr><tr><td>Other</td><td>375</td><td><code>13, 14, 7, 18, 20, 23, 31, 50, 21, 53, 62, 24, 30, 34, 35, 36, 38, 39, 44, 46, 65, 42, 68, 107, 108, 109, 54, 74, 75, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 91, 57, 58, 59, 61</code></td></tr>
+      <tr><td>Graph Build</td><td>73</td><td><code>16, 45, 63, 43, 72, 100, 101, 102, 103, 98, 99, 55, 56</code></td></tr><tr><td>Analysis &amp; Clustering</td><td>39</td><td><code>17, 66, 90, 92, 93, 94, 95, 96, 97</code></td></tr><tr><td>Outputs &amp; Docs</td><td>86</td><td><code>2, 12, 24, 64</code></td></tr><tr><td>CLI &amp; Skill Installers</td><td>223</td><td><code>29, 6, 28, 15, 49, 33, 48, 52, 11, 31, 67, 70, 51</code></td></tr><tr><td>Ingestion &amp; Updates</td><td>61</td><td><code>26, 37, 47, 69, 71, 73</code></td></tr><tr><td>Serving API</td><td>3</td><td><code>76, 60</code></td></tr><tr><td>Security &amp; Global Graph</td><td>6</td><td><code>104, 105, 106</code></td></tr><tr><td>Tests &amp; Fixtures</td><td>110</td><td><code>10, 22, 19, 27, 110, 113, 116</code></td></tr><tr><td>Win32Window</td><td>66</td><td><code>0</code></td></tr><tr><td>GeneratedPluginRegistrant.swift</td><td>49</td><td><code>1</code></td></tr><tr><td>complaint.dart</td><td>40</td><td><code>4</code></td></tr><tr><td>municipality.dart</td><td>40</td><td><code>9</code></td></tr><tr><td>geo_utils.dart</td><td>35</td><td><code>5</code></td></tr><tr><td>app_constants.dart</td><td>30</td><td><code>8</code></td></tr><tr><td>Other</td><td>451</td><td><code>13, 14, 23, 7, 18, 20, 32, 46, 50, 21, 25, 53, 62, 3, 30, 36, 34, 35, 111, 38, 39, 112, 44, 114, 65, 40, 42, 68, 115, 41, 107, 108, 109, 117, 54, 74, 75, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 91, 57, 58, 59, 61</code></td></tr>
     </table>
   </div>
   <div class="card">
     <h4>Core Flow</h4>
-    <div class="arrow-chain">Serving API -&gt; Graph Build -&gt; Other -&gt; Outputs &amp; Docs -&gt; Tests &amp; Fixtures -&gt; geo_utils.dart -&gt; CLI &amp; Skill Installers</div>
+    <div class="arrow-chain">Serving API -&gt; Graph Build -&gt; Other -&gt; Outputs &amp; Docs -&gt; CLI &amp; Skill Installers -&gt; Tests &amp; Fixtures -&gt; geo_utils.dart</div>
   </div>
 </div>
 <div class="grid">
   <div class="card">
     <h4>Graph Report Highlights</h4>
     <ul>
-      <li>1309 nodes · 1653 edges · 110 communities (63 shown, 47 thin omitted)</li>
+      <li>1312 nodes · 1653 edges · 118 communities (70 shown, 48 thin omitted)</li>
       <li>Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 17 edges (avg confidence: 0.85)</li>
       <li>Token cost: 0 input · 0 output</li>
-      <li>1. `complaintRepositoryProvider` - 24 edges</li>
-      <li>2. `Win32Window` - 24 edges</li>
+      <li>1. `Win32Window` - 24 edges</li>
+      <li>2. `complaintRepositoryProvider` - 24 edges</li>
       <li>3. `currentUserProvider` - 22 edges</li>
     </ul>
   </div>
@@ -170,64 +170,55 @@ flowchart LR
 <hr>
 <!-- ====== 2. Graph Build ====== -->
 <h2 id="build-graph">2. Graph Build</h2>
-<p>Graph Build groups implementation around supabase, onboarding, widgets, shared, mostly in supabase/migrations/20260927000000_create_seffaf_schema.sql, onboarding/presentation/onboarding_screen.dart, shared/widgets/full_screen_image_viewer.dart. This section covers 120 nodes and 134 internal edges; the diagram shows only representative relationships to stay readable.</p>
+<p>Graph Build groups implementation around supabase, agents, skills, references, mostly in supabase/migrations/20260927000000_create_seffaf_schema.sql, supabase-postgres-best-practices/references/_sections.md, shared/widgets/empty_state_widget.dart. This section covers 73 nodes and 77 internal edges; the diagram shows only representative relationships to stay readable.</p>
 
 <div class="mermaid">
 %%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
 flowchart LR
-    %% Section: Graph Build (120 nodes, 134 edges)
+    %% Section: Graph Build (73 nodes, 77 edges)
     subgraph build_graph_External_generated_653891f5["External / generated"]
-        package_flutter_material_dart_16a2582d("package:flutter/material.dart")
-        core_constants_app_colors_dart_40520385("../../core/constants/app colors.dart")
-        auth_presentation_login_screen_dart_ff13dbb7("../../auth/presentation/login screen.dart")
-        package_seffaf_shared_widgets_seffaf_image_dart_d46f4016("package:seffaf/shared/widgets/seffaf im...")
-        core_constants_category_defaults_dart_aaa929a4("../../core/constants/category defaults....")
-        package_shimmer_shimmer_dart_40894a48("package:shimmer/shimmer.dart")
+        core_constants_app_colors_dart_40520385("../../../core/constants/app colors.dart")
         icondata_abcb82ed("IconData")
-        list_38b62be4("List")
         materialpageroute_0f3a0d96("MaterialPageRoute")
-        pagecontroller_8da4a863("PageController")
-        state_aa4a5f81("State")
-        statefulwidget_02ec6a88("StatefulWidget")
+        voidcallback_86277e14("VoidCallback")
+        public_61c9b2b1("public")
     end
-    lib_features_onboarding_presentation_onboarding_ff4c16c5("onboarding_screen.dart")
-    lib_shared_widgets_category_badge_c0760aae("category_badge.dart")
-    lib_shared_widgets_empty_state_widget_6a7f0043("empty_state_widget.dart")
+    subgraph build_graph_shared_widgets_empty_state_widget_da_b89c7f42["shared/widgets/empty_state_widget.dart"]
+        lib_shared_widgets_empty_state_widget_6a7f0043("empty_state_widget.dart")
+        lib_shared_widgets_empty_state_widget_build_75d3e9c5("build<br/><small>shared/widgets/empty_state_widget.dart</small>")
+    end
+    android_app_build_gradle_41e1b5f2("app/build.gradle.kts")
+    android_build_gradle_5f51dc9e("android/build.gradle.kts")
+    lib_features_auth_presentation_login_screen_buil_370ee074("build<br/><small>auth/presentation/login_screen.dart</small>")
+    lib_features_complaint_detail_presentation_compl_e61bb438("_openImageViewer<br/><small>complaint_detail/presentation/complaint_detail_screen.dart</small>")
+    lib_features_main_navigation_main_nav_screen_oni_bbf02af8("_onItemTapped<br/><small>features/main_navigation/main_nav_screen.dart</small>")
+    lib_features_feed_presentation_feed_screen_build_2f980bc9("_buildFeedContent<br/><small>feed/presentation/feed_screen.dart</small>")
+    lib_features_leaderboard_presentation_leaderboar_03884ba8("build<br/><small>leaderboard/presentation/leaderboard_screen.dart</small>")
+    lib_features_map_presentation_map_screen_showcom_ebc9ccaf("_showComplaintBottomSheet<br/><small>map/presentation/map_screen.dart</small>")
+    lib_features_municipality_presentation_municipal_0143b836("build<br/><small>municipality/presentation/municipality_profile_screen.dart</small>")
+    lib_features_profile_presentation_profile_screen_3bb4f0ac("buildFollowedMunicipalitiesSection<br/><small>profile/presentation/profile_screen.dart</small>")
     lib_shared_widgets_error_state_widget_baf2c502("error_state_widget.dart")
-    lib_shared_widgets_full_screen_image_viewer_9697a856("screen image viewer.dart<br/><small>shared/widgets/full_screen_image_viewer.dart</small>")
-    lib_shared_widgets_shimmer_card_92af0419("shimmer_card.dart")
-    lib_features_onboarding_presentation_onboarding_ff4c16c5 -->|imports| package_flutter_material_dart_16a2582d
-    lib_features_onboarding_presentation_onboarding_ff4c16c5 -->|imports| core_constants_app_colors_dart_40520385
-    lib_features_onboarding_presentation_onboarding_ff4c16c5 -->|imports| auth_presentation_login_screen_dart_ff13dbb7
-    lib_shared_widgets_full_screen_image_viewer_9697a856 -->|imports| package_flutter_material_dart_16a2582d
-    lib_shared_widgets_full_screen_image_viewer_9697a856 -->|imports| package_seffaf_shared_widgets_seffaf_image_dart_d46f4016
-    lib_shared_widgets_category_badge_c0760aae -->|imports| package_flutter_material_dart_16a2582d
-    lib_shared_widgets_category_badge_c0760aae -->|imports| core_constants_category_defaults_dart_aaa929a4
-    lib_shared_widgets_shimmer_card_92af0419 -->|imports| package_flutter_material_dart_16a2582d
-    lib_shared_widgets_shimmer_card_92af0419 -->|imports| package_shimmer_shimmer_dart_40894a48
-    lib_shared_widgets_empty_state_widget_6a7f0043 -->|imports| package_flutter_material_dart_16a2582d
     lib_shared_widgets_empty_state_widget_6a7f0043 -->|imports| core_constants_app_colors_dart_40520385
-    lib_shared_widgets_error_state_widget_baf2c502 -->|imports| package_flutter_material_dart_16a2582d
     lib_shared_widgets_error_state_widget_baf2c502 -->|imports| core_constants_app_colors_dart_40520385
-    %% Omitted for readability: 102 nodes, 0 edges
-    class package_flutter_material_dart_16a2582d function;
+    %% Omitted for readability: 55 nodes, 0 edges
     class core_constants_app_colors_dart_40520385 function;
-    class auth_presentation_login_screen_dart_ff13dbb7 function;
-    class package_seffaf_shared_widgets_seffaf_image_dart_d46f4016 function;
-    class core_constants_category_defaults_dart_aaa929a4 function;
-    class package_shimmer_shimmer_dart_40894a48 function;
     class icondata_abcb82ed klass;
-    class list_38b62be4 klass;
     class materialpageroute_0f3a0d96 api;
-    class pagecontroller_8da4a863 klass;
-    class state_aa4a5f81 klass;
-    class statefulwidget_02ec6a88 klass;
-    class lib_features_onboarding_presentation_onboarding_ff4c16c5 function;
-    class lib_shared_widgets_category_badge_c0760aae function;
+    class voidcallback_86277e14 klass;
+    class public_61c9b2b1 function;
     class lib_shared_widgets_empty_state_widget_6a7f0043 function;
+    class lib_shared_widgets_empty_state_widget_build_75d3e9c5 function;
+    class android_app_build_gradle_41e1b5f2 function;
+    class android_build_gradle_5f51dc9e function;
+    class lib_features_auth_presentation_login_screen_buil_370ee074 function;
+    class lib_features_complaint_detail_presentation_compl_e61bb438 function;
+    class lib_features_main_navigation_main_nav_screen_oni_bbf02af8 function;
+    class lib_features_feed_presentation_feed_screen_build_2f980bc9 function;
+    class lib_features_leaderboard_presentation_leaderboar_03884ba8 function;
+    class lib_features_map_presentation_map_screen_showcom_ebc9ccaf function;
+    class lib_features_municipality_presentation_municipal_0143b836 function;
+    class lib_features_profile_presentation_profile_screen_3bb4f0ac async;
     class lib_shared_widgets_error_state_widget_baf2c502 function;
-    class lib_shared_widgets_full_screen_image_viewer_9697a856 function;
-    class lib_shared_widgets_shimmer_card_92af0419 function;
     classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
     classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
     classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
@@ -251,243 +242,243 @@ flowchart LR
 </tr>
 <tr>
   <td>1</td>
-  <td><code>../../auth/presentation/login_screen.dart</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>public</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>onboarding_screen.dart</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small><br><code>profile_screen.dart</code><br><small style="color:var(--muted)">profile/presentation/profile_screen.dart</small></td>
+  <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>../../auth/presentation/login_screen.dart node in project.</td>
+  <td>public node in project.</td>
 </tr>
 <tr>
   <td>2</td>
-  <td><code>ComplaintCard</code><br><small style="color:var(--muted)">presentation/widgets/complaint_card.dart</small></td>
-  <td><span class="tag tag-class">Class</span></td>
+  <td><code>20260927000000_create_seffaf_schema.sql</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
+  <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>ComplaintCard node in presentation/widgets/complaint_card.dart.</td>
+  <td>20260927000000_create_seffaf_schema.sql node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>3</td>
-  <td><code>_ComplaintCardState</code><br><small style="color:var(--muted)">presentation/widgets/complaint_card.dart</small></td>
+  <td><code>idx_comments_complaint</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>_ComplaintCardState node in presentation/widgets/complaint_card.dart.</td>
+  <td>idx_comments_complaint node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>4</td>
-  <td><code>onboarding_screen.dart</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>idx_complaints_author</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
-  <td><code>../../../shared/widgets/seffaf logo.dart</code><br><code>../../auth/presentation/login screen.dart</code><br><code>../../core/constants/app colors.dart</code><br>+3 more</td>
-  <td>onboarding_screen.dart node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>No direct outbound edge</td>
+  <td>idx_complaints_author node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>5</td>
-  <td><code>build</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>idx_complaints_created_at</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>build node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>idx_complaints_created_at node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>6</td>
-  <td><code>color</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>idx_complaints_municipality</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>color node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>idx_complaints_municipality node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>7</td>
-  <td><code>_completeOnboarding</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>idx_complaints_status</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>_completeOnboarding node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>idx_complaints_status node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>8</td>
-  <td><code>createState</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>idx_disputes_complaint</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>Verifies imports, entry points, or version behavior.</td>
+  <td>idx_disputes_complaint node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>9</td>
-  <td><code>_currentIndex</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>idx_municipalities_province</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>_currentIndex node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>idx_municipalities_province node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>10</td>
-  <td><code>description</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>idx_municipalities_score</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>description node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>idx_municipalities_score node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>11</td>
-  <td><code>icon</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>on_complaint_confirmation_added</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>icon node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>on_complaint_confirmation_added node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>12</td>
-  <td><code>isFromProfile</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>on_complaint_dispute_added</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>isFromProfile node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>on_complaint_dispute_added node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>13</td>
-  <td><code>isLogo</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>on_complaint_like_added</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>isLogo node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>on_complaint_like_added node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>14</td>
-  <td><code>OnboardingScreen</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
-  <td><span class="tag tag-class">Class</span></td>
+  <td><code>public.citizen_profiles</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
+  <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>OnboardingScreen node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>public.citizen_profiles node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>15</td>
-  <td><code>_OnboardingScreenState</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>public.complaint_comments</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>_OnboardingScreenState node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>public.complaint_comments node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>16</td>
-  <td><code>OnboardingSlide</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
-  <td><span class="tag tag-class">Class</span></td>
+  <td><code>public.complaint_confirmations</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
+  <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>OnboardingSlide node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>public.complaint_confirmations node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>17</td>
-  <td><code>_pageController</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>public.complaint_disputes</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>Organizes documentation pages, navigation, or content lookup.</td>
+  <td>public.complaint_disputes node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>18</td>
-  <td><code>_slides</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>public.complaint_likes</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>_slides node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>public.complaint_likes node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>19</td>
-  <td><code>subtitle</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>public.complaints</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>subtitle node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>public.complaints node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>20</td>
-  <td><code>title</code><br><small style="color:var(--muted)">onboarding/presentation/onboarding_screen.dart</small></td>
+  <td><code>public.handle_complaint_confirmation_change()</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>title node in onboarding/presentation/onboarding_screen.dart.</td>
+  <td>public.handle_complaint_confirmation_change() node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>21</td>
-  <td><code>full_screen_image_viewer.dart</code><br><small style="color:var(--muted)">shared/widgets/full_screen_image_viewer.dart</small></td>
+  <td><code>public.handle_complaint_dispute_change()</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
-  <td><code>package:flutter/material.dart</code><br><code>package:seffaf/shared/widgets/seffaf im...</code></td>
-  <td>full_screen_image_viewer.dart node in shared/widgets/full_screen_image_viewer.dart.</td>
+  <td>No direct outbound edge</td>
+  <td>public.handle_complaint_dispute_change() node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>22</td>
-  <td><code>build</code><br><small style="color:var(--muted)">shared/widgets/full_screen_image_viewer.dart</small></td>
+  <td><code>public.handle_complaint_like_change()</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>build node in shared/widgets/full_screen_image_viewer.dart.</td>
+  <td>public.handle_complaint_like_change() node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>23</td>
-  <td><code>createState</code><br><small style="color:var(--muted)">shared/widgets/full_screen_image_viewer.dart</small></td>
+  <td><code>public.municipalities</code><br><small style="color:var(--muted)">supabase/migrations/20260927000000_create_seffaf_schema.sql</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>Verifies imports, entry points, or version behavior.</td>
+  <td>public.municipalities node in supabase/migrations/20260927000000_create_seffaf_schema.sql.</td>
 </tr>
 <tr>
   <td>24</td>
-  <td><code>_currentIndex</code><br><small style="color:var(--muted)">shared/widgets/full_screen_image_viewer.dart</small></td>
+  <td><code>../../../core/constants/app_colors.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
+  <td><code>complaint_detail_screen.dart</code><br><small style="color:var(--muted)">complaint_detail/presentation/complaint_detail_screen.dart</small><br><code>empty_state_widget.dart</code><br><small style="color:var(--muted)">shared/widgets/empty_state_widget.dart</small><br><code>error_state_widget.dart</code><br><small style="color:var(--muted)">shared/widgets/error_state_widget.dart</small><br>+8 more</td>
   <td>No direct outbound edge</td>
-  <td>_currentIndex node in shared/widgets/full_screen_image_viewer.dart.</td>
+  <td>../../../core/constants/app_colors.dart node in project.</td>
 </tr>
 <tr>
   <td>25</td>
-  <td><code>dispose</code><br><small style="color:var(--muted)">shared/widgets/full_screen_image_viewer.dart</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>dispose node in shared/widgets/full_screen_image_viewer.dart.</td>
-</tr>
-<tr>
-  <td>26</td>
-  <td><code>FullScreenImageViewer</code><br><small style="color:var(--muted)">shared/widgets/full_screen_image_viewer.dart</small></td>
+  <td><code>IconData</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-class">Class</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>FullScreenImageViewer node in shared/widgets/full_screen_image_viewer.dart.</td>
+  <td>IconData node in project.</td>
+</tr>
+<tr>
+  <td>26</td>
+  <td><code>empty_state_widget.dart</code><br><small style="color:var(--muted)">shared/widgets/empty_state_widget.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>../../../core/constants/app colors.dart</code><br><code>package:flutter/material.dart</code></td>
+  <td>empty_state_widget.dart node in shared/widgets/empty_state_widget.dart.</td>
 </tr>
 <tr>
   <td>27</td>
-  <td><code>_FullScreenImageViewerState</code><br><small style="color:var(--muted)">shared/widgets/full_screen_image_viewer.dart</small></td>
+  <td><code>build</code><br><small style="color:var(--muted)">shared/widgets/empty_state_widget.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>_FullScreenImageViewerState node in shared/widgets/full_screen_image_viewer.dart.</td>
+  <td>build node in shared/widgets/empty_state_widget.dart.</td>
 </tr>
 <tr>
   <td>28</td>
-  <td><code>imageUrls</code><br><small style="color:var(--muted)">shared/widgets/full_screen_image_viewer.dart</small></td>
+  <td><code>buttonText</code><br><small style="color:var(--muted)">shared/widgets/empty_state_widget.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>imageUrls node in shared/widgets/full_screen_image_viewer.dart.</td>
+  <td>buttonText node in shared/widgets/empty_state_widget.dart.</td>
 </tr>
 <tr>
   <td>29</td>
-  <td><code>initialIndex</code><br><small style="color:var(--muted)">shared/widgets/full_screen_image_viewer.dart</small></td>
+  <td><code>description</code><br><small style="color:var(--muted)">shared/widgets/empty_state_widget.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>initialIndex node in shared/widgets/full_screen_image_viewer.dart.</td>
+  <td>description node in shared/widgets/empty_state_widget.dart.</td>
 </tr>
 <tr>
   <td>30</td>
-  <td><code>initState</code><br><small style="color:var(--muted)">shared/widgets/full_screen_image_viewer.dart</small></td>
+  <td><code>icon</code><br><small style="color:var(--muted)">shared/widgets/empty_state_widget.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>initState node in shared/widgets/full_screen_image_viewer.dart.</td>
+  <td>icon node in shared/widgets/empty_state_widget.dart.</td>
 </tr>
 </table>
 
@@ -497,34 +488,32 @@ flowchart LR
     <table style="width:100%;font-size:0.85rem;">
       <tr><th>File</th><th>Coverage</th></tr>
       <tr><td><code>supabase/migrations/20260927000000_create_seffaf_schema.sql</code></td><td>22 nodes</td></tr>
-<tr><td><code>onboarding/presentation/onboarding_screen.dart</code></td><td>17 nodes</td></tr>
-<tr><td><code>shared/widgets/full_screen_image_viewer.dart</code></td><td>11 nodes</td></tr>
 <tr><td><code>supabase-postgres-best-practices/references/_sections.md</code></td><td>10 nodes</td></tr>
 <tr><td><code>shared/widgets/empty_state_widget.dart</code></td><td>7 nodes</td></tr>
-<tr><td><code>shared/widgets/category_badge.dart</code></td><td>5 nodes</td></tr>
 <tr><td><code>shared/widgets/error_state_widget.dart</code></td><td>4 nodes</td></tr>
 <tr><td><code>graphify/references/github-and-merge.md</code></td><td>3 nodes</td></tr>
+<tr><td><code>supabase-postgres-best-practices/references/schema-constraints.md</code></td><td>2 nodes</td></tr>
+<tr><td><code>supabase-postgres-best-practices/references/schema-data-types.md</code></td><td>2 nodes</td></tr>
+<tr><td><code>supabase-postgres-best-practices/references/schema-foreign-key-indexes.md</code></td><td>2 nodes</td></tr>
     </table>
   </div>
   <div class="card">
     <h4>Design Notes</h4>
-    <p>This section comes from graphify community clustering. Relationship summary: defines x41, contains x38, references x17, imports x13. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x38, references x9, defines x9, indexes x8. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
   </div>
 </div>
 <hr>
 
 <!-- ====== 3. Analysis & Clustering ====== -->
 <h2 id="analysis-clustering">3. Analysis &amp; Clustering</h2>
-<p>Analysis &amp; Clustering groups implementation around map, agents, skills, references, mostly in map/presentation/map_screen.dart, graphify/references/query.md, supabase-postgres-best-practices/references/monitor-explain-analyze.md. This section covers 41 nodes and 33 internal edges; the diagram shows only representative relationships to stay readable.</p>
+<p>Analysis &amp; Clustering groups implementation around map, agents, skills, references, mostly in map/presentation/map_screen.dart, graphify/references/query.md, supabase-postgres-best-practices/references/monitor-explain-analyze.md. This section covers 39 nodes and 30 internal edges; the diagram shows only representative relationships to stay readable.</p>
 
 <div class="mermaid">
 %%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
 flowchart LR
-    %% Section: Analysis &amp; Clustering (41 nodes, 33 edges)
+    %% Section: Analysis &amp; Clustering (39 nodes, 30 edges)
     subgraph analysis_clustering_map_presentation_map_screen_b0bab486["map/presentation/map_screen.dart"]
         lib_features_map_presentation_map_screen_0e7be7f0("map_screen.dart")
-        lib_features_map_presentation_map_screen_mapscre_ab9b0a33("MapScreen<br/><small>map/presentation/map_screen.dart</small>")
-        lib_features_map_presentation_map_screen_mapscre_dd7ad71e("_MapScreenState<br/><small>map/presentation/map_screen.dart</small>")
         lib_features_map_presentation_map_screen_allcomp_892f891f("_allComplaints<br/><small>map/presentation/map_screen.dart</small>")
         lib_features_map_presentation_map_screen_buildma_486e8330("_buildMapFilterChip<br/><small>map/presentation/map_screen.dart</small>")
         lib_features_map_presentation_map_screen_isloadi_a65b79c5("_isLoading<br/><small>map/presentation/map_screen.dart</small>")
@@ -532,6 +521,8 @@ flowchart LR
         lib_features_map_presentation_map_screen_movetou_9db58aac("_moveToUserLocation<br/><small>map/presentation/map_screen.dart</small>")
         lib_features_map_presentation_map_screen_selecte_9ec946a0("_selectedCategory<br/><small>map/presentation/map_screen.dart</small>")
         lib_features_map_presentation_map_screen_selecte_eb03e9c7("_selectedStatus<br/><small>map/presentation/map_screen.dart</small>")
+        lib_features_map_presentation_map_screen_build_6b50b112("build<br/><small>map/presentation/map_screen.dart</small>")
+        lib_features_map_presentation_map_screen_creates_3c13db92("createState<br/><small>map/presentation/map_screen.dart</small>")
     end
     subgraph analysis_clustering_External_generated_9ee0240b["External / generated"]
         package_seffaf_features_complaint_detail_present_7f981f43("detail/presentation/complaint detail sc...")
@@ -550,10 +541,8 @@ flowchart LR
     lib_features_map_presentation_map_screen_0e7be7f0 -->|imports| package_latlong2_latlong_dart_e1a5cb24
     lib_features_map_presentation_map_screen_0e7be7f0 -->|imports| package_seffaf_core_constants_app_constants_dart_e9fdc868
     lib_features_map_presentation_map_screen_0e7be7f0 -->|imports| package_seffaf_core_constants_category_defaults_e9fae463
-    %% Omitted for readability: 23 nodes, 0 edges
+    %% Omitted for readability: 21 nodes, 0 edges
     class lib_features_map_presentation_map_screen_0e7be7f0 function;
-    class lib_features_map_presentation_map_screen_mapscre_ab9b0a33 klass;
-    class lib_features_map_presentation_map_screen_mapscre_dd7ad71e function;
     class lib_features_map_presentation_map_screen_allcomp_892f891f function;
     class lib_features_map_presentation_map_screen_buildma_486e8330 function;
     class lib_features_map_presentation_map_screen_isloadi_a65b79c5 function;
@@ -561,6 +550,8 @@ flowchart LR
     class lib_features_map_presentation_map_screen_movetou_9db58aac function;
     class lib_features_map_presentation_map_screen_selecte_9ec946a0 function;
     class lib_features_map_presentation_map_screen_selecte_eb03e9c7 function;
+    class lib_features_map_presentation_map_screen_build_6b50b112 function;
+    class lib_features_map_presentation_map_screen_creates_3c13db92 function;
     class package_seffaf_features_complaint_detail_present_7f981f43 function;
     class package_flutter_map_flutter_map_dart_3d9adcb0 function;
     class package_flutter_map_marker_cluster_flutter_map_m_ad83f3e8 function;
@@ -656,22 +647,6 @@ flowchart LR
 </tr>
 <tr>
   <td>9</td>
-  <td><code>MapScreen</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small></td>
-  <td><span class="tag tag-class">Class</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>MapScreen node in map/presentation/map_screen.dart.</td>
-</tr>
-<tr>
-  <td>10</td>
-  <td><code>_MapScreenState</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>_MapScreenState node in map/presentation/map_screen.dart.</td>
-</tr>
-<tr>
-  <td>11</td>
   <td><code>_moveToUserLocation</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -679,7 +654,7 @@ flowchart LR
   <td>_moveToUserLocation node in map/presentation/map_screen.dart.</td>
 </tr>
 <tr>
-  <td>12</td>
+  <td>10</td>
   <td><code>_selectedCategory</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -687,7 +662,7 @@ flowchart LR
   <td>_selectedCategory node in map/presentation/map_screen.dart.</td>
 </tr>
 <tr>
-  <td>13</td>
+  <td>11</td>
   <td><code>_selectedStatus</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -695,7 +670,7 @@ flowchart LR
   <td>_selectedStatus node in map/presentation/map_screen.dart.</td>
 </tr>
 <tr>
-  <td>14</td>
+  <td>12</td>
   <td><code>MapController</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-class">Class</span></td>
   <td>External entry / no inbound edge</td>
@@ -703,7 +678,7 @@ flowchart LR
   <td>MapController node in project.</td>
 </tr>
 <tr>
-  <td>15</td>
+  <td>13</td>
   <td><code>package:flutter_map/flutter_map.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td><code>map_screen.dart</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small></td>
@@ -711,7 +686,7 @@ flowchart LR
   <td>package:flutter_map/flutter_map.dart node in project.</td>
 </tr>
 <tr>
-  <td>16</td>
+  <td>14</td>
   <td><code>package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td><code>map_screen.dart</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small></td>
@@ -719,7 +694,7 @@ flowchart LR
   <td>package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart node in project.</td>
 </tr>
 <tr>
-  <td>17</td>
+  <td>15</td>
   <td><code>package:geolocator/geolocator.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td><code>map_screen.dart</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small><br><code>report_creation_screen.dart</code><br><small style="color:var(--muted)">report_creation/presentation/report_creation_screen.dart</small></td>
@@ -727,7 +702,7 @@ flowchart LR
   <td>package:geolocator/geolocator.dart node in project.</td>
 </tr>
 <tr>
-  <td>18</td>
+  <td>16</td>
   <td><code>package:latlong2/latlong.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td><code>map_screen.dart</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small></td>
@@ -735,7 +710,7 @@ flowchart LR
   <td>package:latlong2/latlong.dart node in project.</td>
 </tr>
 <tr>
-  <td>19</td>
+  <td>17</td>
   <td><code>package:seffaf/core/constants/app_constants.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td><code>map_screen.dart</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small></td>
@@ -743,7 +718,7 @@ flowchart LR
   <td>package:seffaf/core/constants/app_constants.dart node in project.</td>
 </tr>
 <tr>
-  <td>20</td>
+  <td>18</td>
   <td><code>package:seffaf/core/constants/category_defaults.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td><code>map_screen.dart</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small><br><code>municipality profile screen.dart</code><br><small style="color:var(--muted)">municipality/presentation/municipality_profile_screen.dart</small></td>
@@ -751,7 +726,7 @@ flowchart LR
   <td>package:seffaf/core/constants/category_defaults.dart node in project.</td>
 </tr>
 <tr>
-  <td>21</td>
+  <td>19</td>
   <td><code>package:seffaf/features/complaint_detail/presentation/complaint_detail_screen.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td><code>map_screen.dart</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small><br><code>municipality profile screen.dart</code><br><small style="color:var(--muted)">municipality/presentation/municipality_profile_screen.dart</small></td>
@@ -759,7 +734,7 @@ flowchart LR
   <td>package:seffaf/features/complaint_detail/presentation/complaint_detail_screen.dart node in project.</td>
 </tr>
 <tr>
-  <td>22</td>
+  <td>20</td>
   <td><code>query.md</code><br><small style="color:var(--muted)">graphify/references/query.md</small></td>
   <td><span class="tag tag-func">Concept</span></td>
   <td>External entry / no inbound edge</td>
@@ -767,7 +742,7 @@ flowchart LR
   <td>Documentation node describing query.md.</td>
 </tr>
 <tr>
-  <td>23</td>
+  <td>21</td>
   <td><code>For /graphify explain</code><br><small style="color:var(--muted)">graphify/references/query.md</small></td>
   <td><span class="tag tag-func">Concept</span></td>
   <td>External entry / no inbound edge</td>
@@ -775,7 +750,7 @@ flowchart LR
   <td>Documentation node describing For /graphify explain.</td>
 </tr>
 <tr>
-  <td>24</td>
+  <td>22</td>
   <td><code>For /graphify path</code><br><small style="color:var(--muted)">graphify/references/query.md</small></td>
   <td><span class="tag tag-func">Concept</span></td>
   <td>External entry / no inbound edge</td>
@@ -783,7 +758,7 @@ flowchart LR
   <td>Documentation node describing For /graphify path.</td>
 </tr>
 <tr>
-  <td>25</td>
+  <td>23</td>
   <td><code>graphify reference: query, path, explain</code><br><small style="color:var(--muted)">graphify/references/query.md</small></td>
   <td><span class="tag tag-func">Concept</span></td>
   <td>External entry / no inbound edge</td>
@@ -791,7 +766,7 @@ flowchart LR
   <td>Documentation node describing graphify reference: query, path, explain.</td>
 </tr>
 <tr>
-  <td>26</td>
+  <td>24</td>
   <td><code>Step 0 — Constrained query expansion (REQUIRED before traversal)</code><br><small style="color:var(--muted)">graphify/references/query.md</small></td>
   <td><span class="tag tag-func">Concept</span></td>
   <td>External entry / no inbound edge</td>
@@ -799,7 +774,7 @@ flowchart LR
   <td>Documentation node describing Step 0 — Constrained query expansion (REQUIRED before traversal).</td>
 </tr>
 <tr>
-  <td>27</td>
+  <td>25</td>
   <td><code>Step 1 — Traversal</code><br><small style="color:var(--muted)">graphify/references/query.md</small></td>
   <td><span class="tag tag-func">Concept</span></td>
   <td>External entry / no inbound edge</td>
@@ -807,7 +782,7 @@ flowchart LR
   <td>Documentation node describing Step 1 — Traversal.</td>
 </tr>
 <tr>
-  <td>28</td>
+  <td>26</td>
   <td><code>monitor-explain-analyze.md</code><br><small style="color:var(--muted)">supabase-postgres-best-practices/references/monitor-explain-analyze.md</small></td>
   <td><span class="tag tag-func">Concept</span></td>
   <td>External entry / no inbound edge</td>
@@ -815,7 +790,7 @@ flowchart LR
   <td>Documentation node describing monitor-explain-analyze.md.</td>
 </tr>
 <tr>
-  <td>29</td>
+  <td>27</td>
   <td><code>Use EXPLAIN ANALYZE to Diagnose Slow Queries</code><br><small style="color:var(--muted)">supabase-postgres-best-practices/references/monitor-explain-analyze.md</small></td>
   <td><span class="tag tag-func">Concept</span></td>
   <td>External entry / no inbound edge</td>
@@ -823,12 +798,28 @@ flowchart LR
   <td>Documentation node describing Use EXPLAIN ANALYZE to Diagnose Slow Queries.</td>
 </tr>
 <tr>
-  <td>30</td>
+  <td>28</td>
   <td><code>monitor-vacuum-analyze.md</code><br><small style="color:var(--muted)">supabase-postgres-best-practices/references/monitor-vacuum-analyze.md</small></td>
   <td><span class="tag tag-func">Concept</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
   <td>Documentation node describing monitor-vacuum-analyze.md.</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><code>Maintain Table Statistics with VACUUM and ANALYZE</code><br><small style="color:var(--muted)">supabase-postgres-best-practices/references/monitor-vacuum-analyze.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Maintain Table Statistics with VACUUM and ANALYZE.</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td><code>query-composite-indexes.md</code><br><small style="color:var(--muted)">supabase-postgres-best-practices/references/query-composite-indexes.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing query-composite-indexes.md.</td>
 </tr>
 </table>
 
@@ -837,7 +828,7 @@ flowchart LR
     <h4>Key Files</h4>
     <table style="width:100%;font-size:0.85rem;">
       <tr><th>File</th><th>Coverage</th></tr>
-      <tr><td><code>map/presentation/map_screen.dart</code></td><td>13 nodes</td></tr>
+      <tr><td><code>map/presentation/map_screen.dart</code></td><td>11 nodes</td></tr>
 <tr><td><code>graphify/references/query.md</code></td><td>6 nodes</td></tr>
 <tr><td><code>supabase-postgres-best-practices/references/monitor-explain-analyze.md</code></td><td>2 nodes</td></tr>
 <tr><td><code>supabase-postgres-best-practices/references/monitor-vacuum-analyze.md</code></td><td>2 nodes</td></tr>
@@ -849,19 +840,19 @@ flowchart LR
   </div>
   <div class="card">
     <h4>Design Notes</h4>
-    <p>This section comes from graphify community clustering. Relationship summary: defines x12, contains x12, imports x7, references x2. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x12, defines x10, imports x7, references x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
   </div>
 </div>
 <hr>
 
 <!-- ====== 4. Outputs & Docs ====== -->
 <h2 id="outputs-docs">4. Outputs &amp; Docs</h2>
-<p>Outputs &amp; Docs groups implementation around report, creation, features, screendart, mostly in report_creation/presentation/report_creation_screen.dart, graphify/references/exports.md, complaint_detail/presentation/complaint_detail_screen.dart. This section covers 78 nodes and 105 internal edges; the diagram shows only representative relationships to stay readable.</p>
+<p>Outputs &amp; Docs groups implementation around features, report, creation, screendart, mostly in report_creation/presentation/report_creation_screen.dart, leaderboard/presentation/leaderboard_screen.dart, graphify/references/exports.md. This section covers 86 nodes and 106 internal edges; the diagram shows only representative relationships to stay readable.</p>
 
 <div class="mermaid">
 %%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
 flowchart LR
-    %% Section: Outputs &amp; Docs (78 nodes, 105 edges)
+    %% Section: Outputs &amp; Docs (86 nodes, 106 edges)
     subgraph outputs_docs_complaint_detail_presentation_compl_1cbf47ac["complaint_detail/presentation/complaint_detail_screen.dart"]
         lib_features_complaint_detail_presentation_compl_30e53140("_loadComments<br/><small>complaint_detail/presentation/complaint_detail_screen.dart</small>")
         lib_features_complaint_detail_presentation_compl_0425867e("_rateComplaint<br/><small>complaint_detail/presentation/complaint_detail_screen.dart</small>")
@@ -875,22 +866,23 @@ flowchart LR
     subgraph outputs_docs_External_generated_a8e9d6d8["External / generated"]
         package_image_picker_image_picker_dart_424f619c("package:image picker/image picker.dart")
         core_network_offline_manager_dart_1dac737d("../../../core/network/offline manager.dart")
-        consumerstate_a39b95dc("ConsumerState")
-        consumerstatefulwidget_aaaa28e6("ConsumerStatefulWidget")
-        singletickerproviderstatemixin_1ba57c9b("SingleTickerProviderStateMixin")
+        package_seffaf_data_models_municipality_dart_e44f4ff2("package:seffaf/data/models/municipality...")
+        package_seffaf_data_repositories_providers_dart_6201c947("package:seffaf/data/repositories/provid...")
+        package_seffaf_features_municipality_presentatio_94d72478("package:seffaf/features/municipality/pr...")
+        texteditingcontroller_123b4e86("TextEditingController")
     end
     subgraph outputs_docs_core_network_offline_sync_controlle_73ff4d6b["core/network/offline_sync_controller.dart"]
         lib_core_network_offline_sync_controller_offline_3c1ee0f4("offlineSyncProvider<br/><small>core/network/offline_sync_controller.dart</small>")
         lib_core_network_offline_sync_controller_syncnow_00562d7b("syncNow<br/><small>core/network/offline_sync_controller.dart</small>")
     end
-    subgraph outputs_docs_data_repositories_providers_dart_c290448c["data/repositories/providers.dart"]
-        lib_data_repositories_providers_complaintreposit_cc7dda60("complaintRepositoryProvider<br/><small>data/repositories/providers.dart</small>")
-        lib_data_repositories_providers_currentuserprovi_428616e0("currentUserProvider<br/><small>data/repositories/providers.dart</small>")
-    end
+    lib_features_leaderboard_presentation_leaderboar_15212ed5("leaderboard_screen.dart")
     lib_features_report_creation_presentation_report_6bff5f24("report_creation_screen.dart")
     lib_features_report_creation_presentation_report_6bff5f24 -->|imports| package_image_picker_image_picker_dart_424f619c
     lib_features_report_creation_presentation_report_6bff5f24 -->|imports| core_network_offline_manager_dart_1dac737d
-    %% Omitted for readability: 60 nodes, 0 edges
+    lib_features_leaderboard_presentation_leaderboar_15212ed5 -->|imports| package_seffaf_data_models_municipality_dart_e44f4ff2
+    lib_features_leaderboard_presentation_leaderboar_15212ed5 -->|imports| package_seffaf_data_repositories_providers_dart_6201c947
+    lib_features_leaderboard_presentation_leaderboar_15212ed5 -->|imports| package_seffaf_features_municipality_presentatio_94d72478
+    %% Omitted for readability: 68 nodes, 0 edges
     class lib_features_complaint_detail_presentation_compl_30e53140 function;
     class lib_features_complaint_detail_presentation_compl_0425867e function;
     class lib_features_complaint_detail_presentation_compl_7f233d75 function;
@@ -901,13 +893,13 @@ flowchart LR
     class lib_features_complaint_detail_presentation_compl_88dd60cb function;
     class package_image_picker_image_picker_dart_424f619c function;
     class core_network_offline_manager_dart_1dac737d function;
-    class consumerstate_a39b95dc klass;
-    class consumerstatefulwidget_aaaa28e6 klass;
-    class singletickerproviderstatemixin_1ba57c9b klass;
+    class package_seffaf_data_models_municipality_dart_e44f4ff2 function;
+    class package_seffaf_data_repositories_providers_dart_6201c947 function;
+    class package_seffaf_features_municipality_presentatio_94d72478 function;
+    class texteditingcontroller_123b4e86 klass;
     class lib_core_network_offline_sync_controller_offline_3c1ee0f4 function;
     class lib_core_network_offline_sync_controller_syncnow_00562d7b function;
-    class lib_data_repositories_providers_complaintreposit_cc7dda60 function;
-    class lib_data_repositories_providers_currentuserprovi_428616e0 function;
+    class lib_features_leaderboard_presentation_leaderboar_15212ed5 function;
     class lib_features_report_creation_presentation_report_6bff5f24 function;
     classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
     classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
@@ -943,7 +935,7 @@ flowchart LR
   <td><code>report_creation_screen.dart</code><br><small style="color:var(--muted)">report_creation/presentation/report_creation_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
-  <td><code>../../../core/network/offline manager.dart</code><br><code>../../../core/network/offline sync cont...</code><br><code>../../../core/utils/geo utils.dart</code><br>+13 more</td>
+  <td><code>../../../core/constants/app colors.dart</code><br><code>../../../core/network/offline manager.dart</code><br><code>../../../core/network/offline sync cont...</code><br>+13 more</td>
   <td>report_creation_screen.dart node in report_creation/presentation/report_creation_screen.dart.</td>
 </tr>
 <tr>
@@ -1178,30 +1170,30 @@ flowchart LR
     <table style="width:100%;font-size:0.85rem;">
       <tr><th>File</th><th>Coverage</th></tr>
       <tr><td><code>report_creation/presentation/report_creation_screen.dart</code></td><td>31 nodes</td></tr>
+<tr><td><code>leaderboard/presentation/leaderboard_screen.dart</code></td><td>14 nodes</td></tr>
 <tr><td><code>graphify/references/exports.md</code></td><td>9 nodes</td></tr>
 <tr><td><code>complaint_detail/presentation/complaint_detail_screen.dart</code></td><td>8 nodes</td></tr>
 <tr><td><code>feed/application/feed_controller.dart</code></td><td>6 nodes</td></tr>
-<tr><td><code>municipality/presentation/municipality_profile_screen.dart</code></td><td>4 nodes</td></tr>
-<tr><td><code>profile/presentation/profile_screen.dart</code></td><td>4 nodes</td></tr>
 <tr><td><code>data/repositories/providers.dart</code></td><td>3 nodes</td></tr>
-<tr><td><code>leaderboard/presentation/leaderboard_screen.dart</code></td><td>3 nodes</td></tr>
+<tr><td><code>core/network/offline_sync_controller.dart</code></td><td>2 nodes</td></tr>
+<tr><td><code>feed/presentation/feed_screen.dart</code></td><td>2 nodes</td></tr>
     </table>
   </div>
   <div class="card">
     <h4>Design Notes</h4>
-    <p>This section comes from graphify community clustering. Relationship summary: references x56, defines x30, inherits x8, contains x8. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+    <p>This section comes from graphify community clustering. Relationship summary: references x50, defines x43, contains x8, imports x5. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
   </div>
 </div>
 <hr>
 
 <!-- ====== 5. CLI & Skill Installers ====== -->
 <h2 id="cli-skills">5. CLI &amp; Skill Installers</h2>
-<p>CLI &amp; Skill Installers groups implementation around skills, agents, supabase, skillmd, mostly in skills/graphify/SKILL.md, skills/supabase-postgres-best-practices/CHANGELOG.md, skills/supabase/CHANGELOG.md. This section covers 217 nodes and 230 internal edges; the diagram shows only representative relationships to stay readable.</p>
+<p>CLI &amp; Skill Installers groups implementation around skills, agents, supabase, screendart, mostly in skills/graphify/SKILL.md, auth/presentation/register_screen.dart, skills/supabase-postgres-best-practices/CHANGELOG.md. This section covers 223 nodes and 249 internal edges; the diagram shows only representative relationships to stay readable.</p>
 
 <div class="mermaid">
 %%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
 flowchart LR
-    %% Section: CLI &amp; Skill Installers (217 nodes, 230 edges)
+    %% Section: CLI &amp; Skill Installers (223 nodes, 249 edges)
     subgraph cli_skills_External_generated_0c226fa1["External / generated"]
         profile_presentation_profile_screen_dart_024df2cd("../profile/presentation/profile screen....")
         core_network_offline_sync_controller_dart_b3ab5fec("../../../core/network/offline sync cont...")
@@ -1218,12 +1210,12 @@ flowchart LR
         windows_runner_utils_getcommandlinearguments_66eabbe1("GetCommandLineArguments()<br/><small>windows/runner/utils.cpp</small>")
         windows_runner_utils_utf8fromutf16_8bfd7527("Utf8FromUtf16()<br/><small>windows/runner/utils.cpp</small>")
     end
+    lib_features_auth_presentation_login_screen_44ef3f1c("login_screen.dart")
     lib_features_main_navigation_main_nav_screen_486f0b5f("main_nav_screen.dart")
     lib_main_6217d969("main.dart")
     linux_flutter_generated_plugin_registrant_cc_lin_f30cb756("linux/flutter/generated plugin registra...<br/><small>linux/flutter/generated_plugin_registrant.cc</small>")
     windows_runner_flutter_window_h_windows_runner_f_daaa2444("flutter_window.h")
     windows_runner_main_c02fae25("main.cpp")
-    windows_runner_win32_window_h_windows_runner_win_1096573b("win32_window.h")
     windows_runner_utils_getcommandlinearguments_66eabbe1 -->|calls| windows_runner_utils_utf8fromutf16_8bfd7527
     lib_features_main_navigation_main_nav_screen_486f0b5f -->|imports| profile_presentation_profile_screen_dart_024df2cd
     lib_features_main_navigation_main_nav_screen_486f0b5f -->|imports| core_network_offline_sync_controller_dart_b3ab5fec
@@ -1234,12 +1226,10 @@ flowchart LR
     windows_runner_flutter_window_h_windows_runner_f_daaa2444 -->|imports| dart_project_060f8ab4
     windows_runner_flutter_window_h_windows_runner_f_daaa2444 -->|imports| flutter_view_controller_5a4edf4e
     windows_runner_flutter_window_h_windows_runner_f_daaa2444 -->|imports| memory_81c5d49b
-    windows_runner_flutter_window_h_windows_runner_f_daaa2444 -->|imports| windows_runner_win32_window_h_windows_runner_win_1096573b
     windows_runner_main_c02fae25 -->|imports| dart_project_060f8ab4
     windows_runner_main_c02fae25 -->|imports| flutter_view_controller_5a4edf4e
     windows_runner_main_c02fae25 -->|imports| windows_runner_flutter_window_h_windows_runner_f_daaa2444
-    windows_runner_win32_window_h_windows_runner_win_1096573b -->|imports| memory_81c5d49b
-    %% Omitted for readability: 199 nodes, 0 edges
+    %% Omitted for readability: 205 nodes, 0 edges
     class profile_presentation_profile_screen_dart_024df2cd function;
     class core_network_offline_sync_controller_dart_b3ab5fec function;
     class feed_presentation_feed_screen_dart_9766c763 function;
@@ -1252,12 +1242,12 @@ flowchart LR
     class windows_runner_utils_cpp_windows_runner_utils_c95e8a1f function;
     class windows_runner_utils_getcommandlinearguments_66eabbe1 entry;
     class windows_runner_utils_utf8fromutf16_8bfd7527 function;
+    class lib_features_auth_presentation_login_screen_44ef3f1c function;
     class lib_features_main_navigation_main_nav_screen_486f0b5f function;
     class lib_main_6217d969 function;
     class linux_flutter_generated_plugin_registrant_cc_lin_f30cb756 function;
     class windows_runner_flutter_window_h_windows_runner_f_daaa2444 function;
     class windows_runner_main_c02fae25 function;
-    class windows_runner_win32_window_h_windows_runner_win_1096573b function;
     classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
     classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
     classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
@@ -1281,243 +1271,243 @@ flowchart LR
 </tr>
 <tr>
   <td>1</td>
-  <td><code>wWinMain()</code><br><small style="color:var(--muted)">windows/runner/main.cpp</small></td>
+  <td><code>authRepositoryProvider</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
-  <td><code>CreateAndAttachConsole()</code><br><small style="color:var(--muted)">windows/runner/utils.cpp</small><br><code>GetCommandLineArguments()</code><br><small style="color:var(--muted)">windows/runner/utils.cpp</small></td>
-  <td>wWinMain() node in windows/runner/main.cpp.</td>
+  <td>No direct outbound edge</td>
+  <td>authRepositoryProvider node in project.</td>
 </tr>
 <tr>
   <td>2</td>
-  <td><code>CreateAndAttachConsole()</code><br><small style="color:var(--muted)">windows/runner/utils.cpp</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>wWinMain()</code><br><small style="color:var(--muted)">windows/runner/main.cpp</small></td>
-  <td>No direct outbound edge</td>
-  <td>CreateAndAttachConsole() node in windows/runner/utils.cpp.</td>
-</tr>
-<tr>
-  <td>3</td>
-  <td><code>GetCommandLineArguments()</code><br><small style="color:var(--muted)">windows/runner/utils.cpp</small></td>
-  <td><span class="tag tag-cmd">Entry</span></td>
-  <td><code>wWinMain()</code><br><small style="color:var(--muted)">windows/runner/main.cpp</small></td>
-  <td><code>Utf8FromUtf16()</code><br><small style="color:var(--muted)">windows/runner/utils.cpp</small></td>
-  <td>GetCommandLineArguments() node in windows/runner/utils.cpp.</td>
-</tr>
-<tr>
-  <td>4</td>
-  <td><code>Utf8FromUtf16()</code><br><small style="color:var(--muted)">windows/runner/utils.cpp</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>GetCommandLineArguments()</code><br><small style="color:var(--muted)">windows/runner/utils.cpp</small></td>
-  <td>No direct outbound edge</td>
-  <td>Utf8FromUtf16() node in windows/runner/utils.cpp.</td>
-</tr>
-<tr>
-  <td>5</td>
-  <td><code>_In_</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>_In_ node in project.</td>
-</tr>
-<tr>
-  <td>6</td>
-  <td><code>_In_opt_</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>_In_opt_ node in project.</td>
-</tr>
-<tr>
-  <td>7</td>
-  <td><code>anonymous_user.dart</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>anonymous_user.dart node in data/models/anonymous_user.dart.</td>
-</tr>
-<tr>
-  <td>8</td>
-  <td><code>AnonymousUser</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><code>FormState</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-class">Class</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>AnonymousUser node in data/models/anonymous_user.dart.</td>
+  <td>FormState node in project.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>login_screen.dart</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>../../../core/constants/app colors.dart</code><br><code>../../../data/repositories/providers.dart</code><br><code>../../../shared/widgets/seffaf logo.dart</code><br>+4 more</td>
+  <td>login_screen.dart node in auth/presentation/login_screen.dart.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>createState</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>dispose</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>dispose node in auth/presentation/login_screen.dart.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>_emailController</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>_emailController node in auth/presentation/login_screen.dart.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>_errorMessage</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>_errorMessage node in auth/presentation/login_screen.dart.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>_formKey</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>_formKey node in auth/presentation/login_screen.dart.</td>
 </tr>
 <tr>
   <td>9</td>
-  <td><code>copyWith</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><code>_handleLogin</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>copyWith node in data/models/anonymous_user.dart.</td>
+  <td>_handleLogin node in auth/presentation/login_screen.dart.</td>
 </tr>
 <tr>
   <td>10</td>
-  <td><code>createdComplaintIds</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><code>_isLoading</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>createdComplaintIds node in data/models/anonymous_user.dart.</td>
+  <td>_isLoading node in auth/presentation/login_screen.dart.</td>
 </tr>
 <tr>
   <td>11</td>
-  <td><code>displayName</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><code>isModal</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>displayName node in data/models/anonymous_user.dart.</td>
+  <td>isModal node in auth/presentation/login_screen.dart.</td>
 </tr>
 <tr>
   <td>12</td>
-  <td><code>email</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
-  <td><span class="tag tag-func">Function</span></td>
+  <td><code>LoginScreen</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
+  <td><span class="tag tag-class">Class</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>email node in data/models/anonymous_user.dart.</td>
+  <td>LoginScreen node in auth/presentation/login_screen.dart.</td>
 </tr>
 <tr>
   <td>13</td>
-  <td><code>followedMunicipalityIds</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><code>_LoginScreenState</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>followedMunicipalityIds node in data/models/anonymous_user.dart.</td>
+  <td>_LoginScreenState node in auth/presentation/login_screen.dart.</td>
 </tr>
 <tr>
   <td>14</td>
-  <td><code>fromJson</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><code>_obscurePassword</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>fromJson node in data/models/anonymous_user.dart.</td>
+  <td>_obscurePassword node in auth/presentation/login_screen.dart.</td>
 </tr>
 <tr>
   <td>15</td>
-  <td><code>id</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><code>_passwordController</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>id node in data/models/anonymous_user.dart.</td>
+  <td>_passwordController node in auth/presentation/login_screen.dart.</td>
 </tr>
 <tr>
   <td>16</td>
-  <td><code>isGuest</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><code>_showForgotPasswordDialog</code><br><small style="color:var(--muted)">auth/presentation/login_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>isGuest node in data/models/anonymous_user.dart.</td>
+  <td>_showForgotPasswordDialog node in auth/presentation/login_screen.dart.</td>
 </tr>
 <tr>
   <td>17</td>
-  <td><code>isVerified</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><code>register_screen.dart</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>isVerified node in data/models/anonymous_user.dart.</td>
+  <td><code>../../../core/constants/app colors.dart</code><br><code>../../../data/repositories/providers.dart</code><br><code>../../../shared/widgets/seffaf logo.dart</code><br>+3 more</td>
+  <td>register_screen.dart node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>18</td>
-  <td><code>phoneNumber</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><code>build</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>phoneNumber node in data/models/anonymous_user.dart.</td>
+  <td>build node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>19</td>
-  <td><code>toJson</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><code>_confirmPasswordController</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>toJson node in data/models/anonymous_user.dart.</td>
+  <td>_confirmPasswordController node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>20</td>
-  <td><code>vector</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>createState</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>utils.h</code><br><small style="color:var(--muted)">windows/runner/utils.h</small></td>
+  <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>vector node in project.</td>
+  <td>Verifies imports, entry points, or version behavior.</td>
 </tr>
 <tr>
   <td>21</td>
-  <td><code>flutter_window.h</code><br><small style="color:var(--muted)">windows/runner/flutter_window.h</small></td>
+  <td><code>dispose</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>flutter_window.cpp</code><br><small style="color:var(--muted)">windows/runner/flutter_window.cpp</small><br><code>main.cpp</code><br><small style="color:var(--muted)">windows/runner/main.cpp</small></td>
-  <td><code>dart_project</code><br><code>flutter_view_controller</code><br><code>memory</code><br>+1 more</td>
-  <td>flutter_window.h node in windows/runner/flutter_window.h.</td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>dispose node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>22</td>
-  <td><code>main.cpp</code><br><small style="color:var(--muted)">windows/runner/main.cpp</small></td>
+  <td><code>_emailController</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
-  <td><code>dart_project</code><br><code>flutter_view_controller</code><br><code>flutter_window.h</code><br><small style="color:var(--muted)">windows/runner/flutter_window.h</small><br>+2 more</td>
-  <td>main.cpp node in windows/runner/main.cpp.</td>
+  <td>No direct outbound edge</td>
+  <td>_emailController node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>23</td>
-  <td><code>string</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>_errorMessage</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>string node in project.</td>
+  <td>_errorMessage node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>24</td>
-  <td><code>wchar_t</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>_formKey</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>wchar_t node in project.</td>
+  <td>_formKey node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>25</td>
-  <td><code>utils.cpp</code><br><small style="color:var(--muted)">windows/runner/utils.cpp</small></td>
+  <td><code>_isLoading</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
-  <td><code>flutter_windows</code><br><code>io</code><br><code>iostream</code><br>+3 more</td>
-  <td>utils.cpp node in windows/runner/utils.cpp.</td>
+  <td>No direct outbound edge</td>
+  <td>_isLoading node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>26</td>
-  <td><code>utils.h</code><br><small style="color:var(--muted)">windows/runner/utils.h</small></td>
+  <td><code>isModal</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>main.cpp</code><br><small style="color:var(--muted)">windows/runner/main.cpp</small><br><code>utils.cpp</code><br><small style="color:var(--muted)">windows/runner/utils.cpp</small></td>
-  <td><code>string</code><br><code>vector</code></td>
-  <td>utils.h node in windows/runner/utils.h.</td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>isModal node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>27</td>
-  <td><code>win32_window.h</code><br><small style="color:var(--muted)">windows/runner/win32_window.h</small></td>
+  <td><code>_nameController</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>flutter_window.h</code><br><small style="color:var(--muted)">windows/runner/flutter_window.h</small><br><code>win32_window.cpp</code><br><small style="color:var(--muted)">windows/runner/win32_window.cpp</small></td>
-  <td><code>functional</code><br><code>memory</code><br><code>string</code><br>+1 more</td>
-  <td>win32_window.h node in windows/runner/win32_window.h.</td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>_nameController node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>28</td>
-  <td><code>dart_project</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>_obscureConfirmPassword</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>flutter_window.h</code><br><small style="color:var(--muted)">windows/runner/flutter_window.h</small><br><code>main.cpp</code><br><small style="color:var(--muted)">windows/runner/main.cpp</small></td>
+  <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>dart_project node in project.</td>
+  <td>_obscureConfirmPassword node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>29</td>
-  <td><code>flutter_view_controller</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>_obscurePassword</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>flutter_window.h</code><br><small style="color:var(--muted)">windows/runner/flutter_window.h</small><br><code>main.cpp</code><br><small style="color:var(--muted)">windows/runner/main.cpp</small></td>
+  <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>flutter_view_controller node in project.</td>
+  <td>_obscurePassword node in auth/presentation/register_screen.dart.</td>
 </tr>
 <tr>
   <td>30</td>
-  <td><code>flutter_windows</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>_passwordController</code><br><small style="color:var(--muted)">auth/presentation/register_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>utils.cpp</code><br><small style="color:var(--muted)">windows/runner/utils.cpp</small><br><code>win32_window.cpp</code><br><small style="color:var(--muted)">windows/runner/win32_window.cpp</small></td>
+  <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>flutter_windows node in project.</td>
+  <td>_passwordController node in auth/presentation/register_screen.dart.</td>
 </tr>
 </table>
 
@@ -1528,9 +1518,9 @@ flowchart LR
       <tr><th>File</th><th>Coverage</th></tr>
       <tr><td><code>skills/graphify/SKILL.md</code></td><td>25 nodes</td></tr>
 <tr><td><code>skills/supabase-postgres-best-practices/CHANGELOG.md</code></td><td>17 nodes</td></tr>
+<tr><td><code>auth/presentation/register_screen.dart</code></td><td>17 nodes</td></tr>
 <tr><td><code>skills/supabase/CHANGELOG.md</code></td><td>16 nodes</td></tr>
-<tr><td><code>data/models/anonymous_user.dart</code></td><td>13 nodes</td></tr>
-<tr><td><code>auth/presentation/login_screen.dart</code></td><td>13 nodes</td></tr>
+<tr><td><code>auth/presentation/login_screen.dart</code></td><td>14 nodes</td></tr>
 <tr><td><code>linux/runner/my_application.cc</code></td><td>13 nodes</td></tr>
 <tr><td><code>lib/main.dart</code></td><td>12 nodes</td></tr>
 <tr><td><code>skills/supabase/SKILL.md</code></td><td>11 nodes</td></tr>
@@ -1538,7 +1528,7 @@ flowchart LR
   </div>
   <div class="card">
     <h4>Design Notes</h4>
-    <p>This section comes from graphify community clustering. Relationship summary: contains x95, defines x50, imports x48, references x30. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x95, defines x51, imports x50, references x36. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
   </div>
 </div>
 <hr>
@@ -2075,31 +2065,31 @@ flowchart LR
 
 <!-- ====== 9. Tests & Fixtures ====== -->
 <h2 id="tests-fixtures">9. Tests &amp; Fixtures</h2>
-<p>Tests &amp; Fixtures groups implementation around repositorydart, data, repositories, mock, mostly in data/repositories/mock_complaint_repository.dart, data/repositories/supabase_complaint_repository.dart, data/repositories/mock_auth_repository.dart. This section covers 144 nodes and 167 internal edges; the diagram shows only representative relationships to stay readable.</p>
+<p>Tests &amp; Fixtures groups implementation around repositorydart, data, repositories, mock, mostly in data/repositories/mock_complaint_repository.dart, data/repositories/supabase_complaint_repository.dart, data/repositories/mock_auth_repository.dart. This section covers 110 nodes and 129 internal edges; the diagram shows only representative relationships to stay readable.</p>
 
 <div class="mermaid">
 %%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
 flowchart LR
-    %% Section: Tests &amp; Fixtures (144 nodes, 167 edges)
+    %% Section: Tests &amp; Fixtures (110 nodes, 129 edges)
     subgraph tests_fixtures_External_generated_473753cb["External / generated"]
         package_flutter_services_dart_532f997d("package:flutter/services.dart")
         core_utils_geo_utils_dart_028795c6("../../../core/utils/geo utils.dart")
         models_municipality_dart_52095237("../models/municipality.dart")
         municipality_repository_dart_cb232154("municipality_repository.dart")
-        core_config_supabase_config_dart_a00ffa34("core/config/supabase config.dart")
+        core_config_supabase_config_dart_a00ffa34("../../core/config/supabase config.dart")
         mock_municipality_repository_dart_6fc23be4("mock municipality repository.dart")
-        package_shared_preferences_shared_preferences_da_d8269709("package:shared preferences/shared prefe...")
-        core_constants_app_constants_dart_c8566f07("core/constants/app constants.dart")
-        models_complaint_status_dart_2669eb58("../models/complaint status.dart")
-        mock_complaint_repository_dart_18c42e3a("mock complaint repository.dart")
+        package_flutter_test_flutter_test_dart_878563e1("package:flutter test/flutter test.dart")
+        package_seffaf_core_utils_geo_utils_dart_ec910afe("package:seffaf/core/utils/geo utils.dart")
+        package_seffaf_core_utils_scoring_calculator_dar_012e528c("package:seffaf/core/utils/scoring calcu...")
     end
-    lib_data_repositories_mock_auth_repository_eae18c8e("mock_auth_repository.dart")
     lib_data_repositories_mock_complaint_repository_68901721("mock complaint repository.dart<br/><small>data/repositories/mock_complaint_repository.dart</small>")
     lib_data_repositories_mock_municipality_reposito_52b453f0("mock municipality repository.dart<br/><small>data/repositories/mock_municipality_repository.dart</small>")
     lib_data_repositories_municipality_repository_cbaed4e4("municipality_repository.dart")
     lib_data_repositories_supabase_complaint_reposit_17b6fcbe("supabase complaint repository.dart<br/><small>data/repositories/supabase_complaint_repository.dart</small>")
     lib_data_repositories_supabase_municipality_repo_ef60bc49("supabase municipality repository.dart<br/><small>data/repositories/supabase_municipality_repository.dart</small>")
-    lib_features_feed_presentation_feed_screen_9a0f7190("feed_screen.dart")
+    test_auth_screens_test_b139f659("auth_screens_test.dart")
+    test_geo_utils_test_ef24bbf9("geo_utils_test.dart")
+    test_satisfaction_scoring_test_f061adc6("satisfaction scoring test.dart<br/><small>test/satisfaction_scoring_test.dart</small>")
     test_turkey_data_and_supabase_test_aa9ae98d("and supabase test.dart<br/><small>test/turkey_data_and_supabase_test.dart</small>")
     lib_data_repositories_mock_municipality_reposito_52b453f0 -->|imports| package_flutter_services_dart_532f997d
     lib_data_repositories_mock_municipality_reposito_52b453f0 -->|imports| core_utils_geo_utils_dart_028795c6
@@ -2111,35 +2101,33 @@ flowchart LR
     lib_data_repositories_supabase_municipality_repo_ef60bc49 -->|imports| models_municipality_dart_52095237
     lib_data_repositories_supabase_municipality_repo_ef60bc49 -->|imports| mock_municipality_repository_dart_6fc23be4
     lib_data_repositories_supabase_municipality_repo_ef60bc49 -->|imports| municipality_repository_dart_cb232154
+    test_geo_utils_test_ef24bbf9 -->|imports| package_flutter_test_flutter_test_dart_878563e1
+    test_geo_utils_test_ef24bbf9 -->|imports| package_seffaf_core_utils_geo_utils_dart_ec910afe
+    test_satisfaction_scoring_test_f061adc6 -->|imports| package_flutter_test_flutter_test_dart_878563e1
+    test_satisfaction_scoring_test_f061adc6 -->|imports| package_seffaf_core_utils_scoring_calculator_dar_012e528c
+    test_turkey_data_and_supabase_test_aa9ae98d -->|imports| package_flutter_test_flutter_test_dart_878563e1
+    test_turkey_data_and_supabase_test_aa9ae98d -->|imports| package_seffaf_core_utils_geo_utils_dart_ec910afe
+    test_auth_screens_test_b139f659 -->|imports| package_flutter_test_flutter_test_dart_878563e1
     lib_data_repositories_mock_complaint_repository_68901721 -->|imports| package_flutter_services_dart_532f997d
-    lib_data_repositories_mock_complaint_repository_68901721 -->|imports| package_shared_preferences_shared_preferences_da_d8269709
-    lib_data_repositories_mock_complaint_repository_68901721 -->|imports| core_constants_app_constants_dart_c8566f07
-    lib_data_repositories_mock_complaint_repository_68901721 -->|imports| models_complaint_status_dart_2669eb58
-    lib_data_repositories_supabase_complaint_reposit_17b6fcbe -->|imports| mock_complaint_repository_dart_18c42e3a
-    lib_data_repositories_supabase_complaint_reposit_17b6fcbe -->|imports| package_shared_preferences_shared_preferences_da_d8269709
     lib_data_repositories_supabase_complaint_reposit_17b6fcbe -->|imports| core_config_supabase_config_dart_a00ffa34
-    lib_data_repositories_supabase_complaint_reposit_17b6fcbe -->|imports| core_constants_app_constants_dart_c8566f07
-    lib_data_repositories_supabase_complaint_reposit_17b6fcbe -->|imports| models_complaint_status_dart_2669eb58
-    lib_data_repositories_mock_auth_repository_eae18c8e -->|imports| package_shared_preferences_shared_preferences_da_d8269709
-    lib_data_repositories_mock_auth_repository_eae18c8e -->|imports| core_constants_app_constants_dart_c8566f07
-    %% Omitted for readability: 126 nodes, 0 edges
+    %% Omitted for readability: 92 nodes, 0 edges
     class package_flutter_services_dart_532f997d function;
     class core_utils_geo_utils_dart_028795c6 function;
     class models_municipality_dart_52095237 function;
     class municipality_repository_dart_cb232154 function;
     class core_config_supabase_config_dart_a00ffa34 function;
     class mock_municipality_repository_dart_6fc23be4 function;
-    class package_shared_preferences_shared_preferences_da_d8269709 function;
-    class core_constants_app_constants_dart_c8566f07 function;
-    class models_complaint_status_dart_2669eb58 function;
-    class mock_complaint_repository_dart_18c42e3a function;
-    class lib_data_repositories_mock_auth_repository_eae18c8e function;
+    class package_flutter_test_flutter_test_dart_878563e1 function;
+    class package_seffaf_core_utils_geo_utils_dart_ec910afe function;
+    class package_seffaf_core_utils_scoring_calculator_dar_012e528c function;
     class lib_data_repositories_mock_complaint_repository_68901721 function;
     class lib_data_repositories_mock_municipality_reposito_52b453f0 function;
     class lib_data_repositories_municipality_repository_cbaed4e4 function;
     class lib_data_repositories_supabase_complaint_reposit_17b6fcbe function;
     class lib_data_repositories_supabase_municipality_repo_ef60bc49 function;
-    class lib_features_feed_presentation_feed_screen_9a0f7190 function;
+    class test_auth_screens_test_b139f659 test;
+    class test_geo_utils_test_ef24bbf9 test;
+    class test_satisfaction_scoring_test_f061adc6 test;
     class test_turkey_data_and_supabase_test_aa9ae98d test;
     classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
     classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
@@ -2164,243 +2152,243 @@ flowchart LR
 </tr>
 <tr>
   <td>1</td>
-  <td><code>../application/feed_controller.dart</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>../../core/config/supabase_config.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>feed_screen.dart</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
+  <td><code>main.dart</code><br><small style="color:var(--muted)">lib/main.dart</small><br><code>supabase auth repository.dart</code><br><small style="color:var(--muted)">data/repositories/supabase_auth_repository.dart</small><br><code>supabase complaint repository.dart</code><br><small style="color:var(--muted)">data/repositories/supabase_complaint_repository.dart</small><br>+1 more</td>
   <td>No direct outbound edge</td>
-  <td>../application/feed_controller.dart node in project.</td>
+  <td>Reads, resolves, or persists project configuration.</td>
 </tr>
 <tr>
   <td>2</td>
-  <td><code>../../complaint_detail/presentation/complaint_detail_screen.dart</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>../../../core/utils/geo_utils.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>feed_screen.dart</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small><br><code>profile_screen.dart</code><br><small style="color:var(--muted)">profile/presentation/profile_screen.dart</small></td>
+  <td><code>mock municipality repository.dart</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small><br><code>report_creation_screen.dart</code><br><small style="color:var(--muted)">report_creation/presentation/report_creation_screen.dart</small><br><code>supabase municipality repository.dart</code><br><small style="color:var(--muted)">data/repositories/supabase_municipality_repository.dart</small></td>
   <td>No direct outbound edge</td>
-  <td>../../complaint_detail/presentation/complaint_detail_screen.dart node in project.</td>
+  <td>../../../core/utils/geo_utils.dart node in project.</td>
 </tr>
 <tr>
   <td>3</td>
-  <td><code>feed_screen.dart</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
+  <td><code>mock_municipality_repository.dart</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
-  <td><code>../../../shared/widgets/empty state wid...</code><br><code>../../../shared/widgets/error state wid...</code><br><code>../../../shared/widgets/shimmer card.dart</code><br>+7 more</td>
-  <td>feed_screen.dart node in feed/presentation/feed_screen.dart.</td>
+  <td><code>../../../core/utils/geo utils.dart</code><br><code>../models/municipality.dart</code><br><code>dart:convert</code><br>+2 more</td>
+  <td>mock_municipality_repository.dart node in data/repositories/mock_municipality_repository.dart.</td>
 </tr>
 <tr>
   <td>4</td>
-  <td><code>_buildFilterChip</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
+  <td><code>_cachedMunicipalities</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>_buildFilterChip node in feed/presentation/feed_screen.dart.</td>
+  <td>Caches analysis results or computes cache keys.</td>
 </tr>
 <tr>
   <td>5</td>
-  <td><code>createState</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
+  <td><code>_cachedProvinces</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>Verifies imports, entry points, or version behavior.</td>
+  <td>Caches analysis results or computes cache keys.</td>
 </tr>
 <tr>
   <td>6</td>
-  <td><code>dispose</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
+  <td><code>_ensureLoaded</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>dispose node in feed/presentation/feed_screen.dart.</td>
+  <td>_ensureLoaded node in data/repositories/mock_municipality_repository.dart.</td>
 </tr>
 <tr>
   <td>7</td>
-  <td><code>FeedScreen</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
-  <td><span class="tag tag-class">Class</span></td>
+  <td><code>getLeaderboard</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>FeedScreen node in feed/presentation/feed_screen.dart.</td>
+  <td>getLeaderboard node in data/repositories/mock_municipality_repository.dart.</td>
 </tr>
 <tr>
   <td>8</td>
-  <td><code>_FeedScreenState</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
+  <td><code>getMunicipalities</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>_FeedScreenState node in feed/presentation/feed_screen.dart.</td>
+  <td>getMunicipalities node in data/repositories/mock_municipality_repository.dart.</td>
 </tr>
 <tr>
   <td>9</td>
-  <td><code>initState</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
+  <td><code>getMunicipalityById</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>initState node in feed/presentation/feed_screen.dart.</td>
+  <td>getMunicipalityById node in data/repositories/mock_municipality_repository.dart.</td>
 </tr>
 <tr>
   <td>10</td>
-  <td><code>_isSearchVisible</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
-  <td><span class="tag tag-async">Async</span></td>
+  <td><code>getProvinces</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>_isSearchVisible node in feed/presentation/feed_screen.dart.</td>
+  <td>getProvinces node in data/repositories/mock_municipality_repository.dart.</td>
 </tr>
 <tr>
   <td>11</td>
-  <td><code>_scrollController</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>_scrollController node in feed/presentation/feed_screen.dart.</td>
-</tr>
-<tr>
-  <td>12</td>
-  <td><code>_searchController</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>_searchController node in feed/presentation/feed_screen.dart.</td>
-</tr>
-<tr>
-  <td>13</td>
-  <td><code>package:flutter_riverpod/flutter_riverpod.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>auth_screens_test.dart</code><br><small style="color:var(--muted)">test/auth_screens_test.dart</small><br><code>complaint_detail_screen.dart</code><br><small style="color:var(--muted)">complaint_detail/presentation/complaint_detail_screen.dart</small><br><code>feed_controller.dart</code><br><small style="color:var(--muted)">feed/application/feed_controller.dart</small><br>+14 more</td>
-  <td>No direct outbound edge</td>
-  <td>package:flutter_riverpod/flutter_riverpod.dart node in project.</td>
-</tr>
-<tr>
-  <td>14</td>
-  <td><code>package:flutter_test/flutter_test.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>and supabase test.dart</code><br><small style="color:var(--muted)">test/turkey_data_and_supabase_test.dart</small><br><code>auth_screens_test.dart</code><br><small style="color:var(--muted)">test/auth_screens_test.dart</small><br><code>geo_utils_test.dart</code><br><small style="color:var(--muted)">test/geo_utils_test.dart</small><br>+4 more</td>
-  <td>No direct outbound edge</td>
-  <td>Verifies imports, entry points, or version behavior.</td>
-</tr>
-<tr>
-  <td>15</td>
-  <td><code>package:seffaf/core/utils/geo_utils.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>and supabase test.dart</code><br><small style="color:var(--muted)">test/turkey_data_and_supabase_test.dart</small><br><code>geo_utils_test.dart</code><br><small style="color:var(--muted)">test/geo_utils_test.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>package:seffaf/core/utils/geo_utils.dart node in project.</td>
-</tr>
-<tr>
-  <td>16</td>
-  <td><code>package:seffaf/core/utils/scoring_calculator.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>satisfaction scoring test.dart</code><br><small style="color:var(--muted)">test/satisfaction_scoring_test.dart</small><br><code>scoring_calculator_test.dart</code><br><small style="color:var(--muted)">test/scoring_calculator_test.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>package:seffaf/core/utils/scoring_calculator.dart node in project.</td>
-</tr>
-<tr>
-  <td>17</td>
-  <td><code>package:seffaf/data/models/complaint.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>and supabase test.dart</code><br><small style="color:var(--muted)">test/turkey_data_and_supabase_test.dart</small><br><code>complaint_card.dart</code><br><small style="color:var(--muted)">presentation/widgets/complaint_card.dart</small><br><code>map_screen.dart</code><br><small style="color:var(--muted)">map/presentation/map_screen.dart</small><br>+3 more</td>
-  <td>No direct outbound edge</td>
-  <td>package:seffaf/data/models/complaint.dart node in project.</td>
-</tr>
-<tr>
-  <td>18</td>
-  <td><code>package:seffaf/data/models/complaint_status.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>and supabase test.dart</code><br><small style="color:var(--muted)">test/turkey_data_and_supabase_test.dart</small><br><code>satisfaction scoring test.dart</code><br><small style="color:var(--muted)">test/satisfaction_scoring_test.dart</small><br><code>scoring_calculator_test.dart</code><br><small style="color:var(--muted)">test/scoring_calculator_test.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>package:seffaf/data/models/complaint_status.dart node in project.</td>
-</tr>
-<tr>
-  <td>19</td>
-  <td><code>package:seffaf/data/repositories/mock_municipality_repository.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>and supabase test.dart</code><br><small style="color:var(--muted)">test/turkey_data_and_supabase_test.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>package:seffaf/data/repositories/mock_municipality_repository.dart node in project.</td>
-</tr>
-<tr>
-  <td>20</td>
-  <td><code>package:seffaf/features/auth/presentation/login_screen.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>auth_screens_test.dart</code><br><small style="color:var(--muted)">test/auth_screens_test.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>package:seffaf/features/auth/presentation/login_screen.dart node in project.</td>
-</tr>
-<tr>
-  <td>21</td>
-  <td><code>package:seffaf/features/auth/presentation/register_screen.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>auth_screens_test.dart</code><br><small style="color:var(--muted)">test/auth_screens_test.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>package:seffaf/features/auth/presentation/register_screen.dart node in project.</td>
-</tr>
-<tr>
-  <td>22</td>
-  <td><code>package:seffaf/features/profile/presentation/profile_screen.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>profile_screen_test.dart</code><br><small style="color:var(--muted)">test/profile_screen_test.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>package:seffaf/features/profile/presentation/profile_screen.dart node in project.</td>
-</tr>
-<tr>
-  <td>23</td>
-  <td><code>package:seffaf/main.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>widget_test.dart</code><br><small style="color:var(--muted)">test/widget_test.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>package:seffaf/main.dart node in project.</td>
-</tr>
-<tr>
-  <td>24</td>
-  <td><code>package:shared_preferences/shared_preferences.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>main.dart</code><br><small style="color:var(--muted)">lib/main.dart</small><br><code>mock complaint repository.dart</code><br><small style="color:var(--muted)">data/repositories/mock_complaint_repository.dart</small><br><code>mock_auth_repository.dart</code><br><small style="color:var(--muted)">data/repositories/mock_auth_repository.dart</small><br>+6 more</td>
-  <td>No direct outbound edge</td>
-  <td>package:shared_preferences/shared_preferences.dart node in project.</td>
-</tr>
-<tr>
-  <td>25</td>
-  <td><code>ScrollController</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>MockMunicipalityRepository</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small></td>
   <td><span class="tag tag-class">Class</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>ScrollController node in project.</td>
+  <td>MockMunicipalityRepository node in data/repositories/mock_municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>municipality_repository.dart</code><br><small style="color:var(--muted)">data/repositories/municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>../models/municipality.dart</code></td>
+  <td>municipality_repository.dart node in data/repositories/municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>getLeaderboard</code><br><small style="color:var(--muted)">data/repositories/municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>getLeaderboard node in data/repositories/municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>getMunicipalities</code><br><small style="color:var(--muted)">data/repositories/municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>getMunicipalities node in data/repositories/municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>getMunicipalityById</code><br><small style="color:var(--muted)">data/repositories/municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>getMunicipalityById node in data/repositories/municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>getProvinces</code><br><small style="color:var(--muted)">data/repositories/municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>getProvinces node in data/repositories/municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>MunicipalityRepository</code><br><small style="color:var(--muted)">data/repositories/municipality_repository.dart</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>MunicipalityRepository node in data/repositories/municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>supabase_municipality_repository.dart</code><br><small style="color:var(--muted)">data/repositories/supabase_municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>../../../core/utils/geo utils.dart</code><br><code>../../core/config/supabase config.dart</code><br><code>../models/municipality.dart</code><br>+3 more</td>
+  <td>supabase_municipality_repository.dart node in data/repositories/supabase_municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>_fallbackRepo</code><br><small style="color:var(--muted)">data/repositories/supabase_municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>_fallbackRepo node in data/repositories/supabase_municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>getLeaderboard</code><br><small style="color:var(--muted)">data/repositories/supabase_municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>getLeaderboard node in data/repositories/supabase_municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>getMunicipalities</code><br><small style="color:var(--muted)">data/repositories/supabase_municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>getMunicipalities node in data/repositories/supabase_municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>getMunicipalityById</code><br><small style="color:var(--muted)">data/repositories/supabase_municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>getMunicipalityById node in data/repositories/supabase_municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>getProvinces</code><br><small style="color:var(--muted)">data/repositories/supabase_municipality_repository.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>getProvinces node in data/repositories/supabase_municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>SupabaseMunicipalityRepository</code><br><small style="color:var(--muted)">data/repositories/supabase_municipality_repository.dart</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>SupabaseMunicipalityRepository node in data/repositories/supabase_municipality_repository.dart.</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>mock_municipality_repository.dart</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>supabase municipality repository.dart</code><br><small style="color:var(--muted)">data/repositories/supabase_municipality_repository.dart</small></td>
+  <td>No direct outbound edge</td>
+  <td>mock_municipality_repository.dart node in project.</td>
 </tr>
 <tr>
   <td>26</td>
-  <td><code>../../../shared/widgets/empty_state_widget.dart</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>../models/municipality.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>feed_screen.dart</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
+  <td><code>mock municipality repository.dart</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small><br><code>municipality_repository.dart</code><br><small style="color:var(--muted)">data/repositories/municipality_repository.dart</small><br><code>supabase municipality repository.dart</code><br><small style="color:var(--muted)">data/repositories/supabase_municipality_repository.dart</small></td>
   <td>No direct outbound edge</td>
-  <td>../../../shared/widgets/empty_state_widget.dart node in project.</td>
+  <td>../models/municipality.dart node in project.</td>
 </tr>
 <tr>
   <td>27</td>
-  <td><code>../../../shared/widgets/error_state_widget.dart</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>municipality_repository.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>feed_screen.dart</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
+  <td><code>mock municipality repository.dart</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small><br><code>providers.dart</code><br><small style="color:var(--muted)">data/repositories/providers.dart</small><br><code>supabase municipality repository.dart</code><br><small style="color:var(--muted)">data/repositories/supabase_municipality_repository.dart</small></td>
   <td>No direct outbound edge</td>
-  <td>../../../shared/widgets/error_state_widget.dart node in project.</td>
+  <td>municipality_repository.dart node in project.</td>
 </tr>
 <tr>
   <td>28</td>
-  <td><code>../../../shared/widgets/shimmer_card.dart</code><br><small style="color:var(--muted)"></small></td>
+  <td><code>package:flutter/services.dart</code><br><small style="color:var(--muted)"></small></td>
   <td><span class="tag tag-func">Function</span></td>
-  <td><code>feed_screen.dart</code><br><small style="color:var(--muted)">feed/presentation/feed_screen.dart</small></td>
+  <td><code>app_theme.dart</code><br><small style="color:var(--muted)">core/theme/app_theme.dart</small><br><code>complaint_detail_screen.dart</code><br><small style="color:var(--muted)">complaint_detail/presentation/complaint_detail_screen.dart</small><br><code>main_nav_screen.dart</code><br><small style="color:var(--muted)">features/main_navigation/main_nav_screen.dart</small><br>+2 more</td>
   <td>No direct outbound edge</td>
-  <td>../../../shared/widgets/shimmer_card.dart node in project.</td>
+  <td>package:flutter/services.dart node in project.</td>
 </tr>
 <tr>
   <td>29</td>
-  <td><code>auth_screens_test.dart</code><br><small style="color:var(--muted)">test/auth_screens_test.dart</small></td>
-  <td><span class="tag tag-func">Test</span></td>
+  <td><code>ComplaintRepository</code><br><small style="color:var(--muted)">data/repositories/complaint_repository.dart</small></td>
+  <td><span class="tag tag-class">Class</span></td>
   <td>External entry / no inbound edge</td>
-  <td><code>package:flutter riverpod/flutter riverp...</code><br><code>package:flutter test/flutter test.dart</code><br><code>package:flutter/material.dart</code><br>+2 more</td>
-  <td>Verifies imports, entry points, or version behavior.</td>
+  <td>No direct outbound edge</td>
+  <td>ComplaintRepository node in data/repositories/complaint_repository.dart.</td>
 </tr>
 <tr>
   <td>30</td>
-  <td><code>main</code><br><small style="color:var(--muted)">test/auth_screens_test.dart</small></td>
-  <td><span class="tag tag-func">Test</span></td>
+  <td><code>MockComplaintRepository</code><br><small style="color:var(--muted)">data/repositories/mock_complaint_repository.dart</small></td>
+  <td><span class="tag tag-class">Class</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
-  <td>main node in test/auth_screens_test.dart.</td>
+  <td>MockComplaintRepository node in data/repositories/mock_complaint_repository.dart.</td>
 </tr>
 </table>
 
@@ -2411,17 +2399,17 @@ flowchart LR
       <tr><th>File</th><th>Coverage</th></tr>
       <tr><td><code>data/repositories/mock_complaint_repository.dart</code></td><td>18 nodes</td></tr>
 <tr><td><code>data/repositories/supabase_complaint_repository.dart</code></td><td>18 nodes</td></tr>
-<tr><td><code>data/repositories/mock_auth_repository.dart</code></td><td>14 nodes</td></tr>
-<tr><td><code>data/repositories/supabase_auth_repository.dart</code></td><td>14 nodes</td></tr>
-<tr><td><code>feed/presentation/feed_screen.dart</code></td><td>10 nodes</td></tr>
+<tr><td><code>data/repositories/mock_auth_repository.dart</code></td><td>13 nodes</td></tr>
 <tr><td><code>data/repositories/mock_municipality_repository.dart</code></td><td>9 nodes</td></tr>
 <tr><td><code>data/repositories/supabase_municipality_repository.dart</code></td><td>7 nodes</td></tr>
 <tr><td><code>data/repositories/municipality_repository.dart</code></td><td>6 nodes</td></tr>
+<tr><td><code>test/auth_screens_test.dart</code></td><td>2 nodes</td></tr>
+<tr><td><code>test/geo_utils_test.dart</code></td><td>2 nodes</td></tr>
     </table>
   </div>
   <div class="card">
     <h4>Design Notes</h4>
-    <p>This section comes from graphify community clustering. Relationship summary: defines x95, imports x59, references x7, implements x6. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+    <p>This section comes from graphify community clustering. Relationship summary: defines x72, imports x49, implements x4, references x4. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
   </div>
 </div>
 <hr>
@@ -3795,65 +3783,70 @@ flowchart LR
 
 <!-- ====== 14. geo_utils.dart ====== -->
 <h2 id="geo-utils-dart">14. geo_utils.dart</h2>
-<p>geo_utils.dart groups implementation around utils, geo, utilsdart, offline, mostly in core/utils/geo_utils.dart, core/network/offline_manager.dart, core/utils/scoring_calculator.dart. This section covers 39 nodes and 39 internal edges; the diagram shows only representative relationships to stay readable.</p>
+<p>geo_utils.dart groups implementation around geo, utilsdart, utils, anonymous, mostly in core/utils/geo_utils.dart, data/models/anonymous_user.dart. This section covers 35 nodes and 34 internal edges; the diagram shows only representative relationships to stay readable.</p>
 
 <div class="mermaid">
 %%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
 flowchart LR
-    %% Section: geo_utils.dart (39 nodes, 39 edges)
-    subgraph geo_utils_dart_External_generated_82fea157["External / generated"]
-        dart_convert_b7330642("dart:convert")
-        package_connectivity_plus_connectivity_plus_dart_94a8404b("package:connectivity plus/connectivity...")
-        data_models_complaint_dart_eeed9a1b("../../../data/models/complaint.dart")
-        data_repositories_complaint_repository_dart_7d670757("../../data/repositories/complaint repos...")
-        constants_app_constants_dart_3f12d104("../constants/app constants.dart")
-        dart_math_d3cabdb3("dart:math")
-        constants_category_defaults_dart_f734b423("../constants/category defaults.dart")
-        static_list_c4ec62d2("static List")
-        static_final_list_5922c07b("static final List")
-    end
-    subgraph geo_utils_dart_core_network_offline_manager_dart_f67ff238["core/network/offline_manager.dart"]
-        lib_core_network_offline_manager_17a7e354("offline_manager.dart")
-        lib_core_network_offline_manager_offlinemanager_23fd6dc5("OfflineManager<br/><small>core/network/offline_manager.dart</small>")
-        lib_core_network_offline_manager_getdraftcomplai_93c31944("getDraftComplaints<br/><small>core/network/offline_manager.dart</small>")
-        lib_core_network_offline_manager_isconnected_f26af3bd("isConnected<br/><small>core/network/offline_manager.dart</small>")
-        lib_core_network_offline_manager_savedraftcompla_50219d7b("saveDraftComplaint<br/><small>core/network/offline_manager.dart</small>")
-        lib_core_network_offline_manager_syncpendingdraf_dda0663f("syncPendingDrafts<br/><small>core/network/offline_manager.dart</small>")
-    end
+    %% Section: geo_utils.dart (35 nodes, 34 edges)
     subgraph geo_utils_dart_core_utils_geo_utils_dart_eafae909["core/utils/geo_utils.dart"]
         lib_core_utils_geo_utils_e27e4e97("geo_utils.dart")
         lib_core_utils_geo_utils_districtboundary_7718a742("DistrictBoundary<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_municipalityid_29735ba1("municipalityId<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_districtname_b54d7bd4("districtName<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_provincename_69dc2d58("provinceName<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_knownboundaries_687913ac("knownBoundaries<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_polygon_acdc95e9("polygon<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_centerlat_d5f2c22f("centerLat<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_centerlon_cd955c13("centerLon<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_detectmunicipality_c6cd6dfa("detectMunicipality<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_geoutils_b5a40b83("GeoUtils<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_geopoint_f89b9768("GeoPoint<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_ispointinpolygon_a08790f5("isPointInPolygon<br/><small>core/utils/geo_utils.dart</small>")
+        lib_core_utils_geo_utils_latitude_9f185199("latitude<br/><small>core/utils/geo_utils.dart</small>")
     end
-    lib_core_utils_scoring_calculator_5ddb47c6("scoring_calculator.dart")
-    lib_core_network_offline_manager_17a7e354 -->|imports| dart_convert_b7330642
-    lib_core_network_offline_manager_17a7e354 -->|imports| package_connectivity_plus_connectivity_plus_dart_94a8404b
-    lib_core_network_offline_manager_17a7e354 -->|imports| data_models_complaint_dart_eeed9a1b
-    lib_core_network_offline_manager_17a7e354 -->|imports| data_repositories_complaint_repository_dart_7d670757
-    lib_core_network_offline_manager_17a7e354 -->|imports| constants_app_constants_dart_3f12d104
-    lib_core_utils_geo_utils_e27e4e97 -->|imports| dart_math_d3cabdb3
-    lib_core_utils_scoring_calculator_5ddb47c6 -->|imports| dart_math_d3cabdb3
-    lib_core_utils_scoring_calculator_5ddb47c6 -->|imports| data_models_complaint_dart_eeed9a1b
-    lib_core_utils_scoring_calculator_5ddb47c6 -->|imports| constants_app_constants_dart_3f12d104
-    lib_core_utils_scoring_calculator_5ddb47c6 -->|imports| constants_category_defaults_dart_f734b423
-    %% Omitted for readability: 21 nodes, 0 edges
-    class dart_convert_b7330642 function;
-    class package_connectivity_plus_connectivity_plus_dart_94a8404b function;
-    class data_models_complaint_dart_eeed9a1b function;
-    class data_repositories_complaint_repository_dart_7d670757 function;
-    class constants_app_constants_dart_3f12d104 function;
-    class dart_math_d3cabdb3 function;
-    class constants_category_defaults_dart_f734b423 function;
-    class static_list_c4ec62d2 function;
-    class static_final_list_5922c07b function;
-    class lib_core_network_offline_manager_17a7e354 function;
-    class lib_core_network_offline_manager_offlinemanager_23fd6dc5 klass;
-    class lib_core_network_offline_manager_getdraftcomplai_93c31944 function;
-    class lib_core_network_offline_manager_isconnected_f26af3bd function;
-    class lib_core_network_offline_manager_savedraftcompla_50219d7b function;
-    class lib_core_network_offline_manager_syncpendingdraf_dda0663f function;
+    subgraph geo_utils_dart_External_generated_82fea157["External / generated"]
+        static_final_list_5922c07b("static final List")
+        list_38b62be4("List")
+        static_list_c4ec62d2("static List")
+    end
+    lib_data_models_anonymous_user_cb46d5e3("anonymous_user.dart")
+    lib_core_utils_geo_utils_e27e4e97 -->|references| static_final_list_5922c07b
+    lib_core_utils_geo_utils_e27e4e97 -->|references| list_38b62be4
+    lib_core_utils_geo_utils_e27e4e97 -->|references| static_list_c4ec62d2
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_districtboundary_7718a742
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_municipalityid_29735ba1
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_districtname_b54d7bd4
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_provincename_69dc2d58
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_knownboundaries_687913ac
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_polygon_acdc95e9
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_centerlat_d5f2c22f
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_centerlon_cd955c13
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_detectmunicipality_c6cd6dfa
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_geoutils_b5a40b83
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_geopoint_f89b9768
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_ispointinpolygon_a08790f5
+    lib_core_utils_geo_utils_e27e4e97 -->|defines| lib_core_utils_geo_utils_latitude_9f185199
+    lib_data_models_anonymous_user_cb46d5e3 -->|references| list_38b62be4
+    %% Omitted for readability: 17 nodes, 0 edges
     class lib_core_utils_geo_utils_e27e4e97 function;
     class lib_core_utils_geo_utils_districtboundary_7718a742 klass;
-    class lib_core_utils_scoring_calculator_5ddb47c6 function;
+    class lib_core_utils_geo_utils_municipalityid_29735ba1 function;
+    class lib_core_utils_geo_utils_districtname_b54d7bd4 function;
+    class lib_core_utils_geo_utils_provincename_69dc2d58 function;
+    class lib_core_utils_geo_utils_knownboundaries_687913ac function;
+    class lib_core_utils_geo_utils_polygon_acdc95e9 function;
+    class lib_core_utils_geo_utils_centerlat_d5f2c22f function;
+    class lib_core_utils_geo_utils_centerlon_cd955c13 function;
+    class lib_core_utils_geo_utils_detectmunicipality_c6cd6dfa function;
+    class lib_core_utils_geo_utils_geoutils_b5a40b83 klass;
+    class lib_core_utils_geo_utils_geopoint_f89b9768 klass;
+    class lib_core_utils_geo_utils_ispointinpolygon_a08790f5 function;
+    class lib_core_utils_geo_utils_latitude_9f185199 function;
+    class static_final_list_5922c07b function;
+    class list_38b62be4 klass;
+    class static_list_c4ec62d2 function;
+    class lib_data_models_anonymous_user_cb46d5e3 function;
     classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
     classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
     classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
@@ -3877,102 +3870,6 @@ flowchart LR
 </tr>
 <tr>
   <td>1</td>
-  <td><code>../constants/app_constants.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>offline_manager.dart</code><br><small style="color:var(--muted)">core/network/offline_manager.dart</small><br><code>scoring_calculator.dart</code><br><small style="color:var(--muted)">core/utils/scoring_calculator.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>../constants/app_constants.dart node in project.</td>
-</tr>
-<tr>
-  <td>2</td>
-  <td><code>../constants/category_defaults.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>scoring_calculator.dart</code><br><small style="color:var(--muted)">core/utils/scoring_calculator.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>../constants/category_defaults.dart node in project.</td>
-</tr>
-<tr>
-  <td>3</td>
-  <td><code>dart:convert</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>mock complaint repository.dart</code><br><small style="color:var(--muted)">data/repositories/mock_complaint_repository.dart</small><br><code>mock municipality repository.dart</code><br><small style="color:var(--muted)">data/repositories/mock_municipality_repository.dart</small><br><code>offline_manager.dart</code><br><small style="color:var(--muted)">core/network/offline_manager.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>dart:convert node in project.</td>
-</tr>
-<tr>
-  <td>4</td>
-  <td><code>dart:math</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>geo_utils.dart</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small><br><code>scoring_calculator.dart</code><br><small style="color:var(--muted)">core/utils/scoring_calculator.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>dart:math node in project.</td>
-</tr>
-<tr>
-  <td>5</td>
-  <td><code>../../../data/models/complaint.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>complaint_detail_screen.dart</code><br><small style="color:var(--muted)">complaint_detail/presentation/complaint_detail_screen.dart</small><br><code>feed_controller.dart</code><br><small style="color:var(--muted)">feed/application/feed_controller.dart</small><br><code>offline_manager.dart</code><br><small style="color:var(--muted)">core/network/offline_manager.dart</small><br>+3 more</td>
-  <td>No direct outbound edge</td>
-  <td>../../../data/models/complaint.dart node in project.</td>
-</tr>
-<tr>
-  <td>6</td>
-  <td><code>../../data/repositories/complaint_repository.dart</code><br><small style="color:var(--muted)"></small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td><code>offline_manager.dart</code><br><small style="color:var(--muted)">core/network/offline_manager.dart</small></td>
-  <td>No direct outbound edge</td>
-  <td>../../data/repositories/complaint_repository.dart node in project.</td>
-</tr>
-<tr>
-  <td>7</td>
-  <td><code>offline_manager.dart</code><br><small style="color:var(--muted)">core/network/offline_manager.dart</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td><code>../../../data/models/complaint.dart</code><br><code>../../data/repositories/complaint repos...</code><br><code>../constants/app constants.dart</code><br>+3 more</td>
-  <td>offline_manager.dart node in core/network/offline_manager.dart.</td>
-</tr>
-<tr>
-  <td>8</td>
-  <td><code>getDraftComplaints</code><br><small style="color:var(--muted)">core/network/offline_manager.dart</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>getDraftComplaints node in core/network/offline_manager.dart.</td>
-</tr>
-<tr>
-  <td>9</td>
-  <td><code>isConnected</code><br><small style="color:var(--muted)">core/network/offline_manager.dart</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>isConnected node in core/network/offline_manager.dart.</td>
-</tr>
-<tr>
-  <td>10</td>
-  <td><code>OfflineManager</code><br><small style="color:var(--muted)">core/network/offline_manager.dart</small></td>
-  <td><span class="tag tag-class">Class</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>OfflineManager node in core/network/offline_manager.dart.</td>
-</tr>
-<tr>
-  <td>11</td>
-  <td><code>saveDraftComplaint</code><br><small style="color:var(--muted)">core/network/offline_manager.dart</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>saveDraftComplaint node in core/network/offline_manager.dart.</td>
-</tr>
-<tr>
-  <td>12</td>
-  <td><code>syncPendingDrafts</code><br><small style="color:var(--muted)">core/network/offline_manager.dart</small></td>
-  <td><span class="tag tag-func">Function</span></td>
-  <td>External entry / no inbound edge</td>
-  <td>No direct outbound edge</td>
-  <td>syncPendingDrafts node in core/network/offline_manager.dart.</td>
-</tr>
-<tr>
-  <td>13</td>
   <td><code>geo_utils.dart</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -3980,7 +3877,7 @@ flowchart LR
   <td>geo_utils.dart node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>14</td>
+  <td>2</td>
   <td><code>_allDistricts</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -3988,7 +3885,7 @@ flowchart LR
   <td>_allDistricts node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>15</td>
+  <td>3</td>
   <td><code>calculateDistanceInMeters</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -3996,7 +3893,7 @@ flowchart LR
   <td>calculateDistanceInMeters node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>16</td>
+  <td>4</td>
   <td><code>centerLat</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -4004,7 +3901,7 @@ flowchart LR
   <td>centerLat node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>17</td>
+  <td>5</td>
   <td><code>centerLon</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -4012,7 +3909,7 @@ flowchart LR
   <td>centerLon node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>18</td>
+  <td>6</td>
   <td><code>_degreesToRadians</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -4020,7 +3917,7 @@ flowchart LR
   <td>_degreesToRadians node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>19</td>
+  <td>7</td>
   <td><code>detectMunicipality</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -4028,7 +3925,7 @@ flowchart LR
   <td>detectMunicipality node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>20</td>
+  <td>8</td>
   <td><code>DistrictBoundary</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-class">Class</span></td>
   <td>External entry / no inbound edge</td>
@@ -4036,7 +3933,7 @@ flowchart LR
   <td>DistrictBoundary node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>21</td>
+  <td>9</td>
   <td><code>districtName</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -4044,7 +3941,7 @@ flowchart LR
   <td>districtName node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>22</td>
+  <td>10</td>
   <td><code>formatDistance</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -4052,7 +3949,7 @@ flowchart LR
   <td>formatDistance node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>23</td>
+  <td>11</td>
   <td><code>GeoPoint</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-class">Class</span></td>
   <td>External entry / no inbound edge</td>
@@ -4060,7 +3957,7 @@ flowchart LR
   <td>GeoPoint node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>24</td>
+  <td>12</td>
   <td><code>GeoUtils</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-class">Class</span></td>
   <td>External entry / no inbound edge</td>
@@ -4068,7 +3965,7 @@ flowchart LR
   <td>GeoUtils node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>25</td>
+  <td>13</td>
   <td><code>isPointInPolygon</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -4076,7 +3973,7 @@ flowchart LR
   <td>isPointInPolygon node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>26</td>
+  <td>14</td>
   <td><code>knownBoundaries</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -4084,7 +3981,7 @@ flowchart LR
   <td>knownBoundaries node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>27</td>
+  <td>15</td>
   <td><code>latitude</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -4092,7 +3989,7 @@ flowchart LR
   <td>latitude node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>28</td>
+  <td>16</td>
   <td><code>longitude</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -4100,7 +3997,7 @@ flowchart LR
   <td>Turns a local path or remote repository into analysis context.</td>
 </tr>
 <tr>
-  <td>29</td>
+  <td>17</td>
   <td><code>municipalityId</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
@@ -4108,12 +4005,108 @@ flowchart LR
   <td>municipalityId node in core/utils/geo_utils.dart.</td>
 </tr>
 <tr>
-  <td>30</td>
+  <td>18</td>
   <td><code>polygon</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
   <td>No direct outbound edge</td>
   <td>polygon node in core/utils/geo_utils.dart.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>provinceName</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>provinceName node in core/utils/geo_utils.dart.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>setMunicipalities</code><br><small style="color:var(--muted)">core/utils/geo_utils.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>setMunicipalities node in core/utils/geo_utils.dart.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>anonymous_user.dart</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>anonymous_user.dart node in data/models/anonymous_user.dart.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>copyWith</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>copyWith node in data/models/anonymous_user.dart.</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>createdComplaintIds</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>createdComplaintIds node in data/models/anonymous_user.dart.</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>displayName</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>displayName node in data/models/anonymous_user.dart.</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>email</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>email node in data/models/anonymous_user.dart.</td>
+</tr>
+<tr>
+  <td>26</td>
+  <td><code>followedMunicipalityIds</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>followedMunicipalityIds node in data/models/anonymous_user.dart.</td>
+</tr>
+<tr>
+  <td>27</td>
+  <td><code>fromJson</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>fromJson node in data/models/anonymous_user.dart.</td>
+</tr>
+<tr>
+  <td>28</td>
+  <td><code>id</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>id node in data/models/anonymous_user.dart.</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><code>isGuest</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>isGuest node in data/models/anonymous_user.dart.</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td><code>isVerified</code><br><small style="color:var(--muted)">data/models/anonymous_user.dart</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>isVerified node in data/models/anonymous_user.dart.</td>
 </tr>
 </table>
 
@@ -4123,13 +4116,12 @@ flowchart LR
     <table style="width:100%;font-size:0.85rem;">
       <tr><th>File</th><th>Coverage</th></tr>
       <tr><td><code>core/utils/geo_utils.dart</code></td><td>20 nodes</td></tr>
-<tr><td><code>core/network/offline_manager.dart</code></td><td>6 nodes</td></tr>
-<tr><td><code>core/utils/scoring_calculator.dart</code></td><td>4 nodes</td></tr>
+<tr><td><code>data/models/anonymous_user.dart</code></td><td>12 nodes</td></tr>
     </table>
   </div>
   <div class="card">
     <h4>Design Notes</h4>
-    <p>This section comes from graphify community clustering. Relationship summary: defines x27, imports x10, references x2. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+    <p>This section comes from graphify community clustering. Relationship summary: defines x30, references x4. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
   </div>
 </div>
 <hr>
@@ -4480,64 +4472,67 @@ flowchart LR
 
 <!-- ====== 16. Other ====== -->
 <h2 id="other">16. Other</h2>
-<p>Other groups implementation around features, presentation, screendart, complaint, mostly in core/constants/app_colors.dart, feed/application/feed_controller.dart, complaint_detail/presentation/complaint_detail_screen.dart. This section covers 375 nodes and 359 internal edges; the diagram shows only representative relationships to stay readable.</p>
+<p>Other groups implementation around features, presentation, screendart, feed, mostly in core/constants/app_colors.dart, municipality/presentation/municipality_profile_screen.dart, feed/application/feed_controller.dart. This section covers 451 nodes and 463 internal edges; the diagram shows only representative relationships to stay readable.</p>
 
 <div class="mermaid">
 %%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
 flowchart LR
-    %% Section: Other (375 nodes, 359 edges)
+    %% Section: Other (451 nodes, 463 edges)
     subgraph other_External_generated_9e8859fa["External / generated"]
-        data_repositories_providers_dart_78b4ba47("data/repositories/providers.dart")
+        package_flutter_material_dart_16a2582d("package:flutter/material.dart")
+        package_seffaf_shared_widgets_seffaf_image_dart_d46f4016("package:seffaf/shared/widgets/seffaf im...")
+        core_theme_app_theme_dart_b810472d("../../core/theme/app theme.dart")
+        data_models_complaint_status_dart_d1bf5ee7("../../data/models/complaint status.dart")
+        package_shimmer_shimmer_dart_40894a48("package:shimmer/shimmer.dart")
         shared_widgets_category_badge_dart_36f81719("../../../shared/widgets/category badge....")
         shared_widgets_full_screen_image_viewer_dart_c881afb9("screen image viewer.dart")
         shared_widgets_seffaf_image_dart_4fc24151("../../../shared/widgets/seffaf image.dart")
         shared_widgets_status_badge_dart_5b469779("../../../shared/widgets/status badge.dart")
-        feed_application_feed_controller_dart_d28de203("../../feed/application/feed controller....")
-        core_utils_date_formatter_dart_c7076410("../../../core/utils/date formatter.dart")
-        data_models_comment_dart_d9d19a33("../../../data/models/comment.dart")
-        dart_async_8af82658("dart:async")
-        features_feed_application_feed_controller_dart_7de212d7("../../features/feed/application/feed co...")
-        offline_manager_dart_194174f0("offline_manager.dart")
     end
     lib_features_complaint_detail_presentation_compl_81203912("complaint_detail_screen.dart")
-    lib_core_network_offline_sync_controller_1968ff16("offline_sync_controller.dart")
     lib_data_repositories_providers_e314ae80("providers.dart")
-    lib_features_feed_application_feed_controller_786f00a8("feed_controller.dart")
-    lib_features_municipality_presentation_municipal_31e41111("municipality profile screen.dart<br/><small>municipality/presentation/municipality_profile_screen.dart</small>")
+    lib_features_feed_presentation_feed_screen_9a0f7190("feed_screen.dart")
+    lib_features_feed_presentation_widgets_complaint_f8d27e27("complaint_card.dart")
     lib_features_profile_presentation_profile_screen_181b88d0("profile_screen.dart")
+    lib_shared_widgets_full_screen_image_viewer_9697a856("screen image viewer.dart<br/><small>shared/widgets/full_screen_image_viewer.dart</small>")
+    lib_shared_widgets_shimmer_card_92af0419("shimmer_card.dart")
+    lib_shared_widgets_status_badge_0d1af0c8("status_badge.dart")
     windows_flutter_generated_plugin_registrant_cc_w_91fae99d("windows/flutter/generated plugin regist...<br/><small>windows/flutter/generated_plugin_registrant.cc</small>")
-    lib_features_complaint_detail_presentation_compl_81203912 -->|imports| data_repositories_providers_dart_78b4ba47
+    lib_shared_widgets_full_screen_image_viewer_9697a856 -->|imports| package_flutter_material_dart_16a2582d
+    lib_shared_widgets_full_screen_image_viewer_9697a856 -->|imports| package_seffaf_shared_widgets_seffaf_image_dart_d46f4016
+    lib_shared_widgets_status_badge_0d1af0c8 -->|imports| package_flutter_material_dart_16a2582d
+    lib_shared_widgets_status_badge_0d1af0c8 -->|imports| core_theme_app_theme_dart_b810472d
+    lib_shared_widgets_status_badge_0d1af0c8 -->|imports| data_models_complaint_status_dart_d1bf5ee7
+    lib_shared_widgets_shimmer_card_92af0419 -->|imports| package_flutter_material_dart_16a2582d
+    lib_shared_widgets_shimmer_card_92af0419 -->|imports| package_shimmer_shimmer_dart_40894a48
+    lib_features_complaint_detail_presentation_compl_81203912 -->|imports| package_flutter_material_dart_16a2582d
     lib_features_complaint_detail_presentation_compl_81203912 -->|imports| shared_widgets_category_badge_dart_36f81719
     lib_features_complaint_detail_presentation_compl_81203912 -->|imports| shared_widgets_full_screen_image_viewer_dart_c881afb9
     lib_features_complaint_detail_presentation_compl_81203912 -->|imports| shared_widgets_seffaf_image_dart_4fc24151
     lib_features_complaint_detail_presentation_compl_81203912 -->|imports| shared_widgets_status_badge_dart_5b469779
-    lib_features_complaint_detail_presentation_compl_81203912 -->|imports| feed_application_feed_controller_dart_d28de203
-    lib_features_complaint_detail_presentation_compl_81203912 -->|imports| core_utils_date_formatter_dart_c7076410
-    lib_features_complaint_detail_presentation_compl_81203912 -->|imports| data_models_comment_dart_d9d19a33
-    lib_core_network_offline_sync_controller_1968ff16 -->|imports| dart_async_8af82658
-    lib_core_network_offline_sync_controller_1968ff16 -->|imports| data_repositories_providers_dart_78b4ba47
-    lib_core_network_offline_sync_controller_1968ff16 -->|imports| features_feed_application_feed_controller_dart_7de212d7
-    lib_core_network_offline_sync_controller_1968ff16 -->|imports| offline_manager_dart_194174f0
-    lib_features_feed_application_feed_controller_786f00a8 -->|imports| data_repositories_providers_dart_78b4ba47
-    lib_features_profile_presentation_profile_screen_181b88d0 -->|imports| data_repositories_providers_dart_78b4ba47
-    %% Omitted for readability: 357 nodes, 0 edges
-    class data_repositories_providers_dart_78b4ba47 function;
+    lib_features_complaint_detail_presentation_compl_81203912 -->|imports| data_models_complaint_status_dart_d1bf5ee7
+    lib_features_feed_presentation_widgets_complaint_f8d27e27 -->|imports| package_flutter_material_dart_16a2582d
+    lib_features_feed_presentation_widgets_complaint_f8d27e27 -->|imports| package_seffaf_shared_widgets_seffaf_image_dart_d46f4016
+    lib_features_profile_presentation_profile_screen_181b88d0 -->|imports| package_flutter_material_dart_16a2582d
+    lib_features_feed_presentation_feed_screen_9a0f7190 -->|imports| package_flutter_material_dart_16a2582d
+    %% Omitted for readability: 433 nodes, 0 edges
+    class package_flutter_material_dart_16a2582d function;
+    class package_seffaf_shared_widgets_seffaf_image_dart_d46f4016 function;
+    class core_theme_app_theme_dart_b810472d function;
+    class data_models_complaint_status_dart_d1bf5ee7 function;
+    class package_shimmer_shimmer_dart_40894a48 function;
     class shared_widgets_category_badge_dart_36f81719 function;
     class shared_widgets_full_screen_image_viewer_dart_c881afb9 function;
     class shared_widgets_seffaf_image_dart_4fc24151 function;
     class shared_widgets_status_badge_dart_5b469779 function;
-    class feed_application_feed_controller_dart_d28de203 function;
-    class core_utils_date_formatter_dart_c7076410 function;
-    class data_models_comment_dart_d9d19a33 function;
-    class dart_async_8af82658 async;
-    class features_feed_application_feed_controller_dart_7de212d7 function;
-    class offline_manager_dart_194174f0 function;
     class lib_features_complaint_detail_presentation_compl_81203912 function;
-    class lib_core_network_offline_sync_controller_1968ff16 function;
     class lib_data_repositories_providers_e314ae80 function;
-    class lib_features_feed_application_feed_controller_786f00a8 function;
-    class lib_features_municipality_presentation_municipal_31e41111 function;
+    class lib_features_feed_presentation_feed_screen_9a0f7190 function;
+    class lib_features_feed_presentation_widgets_complaint_f8d27e27 function;
     class lib_features_profile_presentation_profile_screen_181b88d0 function;
+    class lib_shared_widgets_full_screen_image_viewer_9697a856 function;
+    class lib_shared_widgets_shimmer_card_92af0419 function;
+    class lib_shared_widgets_status_badge_0d1af0c8 function;
     class windows_flutter_generated_plugin_registrant_cc_w_91fae99d function;
     classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
     classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
@@ -4589,7 +4584,7 @@ flowchart LR
   <td><code>complaint_detail_screen.dart</code><br><small style="color:var(--muted)">complaint_detail/presentation/complaint_detail_screen.dart</small></td>
   <td><span class="tag tag-func">Function</span></td>
   <td>External entry / no inbound edge</td>
-  <td><code>../../../core/utils/date formatter.dart</code><br><code>../../../data/models/comment.dart</code><br><code>../../../data/models/complaint.dart</code><br>+12 more</td>
+  <td><code>../../../core/constants/app colors.dart</code><br><code>../../../core/utils/date formatter.dart</code><br><code>../../../data/models/comment.dart</code><br>+12 more</td>
   <td>complaint_detail_screen.dart node in complaint_detail/presentation/complaint_detail_screen.dart.</td>
 </tr>
 <tr>
@@ -4809,17 +4804,17 @@ flowchart LR
       <tr><th>File</th><th>Coverage</th></tr>
       <tr><td><code>core/constants/app_colors.dart</code></td><td>24 nodes</td></tr>
 <tr><td><code>feed/application/feed_controller.dart</code></td><td>19 nodes</td></tr>
-<tr><td><code>auth/presentation/register_screen.dart</code></td><td>18 nodes</td></tr>
+<tr><td><code>municipality/presentation/municipality_profile_screen.dart</code></td><td>19 nodes</td></tr>
 <tr><td><code>complaint_detail/presentation/complaint_detail_screen.dart</code></td><td>18 nodes</td></tr>
-<tr><td><code>municipality/presentation/municipality_profile_screen.dart</code></td><td>17 nodes</td></tr>
+<tr><td><code>onboarding/presentation/onboarding_screen.dart</code></td><td>17 nodes</td></tr>
 <tr><td><code>supabase-postgres-best-practices/references/_contributing.md</code></td><td>16 nodes</td></tr>
 <tr><td><code>README.md</code></td><td>16 nodes</td></tr>
-<tr><td><code>profile/presentation/profile_screen.dart</code></td><td>14 nodes</td></tr>
+<tr><td><code>profile/presentation/profile_screen.dart</code></td><td>16 nodes</td></tr>
     </table>
   </div>
   <div class="card">
     <h4>Design Notes</h4>
-    <p>This section comes from graphify community clustering. Relationship summary: defines x199, imports x58, contains x56, references x37. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+    <p>This section comes from graphify community clustering. Relationship summary: defines x243, imports x98, contains x56, references x45. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
   </div>
 </div>
 <hr>
@@ -4830,10 +4825,10 @@ flowchart LR
   <div class="card">
     <h4>Graph</h4>
     <table style="width:100%;font-size:0.85rem;">
-      <tr><td>Nodes</td><td>1309</td></tr>
+      <tr><td>Nodes</td><td>1312</td></tr>
       <tr><td>Edges</td><td>1653</td></tr>
       <tr><td>Hyperedges</td><td>0</td></tr>
-      <tr><td>Communities</td><td>110</td></tr>
+      <tr><td>Communities</td><td>118</td></tr>
       <tr><td>Documented Sections</td><td>15</td></tr>
     </table>
   </div>

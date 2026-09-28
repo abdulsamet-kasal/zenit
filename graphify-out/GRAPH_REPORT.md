@@ -1,17 +1,17 @@
 # Graph Report - zenit  (2026-09-28)
 
 ## Corpus Check
-- 149 files · ~374,249 words
+- 149 files · ~374,370 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 58 file(s) not represented in the graph (top: (none) 13, .xcconfig 8, .xml 7)
 
 ## Summary
-- 1309 nodes · 1653 edges · 110 communities (63 shown, 47 thin omitted)
+- 1312 nodes · 1653 edges · 118 communities (70 shown, 48 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 17 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ba1bf578`
+- Built from commit: `7f9cb9df`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -31,7 +31,7 @@
 - complaintRepositoryProvider
 - complaint_detail_screen.dart
 - app_colors.dart
-- anonymous_user.dart
+- String?
 - 20260927000000_create_seffaf_schema.sql
 - map_screen.dart
 - offline_sync_controller.dart
@@ -45,9 +45,9 @@
 - app_theme.dart
 - mock_auth_repository.dart
 - What You Must Do When Invoked
-- login_screen.dart
-- complaint_repository.dart
 - register_screen.dart
+- complaint_repository.dart
+- ConsumerState
 - supabase_auth_repository.dart
 - Supabase
 - category_defaults.dart
@@ -56,13 +56,13 @@
 - manifest.json
 - windows/flutter/generated_plugin_registrant.cc
 - providers.dart
-- package:flutter/material.dart
-- ConsumerState
+- category_badge.dart
+- _MunicipalityProfileScreenState
 - StatelessWidget
 - MaterialPageRoute
 - seffaf_logo.dart
 - empty_state_widget.dart
-- authRepositoryProvider
+- offline_manager.dart
 - 20260928000000_auto_confirm_users.sql
 - Changelog
 - main.dart
@@ -120,35 +120,43 @@
 - _template.md
 - workflows/graphify.md
 - LaunchImage.imageset/README.md
+- package:flutter_test/flutter_test.dart
+- full_screen_image_viewer.dart
+- ComplaintCard
+- package:flutter_riverpod/flutter_riverpod.dart
+- status_badge.dart
+- package:flutter/material.dart
+- auth_screens_test.dart
+- _TabBarHeaderDelegate
 
 ## God Nodes (most connected - your core abstractions)
-1. `complaintRepositoryProvider` - 24 edges
-2. `Win32Window` - 24 edges
+1. `Win32Window` - 24 edges
+2. `complaintRepositoryProvider` - 24 edges
 3. `currentUserProvider` - 22 edges
 4. `feedControllerProvider` - 13 edges
 5. `MessageHandler` - 12 edges
 6. `What You Must Do When Invoked` - 12 edges
-7. `authRepositoryProvider` - 11 edges
-8. `public.complaints` - 11 edges
-9. `FlutterWindow` - 10 edges
-10. `Create` - 10 edges
+7. `public.complaints` - 11 edges
+8. `FlutterWindow` - 10 edges
+9. `Create` - 10 edges
+10. `WndProc` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `OnCreate` --calls--> `RegisterPlugins()`  [INFERRED]
-  windows/runner/flutter_window.h → windows/flutter/generated_plugin_registrant.cc
-- `wWinMain()` --calls--> `CreateAndAttachConsole()`  [INFERRED]
-  windows/runner/main.cpp → windows/runner/utils.cpp
 - `Win32Window::Win32Window()` --calls--> `Destroy`  [INFERRED]
   windows/runner/win32_window.cpp → windows/runner/win32_window.h
-- `OfflineSyncNotifier` --references--> `complaintRepositoryProvider`  [EXTRACTED]
-  lib/core/network/offline_sync_controller.dart → lib/data/repositories/providers.dart
-- `OfflineSyncNotifier` --references--> `feedControllerProvider`  [EXTRACTED]
-  lib/core/network/offline_sync_controller.dart → lib/features/feed/application/feed_controller.dart
+- `wWinMain()` --calls--> `CreateAndAttachConsole()`  [INFERRED]
+  windows/runner/main.cpp → windows/runner/utils.cpp
+- `OnCreate` --calls--> `RegisterPlugins()`  [INFERRED]
+  windows/runner/flutter_window.h → windows/flutter/generated_plugin_registrant.cc
+- `Create` --calls--> `Scale()`  [EXTRACTED]
+  windows/runner/win32_window.h → windows/runner/win32_window.cpp
+- `wWinMain()` --calls--> `GetCommandLineArguments()`  [INFERRED]
+  windows/runner/main.cpp → windows/runner/utils.cpp
 
 ## Import Cycles
 - None detected.
 
-## Communities (110 total, 47 thin omitted)
+## Communities (118 total, 48 thin omitted)
 
 ### Community 0 - "Win32Window"
 Cohesion: 0.05
@@ -163,24 +171,24 @@ Cohesion: 0.07
 Nodes (28): ../../../core/network/offline_manager.dart, _address, build, _buildStep1PhotosAndCategory, _buildStep2LocationAndMunicipality, _buildStep3Details, _buildStep4PreviewAndSubmit, _buildStepIndicator (+20 more)
 
 ### Community 3 - "feed_screen.dart"
-Cohesion: 0.06
-Nodes (35): ../application/feed_controller.dart, ../../complaint_detail/presentation/complaint_detail_screen.dart, _buildFilterChip, createState, dispose, FeedScreen, _FeedScreenState, initState (+27 more)
+Cohesion: 0.13
+Nodes (14): ../application/feed_controller.dart, ../../complaint_detail/presentation/complaint_detail_screen.dart, _buildFilterChip, createState, dispose, initState, _isSearchVisible, _scrollController (+6 more)
 
 ### Community 4 - "complaint.dart"
 Cohesion: 0.05
 Nodes (38): complaint_status.dart, address, anonymousUserId, anonymousUserName, averageRating, categoryId, commentCount, confirmCount (+30 more)
 
 ### Community 5 - "geo_utils.dart"
-Cohesion: 0.05
-Nodes (36): ../constants/app_constants.dart, ../constants/category_defaults.dart, dart:convert, dart:math, ../../../data/models/complaint.dart, ../../data/repositories/complaint_repository.dart, getDraftComplaints, isConnected (+28 more)
+Cohesion: 0.06
+Nodes (33): _allDistricts, calculateDistanceInMeters, centerLat, centerLon, _degreesToRadians, detectMunicipality, DistrictBoundary, districtName (+25 more)
 
 ### Community 6 - "my_application.cc"
 Cohesion: 0.08
 Nodes (28): file_selector_plugin, FlPluginRegistry, flutter_linux, FlView, GApplication, gboolean, gchar, gdkx (+20 more)
 
 ### Community 7 - "municipality_profile_screen.dart"
-Cohesion: 0.08
-Nodes (23): class, double get, Municipality, _buildStatBox, createState, dispose, initState, isDark (+15 more)
+Cohesion: 0.09
+Nodes (21): class, double get, Municipality, _buildStatBox, createState, dispose, initState, isDark (+13 more)
 
 ### Community 8 - "app_constants.dart"
 Cohesion: 0.07
@@ -192,11 +200,11 @@ Nodes (38): DateTime?, int?, anonymousUserId, anonymousUserName, Comment, compla
 
 ### Community 10 - "mock_municipality_repository.dart"
 Cohesion: 0.08
-Nodes (25): core/config/supabase_config.dart, ../../../core/utils/geo_utils.dart, _cachedMunicipalities, _cachedProvinces, _ensureLoaded, getLeaderboard, getMunicipalities, getMunicipalityById (+17 more)
+Nodes (25): ../../core/config/supabase_config.dart, ../../../core/utils/geo_utils.dart, _cachedMunicipalities, _cachedProvinces, _ensureLoaded, getLeaderboard, getMunicipalities, getMunicipalityById (+17 more)
 
 ### Community 11 - "main_nav_screen.dart"
-Cohesion: 0.13
-Nodes (15): ../../../core/network/offline_sync_controller.dart, ../feed/presentation/feed_screen.dart, ../leaderboard/presentation/leaderboard_screen.dart, build, _buildCenterActionButton, _buildNavItem, createState, _lastBackPressTime (+7 more)
+Cohesion: 0.14
+Nodes (13): ../../../core/network/offline_sync_controller.dart, ../feed/presentation/feed_screen.dart, ../leaderboard/presentation/leaderboard_screen.dart, build, _buildCenterActionButton, _buildNavItem, createState, _lastBackPressTime (+5 more)
 
 ### Community 12 - "complaintRepositoryProvider"
 Cohesion: 0.12
@@ -210,21 +218,21 @@ Nodes (24): ../../../core/utils/date_formatter.dart, ../../../data/models/commen
 Cohesion: 0.08
 Nodes (24): accent, accentDark, accentLight, AppColors, backgroundDark, backgroundLight, borderDark, borderLight (+16 more)
 
-### Community 15 - "anonymous_user.dart"
-Cohesion: 0.07
-Nodes (31): dart_project, flutter_view_controller, flutter_windows, functional, _In_, _In_opt_, io, iostream (+23 more)
+### Community 15 - "String?"
+Cohesion: 0.12
+Nodes (19): dart_project, flutter_view_controller, flutter_windows, functional, _In_, _In_opt_, io, iostream (+11 more)
 
 ### Community 16 - "20260927000000_create_seffaf_schema.sql"
 Cohesion: 0.15
 Nodes (19): public, idx_comments_complaint, idx_complaints_author, idx_complaints_created_at, idx_complaints_municipality, idx_complaints_status, idx_disputes_complaint, idx_municipalities_province (+11 more)
 
 ### Community 17 - "map_screen.dart"
-Cohesion: 0.10
-Nodes (20): _allComplaints, build, _buildMapFilterChip, createState, initState, _isLoading, _mapController, MapScreen (+12 more)
+Cohesion: 0.11
+Nodes (18): _allComplaints, build, _buildMapFilterChip, createState, initState, _isLoading, _mapController, _moveToUserLocation (+10 more)
 
 ### Community 18 - "offline_sync_controller.dart"
 Cohesion: 0.11
-Nodes (19): dart:async, data/repositories/providers.dart, ../../features/feed/application/feed_controller.dart, build, copyWith, _init, isOnline, isSyncing (+11 more)
+Nodes (18): dart:async, ../../features/feed/application/feed_controller.dart, build, copyWith, _init, isOnline, isSyncing, lastSyncMessage (+10 more)
 
 ### Community 19 - "mock_complaint_repository.dart"
 Cohesion: 0.11
@@ -243,16 +251,16 @@ Cohesion: 0.10
 Nodes (20): ComplaintRepository, MockComplaintRepository, addComment, _applyLocalStateToList, _applyLocalStateToSingle, createComplaint, deleteComplaint, _fallbackRepo (+12 more)
 
 ### Community 23 - "profile_screen.dart"
-Cohesion: 0.12
-Nodes (16): ../../../data/models/anonymous_user.dart, ../../../data/models/municipality.dart, ../../feed/presentation/widgets/complaint_card.dart, _buildAuthBanner, _buildOfflineDraftsCard, _buildUserCard, createState, _followedMunicipalities (+8 more)
+Cohesion: 0.09
+Nodes (24): ../../../data/models/anonymous_user.dart, ../../../data/models/municipality.dart, ../../feed/presentation/widgets/complaint_card.dart, authRepositoryProvider, _handleRegister, _toggleFollow, _buildAuthBanner, _buildOfflineDraftsCard (+16 more)
 
 ### Community 24 - "leaderboard_screen.dart"
-Cohesion: 0.13
-Nodes (14): _buildRankBadge, createState, dispose, initState, _isLoading, _municipalities, _provinces, _searchController (+6 more)
+Cohesion: 0.10
+Nodes (20): municipalityRepositoryProvider, _buildRankBadge, createState, dispose, initState, _isLoading, LeaderboardScreen, _LeaderboardScreenState (+12 more)
 
 ### Community 25 - "onboarding_screen.dart"
-Cohesion: 0.07
-Nodes (34): ../../auth/presentation/login_screen.dart, ComplaintCard, _ComplaintCardState, build, color, _completeOnboarding, createState, _currentIndex (+26 more)
+Cohesion: 0.12
+Nodes (15): ../../auth/presentation/login_screen.dart, build, color, _completeOnboarding, createState, _currentIndex, description, icon (+7 more)
 
 ### Community 26 - "app_theme.dart"
 Cohesion: 0.06
@@ -266,21 +274,21 @@ Nodes (15): core/constants/app_constants.dart, addCreatedComplaintId, _cachedUse
 Cohesion: 0.08
 Nodes (24): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+16 more)
 
-### Community 29 - "login_screen.dart"
-Cohesion: 0.12
-Nodes (16): FormState, createState, dispose, _emailController, _errorMessage, _formKey, _isLoading, isModal (+8 more)
+### Community 29 - "register_screen.dart"
+Cohesion: 0.07
+Nodes (32): authRepositoryProvider, FormState, createState, dispose, _emailController, _errorMessage, _formKey, _handleLogin (+24 more)
 
 ### Community 30 - "complaint_repository.dart"
 Cohesion: 0.13
 Nodes (14): addComment, createComplaint, deleteComplaint, getComments, getComplaintById, getComplaintsByMunicipality, getComplaintsByUser, getFeed (+6 more)
 
-### Community 31 - "register_screen.dart"
-Cohesion: 0.12
-Nodes (16): build, _confirmPasswordController, createState, dispose, _emailController, _errorMessage, _formKey, _isLoading (+8 more)
+### Community 31 - "ConsumerState"
+Cohesion: 0.27
+Nodes (10): ConsumerState, ConsumerStatefulWidget, RegisterScreen, _RegisterScreenState, FeedScreen, _FeedScreenState, MainNavScreen, _MainNavScreenState (+2 more)
 
 ### Community 32 - "supabase_auth_repository.dart"
 Cohesion: 0.12
-Nodes (16): AuthRepository, MockAuthRepository, addCreatedComplaintId, clearUserData, _fallbackRepo, getCurrentUser, resetPassword, saveUser (+8 more)
+Nodes (16): AuthRepository, addCreatedComplaintId, clearUserData, _fallbackRepo, getCurrentUser, resetPassword, saveUser, signInWithEmail (+8 more)
 
 ### Community 33 - "Supabase"
 Cohesion: 0.11
@@ -295,8 +303,8 @@ Cohesion: 0.17
 Nodes (11): defaultAnonKey, initialize, _isInitialized, projectRef, SupabaseConfig, supabaseUrl, package:flutter/foundation.dart, package:supabase_flutter/supabase_flutter.dart (+3 more)
 
 ### Community 36 - "auth_repository.dart"
-Cohesion: 0.17
-Nodes (11): addCreatedComplaintId, clearUserData, getCurrentUser, resetPassword, saveUser, signInWithEmail, signOut, signUpWithEmail (+3 more)
+Cohesion: 0.14
+Nodes (13): addCreatedComplaintId, AuthRepository, clearUserData, getCurrentUser, resetPassword, saveUser, signInWithEmail, signOut (+5 more)
 
 ### Community 37 - "manifest.json"
 Cohesion: 0.18
@@ -307,16 +315,16 @@ Cohesion: 0.20
 Nodes (8): app_links_plugin_c_api, connectivity_plus_windows_plugin, file_selector_windows, geolocator_windows, plugin_registry, PluginRegistry, url_launcher_windows, RegisterPlugins()
 
 ### Community 39 - "providers.dart"
-Cohesion: 0.22
-Nodes (8): auth_repository.dart, complaint_repository.dart, authRepo, getCurrentUser, ../models/anonymous_user.dart, supabase_auth_repository.dart, supabase_complaint_repository.dart, supabase_municipality_repository.dart
+Cohesion: 0.20
+Nodes (9): auth_repository.dart, complaint_repository.dart, AnonymousUser, authRepo, getCurrentUser, ../models/anonymous_user.dart, supabase_auth_repository.dart, supabase_complaint_repository.dart (+1 more)
 
-### Community 40 - "package:flutter/material.dart"
-Cohesion: 0.18
-Nodes (9): ../../core/constants/category_defaults.dart, build, CategoryBadge, categoryId, showIcon, build, ShimmerCard, package:flutter/material.dart (+1 more)
+### Community 40 - "category_badge.dart"
+Cohesion: 0.33
+Nodes (5): ../../core/constants/category_defaults.dart, build, CategoryBadge, categoryId, showIcon
 
-### Community 41 - "ConsumerState"
-Cohesion: 0.19
-Nodes (13): ConsumerState, ConsumerStatefulWidget, municipalityRepositoryProvider, LeaderboardScreen, _LeaderboardScreenState, _loadLeaderboard, MunicipalityProfileScreen, _MunicipalityProfileScreenState (+5 more)
+### Community 41 - "_MunicipalityProfileScreenState"
+Cohesion: 0.67
+Nodes (3): MunicipalityProfileScreen, _MunicipalityProfileScreenState, SingleTickerProviderStateMixin
 
 ### Community 42 - "StatelessWidget"
 Cohesion: 0.33
@@ -332,11 +340,11 @@ Nodes (7): Axis, build, orientation, showSubtitle, showText, size, package:seffa
 
 ### Community 45 - "empty_state_widget.dart"
 Cohesion: 0.15
-Nodes (12): ../../core/constants/app_colors.dart, IconData, build, buttonText, description, icon, onButtonPressed, title (+4 more)
+Nodes (12): ../../../core/constants/app_colors.dart, IconData, build, buttonText, description, icon, onButtonPressed, title (+4 more)
 
-### Community 46 - "authRepositoryProvider"
-Cohesion: 0.29
-Nodes (7): authRepositoryProvider, _handleLogin, _handleRegister, _toggleFollow, _confirmSignOut, _showResetDataDialog, _showSmsVerificationModal
+### Community 46 - "offline_manager.dart"
+Cohesion: 0.12
+Nodes (15): ../constants/app_constants.dart, ../constants/category_defaults.dart, dart:convert, dart:math, ../../../data/models/complaint.dart, ../../data/repositories/complaint_repository.dart, getDraftComplaints, isConnected (+7 more)
 
 ### Community 47 - "20260928000000_auto_confirm_users.sql"
 Cohesion: 0.40
@@ -347,8 +355,8 @@ Cohesion: 0.12
 Nodes (16): [1.2.0](https://github.com/supabase/agent-skills/compare/v1.1.1...v1.2.0) (2026-06-02), [1.3.0](https://github.com/supabase/agent-skills/compare/v1.2.0...v1.3.0) (2026-06-05), [1.4.0](https://github.com/supabase/agent-skills/compare/v1.3.0...v1.4.0) (2026-07-10), [1.5.0](https://github.com/supabase/agent-skills/compare/supabase-postgres-best-practices-v1.4.0...supabase-postgres-best-practices-v1.5.0) (2026-07-30), [1.6.0](https://github.com/supabase/agent-skills/compare/supabase-postgres-best-practices-v1.5.0...supabase-postgres-best-practices-v1.6.0) (2026-07-30), Bug Fixes, Bug Fixes, Bug Fixes (+8 more)
 
 ### Community 49 - "main.dart"
-Cohesion: 0.09
-Nodes (23): ConsumerWidget, ../../core/theme/app_theme.dart, ../../data/models/complaint_status.dart, features/auth/presentation/login_screen.dart, features/main_navigation/main_nav_screen.dart, features/onboarding/presentation/onboarding_screen.dart, build, build (+15 more)
+Cohesion: 0.12
+Nodes (18): ConsumerWidget, ../../../data/repositories/providers.dart, features/auth/presentation/login_screen.dart, features/main_navigation/main_nav_screen.dart, features/onboarding/presentation/onboarding_screen.dart, build, build, initialize (+10 more)
 
 ### Community 50 - "seffaf_image.dart"
 Cohesion: 0.12
@@ -376,7 +384,7 @@ Nodes (8): graphify reference: extra exports and benchmark, Step 6b - Wiki (only
 
 ### Community 65 - "🧠 AGENTS.md — Proje Hafızası ve Geliştirici Kılavuzu"
 Cohesion: 0.29
-Nodes (6): 🧠 AGENTS.md — Proje Hafızası ve Geliştirici Kılavuzu, 🎯 Gelecek Faz (Faz 21 - Canlı Dağıtım ve Yayın Öncesi), 🏗️ Mimari ve Teknoloji Yığını, 📌 Proje Özeti, 💻 Sistem ve Donanım Kısıtları (ÖNEMLİ), 🚦 Tamamlanan Aşamalar (Faz 1 - Faz 10)
+Nodes (6): 🧠 AGENTS.md — Proje Hafızası ve Geliştirici Kılavuzu, 🎯 Gelecek Faz (Faz 22 - Canlı Dağıtım ve Yayın Öncesi), 🏗️ Mimari ve Teknoloji Yığını, 📌 Proje Özeti, 💻 Sistem ve Donanım Kısıtları (ÖNEMLİ), 🚦 Tamamlanan Aşamalar (Faz 1 - Faz 10)
 
 ### Community 66 - "graphify reference: query, path, explain"
 Cohesion: 0.33
@@ -402,21 +410,49 @@ Nodes (3): For git commit hook, For native CLAUDE.md integration, graphify refer
 Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
+### Community 110 - "package:flutter_test/flutter_test.dart"
+Cohesion: 0.21
+Nodes (10): package:flutter_test/flutter_test.dart, package:seffaf/core/utils/geo_utils.dart, package:seffaf/core/utils/scoring_calculator.dart, package:seffaf/data/models/complaint.dart, package:seffaf/data/models/complaint_status.dart, package:seffaf/data/repositories/mock_municipality_repository.dart, main, main (+2 more)
+
+### Community 111 - "full_screen_image_viewer.dart"
+Cohesion: 0.18
+Nodes (10): build, createState, _currentIndex, dispose, imageUrls, initialIndex, initState, _pageController (+2 more)
+
+### Community 112 - "ComplaintCard"
+Cohesion: 0.32
+Nodes (8): ComplaintCard, _ComplaintCardState, OnboardingScreen, _OnboardingScreenState, FullScreenImageViewer, _FullScreenImageViewerState, State, StatefulWidget
+
+### Community 113 - "package:flutter_riverpod/flutter_riverpod.dart"
+Cohesion: 0.29
+Nodes (6): package:flutter_riverpod/flutter_riverpod.dart, package:seffaf/features/profile/presentation/profile_screen.dart, package:seffaf/main.dart, package:shared_preferences/shared_preferences.dart, main, main
+
+### Community 114 - "status_badge.dart"
+Cohesion: 0.29
+Nodes (6): ../../core/theme/app_theme.dart, ../../data/models/complaint_status.dart, build, isCompact, status, StatusBadge
+
+### Community 115 - "package:flutter/material.dart"
+Cohesion: 0.40
+Nodes (4): build, ShimmerCard, package:flutter/material.dart, package:shimmer/shimmer.dart
+
+### Community 116 - "auth_screens_test.dart"
+Cohesion: 0.50
+Nodes (3): package:seffaf/features/auth/presentation/login_screen.dart, package:seffaf/features/auth/presentation/register_screen.dart, main
+
 ## Knowledge Gaps
-- **710 isolated node(s):** `SupabaseConfig`, `projectRef`, `supabaseUrl`, `defaultAnonKey`, `_isInitialized` (+705 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 916 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **47 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **710 isolated node(s):** `📌 Proje Özeti`, `💻 Sistem ve Donanım Kısıtları (ÖNEMLİ)`, `🏗️ Mimari ve Teknoloji Yığını`, `🚦 Tamamlanan Aşamalar (Faz 1 - Faz 10)`, `🎯 Gelecek Faz (Faz 22 - Canlı Dağıtım ve Yayın Öncesi)` (+705 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 918 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **48 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Win32Window` connect `Win32Window` to `anonymous_user.dart`?**
-  _High betweenness centrality (0.049) - this node is a cross-community bridge._
+- **Why does `Win32Window` connect `Win32Window` to `String?`?**
+  _High betweenness centrality (0.058) - this node is a cross-community bridge._
 - **Why does `OnCreate` connect `Win32Window` to `windows/flutter/generated_plugin_registrant.cc`?**
   _High betweenness centrality (0.021) - this node is a cross-community bridge._
 - **Why does `RegisterPlugins()` connect `windows/flutter/generated_plugin_registrant.cc` to `Win32Window`?**
   _High betweenness centrality (0.020) - this node is a cross-community bridge._
-- **What connects `SupabaseConfig`, `projectRef`, `supabaseUrl` to the rest of the system?**
+- **What connects `📌 Proje Özeti`, `💻 Sistem ve Donanım Kısıtları (ÖNEMLİ)`, `🏗️ Mimari ve Teknoloji Yığını` to the rest of the system?**
   _710 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Win32Window` be split into smaller, more focused modules?**
   _Cohesion score 0.05407925407925408 - nodes in this community are weakly interconnected._
