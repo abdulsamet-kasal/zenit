@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/app_colors.dart';
+import '../../core/theme/app_theme.dart';
 import '../../data/models/complaint_status.dart';
 
 class StatusBadge extends StatelessWidget {
@@ -14,56 +14,43 @@ class StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color;
-    Color textColor;
-    switch (status) {
-      case ComplaintStatus.pending:
-        color = AppColors.statusPending;
-        textColor = const Color(0xFFB45309);
-        break;
-      case ComplaintStatus.inReview:
-        color = AppColors.statusInReview;
-        textColor = const Color(0xFF1D4ED8);
-        break;
-      case ComplaintStatus.resolved:
-        color = AppColors.statusResolved;
-        textColor = const Color(0xFF047857);
-        break;
-      case ComplaintStatus.rejected:
-        color = AppColors.statusRejected;
-        textColor = const Color(0xFFB91C1C);
-        break;
-    }
+    final seffaf = Theme.of(context).extension<SeffafColors>();
+    final StatusColor sc = switch (status) {
+      ComplaintStatus.pending =>
+        seffaf?.pending ?? const StatusColor(Color(0xFFFCF0D2), Color(0xFF7A5200)),
+      ComplaintStatus.inReview =>
+        seffaf?.reviewing ?? const StatusColor(Color(0xFFDDE9FB), Color(0xFF1B4DA0)),
+      ComplaintStatus.resolved =>
+        seffaf?.resolved ?? const StatusColor(Color(0xFFD9F0E1), Color(0xFF1B6B3C)),
+      ComplaintStatus.rejected =>
+        seffaf?.rejected ?? const StatusColor(Color(0xFFF9DEDA), Color(0xFF9E2A1F)),
+    };
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isCompact ? 8 : 12,
-        vertical: isCompact ? 4 : 6,
+        horizontal: isCompact ? 8 : 10,
+        vertical: isCompact ? 3 : 5,
       ),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-          width: 1,
-        ),
+        color: sc.bg,
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 8,
-            height: 8,
+            width: 7,
+            height: 7,
             decoration: BoxDecoration(
-              color: color,
+              color: sc.fg,
               shape: BoxShape.circle,
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 5),
           Text(
             status.label,
             style: TextStyle(
-              color: textColor,
+              color: sc.fg,
               fontSize: isCompact ? 11 : 12,
               fontWeight: FontWeight.w700,
             ),

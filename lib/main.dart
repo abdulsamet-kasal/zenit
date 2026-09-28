@@ -79,8 +79,8 @@ class SeffafApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Seffaf',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
       themeMode: themeMode,
       home: !onboardingCompleted
           ? const OnboardingScreen()
