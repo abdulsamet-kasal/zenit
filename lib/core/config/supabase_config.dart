@@ -4,12 +4,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class SupabaseConfig {
   static const String projectRef = 'txhpstratzihirwlpixu';
   static const String supabaseUrl = 'https://txhpstratzihirwlpixu.supabase.co';
-  
-  // Anon Public Key: Supabase Dashboard -> Project Settings -> API
+
+  // Güvenlik: anon key ASLA koda gömülmez.
+  // --dart-define=SUPABASE_ANON_KEY=... ile build anında verilir.
+  // Verilmezse uygulama offline-first yerel modda çalışır.
   static const String defaultAnonKey = String.fromEnvironment(
     'SUPABASE_ANON_KEY',
-    defaultValue:
-        '***REMOVED***',
+    defaultValue: '',
   );
 
   static bool _isInitialized = false;
